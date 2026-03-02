@@ -3,38 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VORTEX PRO AI | Official</title>
+    <title>VORTEX PRO AI | Elite Operations</title>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
         :root { 
-            --bg: #020205; --card: #0a0a12; --primary: #8b5cf6; 
-            --gold: #ffd700; --green: #00ff88; --red: #ff4444;
-            --grad: linear-gradient(90deg, #8b5cf6 0%, #ec4899 100%); 
+            --bg: #010103; --card: #040409; --primary: #8b5cf6; 
+            --gold: #ffd700; --gold-dark: #b8860b; --green: #00ff88; --red: #ff4444;
+            --grad: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%); 
+            --neon-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+            --gold-neon: 0 0 15px rgba(255, 215, 0, 0.6);
         }
         
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
         
         body { 
             font-family: 'Rajdhani', sans-serif; 
             background: var(--bg); color: #fff; 
-            background-image: radial-gradient(circle at 50% -20%, #251052 0%, #020205 60%);
+            background-image: radial-gradient(circle at 50% -20%, #1a0a38 0%, #010103 60%);
             min-height: 100vh; display: flex; flex-direction: column; align-items: center;
-            padding: 20px; padding-bottom: 50px;
+            padding: 20px; padding-bottom: 50px; overflow-x: hidden;
         }
 
+        /* LOGO ELITE COM PULSO NEON */
         .vortex-logo {
-            width: 70px; height: 70px; margin: 20px 0;
-            background: linear-gradient(45deg, #251052, #020205);
+            width: 80px; height: 80px; margin: 20px 0;
+            background: linear-gradient(45deg, #1a0a38, #010103);
             border-radius: 50%; border: 2px solid var(--primary);
-            box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+            box-shadow: var(--neon-shadow);
             display: flex; align-items: center; justify-content: center;
             position: relative; overflow: hidden;
+            animation: logoPulse 2s infinite alternate;
         }
         .vortex-logo::after {
             content: ''; position: absolute; width: 200%; height: 200%;
@@ -42,91 +46,140 @@
             animation: rotateVortex 4s linear infinite;
         }
         .vortex-logo-v {
-            font-family: 'Space Grotesk', sans-serif; font-size: 32px;
+            font-family: 'Orbitron', sans-serif; font-size: 36px;
             color: #fff; font-weight: 800; z-index: 10;
             background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(139, 92, 246, 0.8);
         }
         @keyframes rotateVortex { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes logoPulse { from { box-shadow: 0 0 10px rgba(139, 92, 246, 0.4); } to { box-shadow: 0 0 25px rgba(139, 92, 246, 0.7); } }
 
-        .screen { width: 100%; display: none; flex-direction: column; align-items: center; max-width: 400px; animation: fadeInUp 0.4s ease; }
+        .screen { width: 100%; display: none; flex-direction: column; align-items: center; max-width: 400px; animation: fadeInUp 0.5s ease-out; }
         .active { display: flex; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .card { background: var(--card); padding: 25px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.08); width: 100%; margin-bottom: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
-        input { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px; border: 1px solid #1a1a2e; background: #000; color: #fff; outline: none; font-weight: bold; transition: 0.3s; }
-        input:focus { border-color: var(--primary); }
+        .card { background: var(--card); padding: 25px; border-radius: 20px; border: 1px solid rgba(139, 92, 246, 0.15); width: 100%; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); transition: 0.3s; }
+        .card:hover { border-color: rgba(139, 92, 246, 0.3); }
 
-        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-family: 'Space Grotesk'; transition: 0.3s; margin-bottom: 5px; }
-        .btn-primary { background: var(--grad); color: #fff; }
-        .btn-extract { background: #fff; color: #000; }
-        .btn-logout { background: none; color: #444; text-decoration: underline; font-size: 11px; margin-top: 20px; border: none; cursor: pointer; }
+        input { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 12px; border: 1px solid #1a1a2e; background: rgba(0,0,0,0.4); color: #fff; font-weight: bold; font-family: 'Orbitron', sans-serif; font-size: 14px; transition: 0.3s; }
+        input:focus { border-color: var(--primary); background: rgba(0,0,0,0.6); box-shadow: var(--neon-shadow); }
+
+        .btn { width: 100%; padding: 18px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-family: 'Orbitron', sans-serif; transition: 0.3s; margin-bottom: 8px; font-size: 13px; letter-spacing: 1px; position: relative; overflow: hidden; }
+        .btn-primary { background: var(--grad); color: #fff; box-shadow: var(--neon-shadow); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(139, 92, 246, 0.7); }
         
-        .label-app { font-size: 10px; color: var(--primary); font-weight: 800; margin-bottom: 5px; display: block; letter-spacing: 1.5px; text-transform: uppercase; }
-        .ad-banner { width: 100%; padding: 15px; border-radius: 16px; cursor: pointer; display: flex; align-items: center; gap: 15px; margin-top: 20px; border: 1px solid #0046ff; background: linear-gradient(45deg, #001a4d, #0a0a12); transition: 0.3s; }
-        #locDisplay { color: var(--green); font-size: 11px; font-weight: 700; margin-bottom: 10px; min-height: 16px; display: flex; align-items: center; gap: 5px; }
+        .btn-extract { background: #fff; color: #000; border: 1px solid #fff; }
+        .btn-extract:hover { background: rgba(255,255,255,0.8); }
+
+        .btn-logout { background: none; color: #444; text-decoration: underline; font-size: 11px; margin-top: 25px; border: none; cursor: pointer; text-transform: none; font-family: 'Rajdhani', sans-serif; }
+        
+        .label-app { font-size: 10px; color: var(--primary); font-weight: 800; margin-bottom: 6px; display: block; letter-spacing: 2px; text-transform: uppercase; font-family: 'Orbitron', sans-serif; }
+        
+        /* SISTEMA DE PATENTES GAMIFICADO */
+        .rank-card { text-align: center; padding: 20px; position: relative; border: 2px solid var(--primary); background: rgba(139, 92, 246, 0.03); overflow: hidden; }
+        .rank-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent); animation: shine 3s infinite; }
+        @keyframes shine { to { left: 100%; } }
+
+        #rankLabel { font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        
+        /* ESTILO OURO BLOQUEADO (DOPAMINA) */
+        .gold-locked { color: var(--gold-dark); opacity: 0.6; position: relative; }
+        .gold-locked::after { content: '🔒'; font-size: 12px; margin-left: 5px; vertical-align: middle; }
+        
+        /* ESTILO OURO ATIVADO */
+        .gold-active { border-color: var(--gold); background: rgba(255, 215, 0, 0.05); box-shadow: var(--gold-neon); animation: goldPulse 2s infinite alternate; }
+        .gold-active #rankLabel { color: var(--gold); text-shadow: var(--gold-neon); }
+        @keyframes goldPulse { from { box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); } to { box-shadow: 0 0 25px rgba(255, 215, 0, 0.6); } }
+
+        /* RESULTADO COM ANIMAÇÃO DE RADAR */
+        #resultCard { border: 2px solid var(--green); text-align: center; position: relative; animation: resultScan 1.5s ease-out; }
+        @keyframes resultScan { from { border-color: var(--card); } to { border-color: var(--green); } }
+        
+        #resProfit { font-family: 'Orbitron', sans-serif; font-size: 45px; font-weight: 800; text-shadow: 0 0 15px var(--green); }
+
+        .ad-banner { width: 100%; padding: 15px; border-radius: 16px; cursor: pointer; display: flex; align-items: center; gap: 15px; margin-top: 25px; border: 1px solid #0046ff; background: linear-gradient(45deg, #001a4d, #040409); transition: 0.3s; position: relative; }
+        .ad-banner:hover { transform: translateY(-3px); box-shadow: 0 5px 20px rgba(0, 70, 255, 0.4); }
+        .ad-banner::after { content: 'BENEFÍCIO ELITE'; position: absolute; top: -8px; right: 10px; background: #0046ff; color: #fff; font-size: 8px; padding: 2px 6px; border-radius: 10px; font-weight: bold; }
+
+        #locDisplay { color: var(--green); font-size: 11px; font-weight: 700; margin-bottom: 12px; min-height: 16px; display: flex; align-items: center; gap: 6px; font-family: 'Orbitron', sans-serif; }
+        
+        .loader { width: 100%; height: 2px; background: rgba(139, 92, 246, 0.1); position: relative; overflow: hidden; margin-top: -15px; margin-bottom: 15px; display: none; }
+        .loader-fill { width: 0%; height: 100%; background: var(--grad); position: absolute; animation: loadScan 1s linear forwards; }
+        @keyframes loadScan { to { width: 100%; } }
+
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
-    <section id="screen-login" class="screen active">
+    <section id="screen-login" class="screen active" style="margin-top: 5vh;">
         <div class="vortex-logo"><span class="vortex-logo-v">V</span></div>
-        <h1 style="font-family:'Space Grotesk'; margin-bottom: 40px; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 38px; font-weight: 800; text-align: center;">VORTEX PRO AI</h1>
-        <div class="card">
-            <input type="email" id="email" placeholder="E-mail">
-            <input type="password" id="pass" placeholder="Senha">
-            <button class="btn btn-primary" onclick="handleAuth()">IDENTIFICAR OPERADOR</button>
+        <h1 style="font-family:'Orbitron'; margin-bottom: 50px; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 36px; font-weight: 800; text-align: center; text-shadow: 0 0 15px rgba(139, 92, 246, 0.3);">VORTEX PRO AI</h1>
+        <div class="card" style="border-color: rgba(139, 92, 246, 0.3);">
+            <input type="email" id="email" placeholder="OPERADOR ID (E-MAIL)">
+            <input type="password" id="pass" placeholder="CHAVE DE ACESSO (SENHA)">
+            <button class="btn btn-primary" onclick="handleAuth()">AUTENTICAR NO SISTEMA</button>
         </div>
     </section>
 
     <section id="screen-app" class="screen">
-        <div id="rankCard" class="card" style="border-color: var(--primary); text-align: center; padding: 15px;">
-            <div id="rankLabel" style="color:var(--primary); font-weight: 800;">PATENTE: CARREGANDO...</div>
+        <div id="rankCard" class="card rank-card">
+            <div id="rankLabel">PATENTE: CARREGANDO...</div>
         </div>
 
         <div class="card">
-            <span class="label-app">MINERAÇÃO DE LINK</span>
-            <input type="url" id="productUrl" placeholder="Link Shopee ou AliExpress">
-            <button class="btn btn-extract" id="btnExtract" onclick="capturePrice(this)">EXTRAIR DADOS</button>
+            <span class="label-app">SCANNERS DE LINK (SHOPEE/ALI)</span>
+            <input type="url" id="productUrl" placeholder="Cole o link do fornecedor aqui">
+            <button class="btn btn-extract" id="btnExtract" onclick="capturePrice(this)">INICIAR EXTRAÇÃO</button>
+            <div class="loader" id="extractLoader"><div class="loader-fill"></div></div>
             
-            <span class="label-app">LOGÍSTICA (CEP)</span>
+            <span class="label-app" style="margin-top: 15px;">COORDENADAS LOGÍSTICAS (CEP)</span>
             <input type="text" id="destCep" placeholder="00000000" maxlength="8" oninput="validarCEP(this)">
             <div id="locDisplay"></div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <div><span class="label-app">CUSTO FORN.</span><input type="text" id="supplier" placeholder="0.00" oninput="atualizarSugestao()"></div>
-                <div><span class="label-app">FRETE (R$)</span><input type="text" id="shipping" value="0.00" readonly style="color: #666;"></div>
+                <div><span class="label-app">CUSTO (R$)</span><input type="text" id="supplier" placeholder="0.00" oninput="atualizarSugestao()"></div>
+                <div><span class="label-app">FRETE REGIONAL</span><input type="text" id="shipping" value="0,00" readonly style="color: #666; border-color: #1a1a2e;"></div>
             </div>
 
-            <span class="label-app">REVENDA SUGERIDA</span>
-            <input type="text" id="sale" style="color: var(--primary); font-size: 20px;">
+            <span class="label-app">REVENDA SUGERIDA (33% MARGEM)</span>
+            <input type="text" id="sale" style="color: var(--primary); font-size: 20px; border-color: var(--primary); text-shadow: var(--neon-shadow);">
             
-            <button class="btn btn-primary" onclick="calcular()">⚡ CALCULAR MARGEM REAL</button>
+            <button class="btn btn-primary" id="btnCalc" onclick="calcular()">⚡ EXECUTAR CÁLCULO REAL</button>
+            <div class="loader" id="calcLoader"><div class="loader-fill"></div></div>
         </div>
 
-        <div id="resultCard" class="card hidden" style="border: 2px solid var(--green); text-align: center;">
-            <div style="font-size: 12px; color: #888;">LUCRO LÍQUIDO ESTIMADO:</div>
-            <h2 id="resProfit" style="color:var(--green); font-size: 40px; font-family: 'Space Grotesk';">R$ 0,00</h2>
+        <div id="resultCard" class="card hidden">
+            <div style="font-size: 12px; color: #888; font-family: 'Orbitron'; letter-spacing: 1px;">LUCRO LÍQUIDO OPERACIONAL:</div>
+            <h2 id="resProfit">R$ 0,00</h2>
+            
             <div class="ad-banner" onclick="window.open('https://www.nuvemshop.com.br/partners/vrtex-pro')">
-                <div style="font-size: 24px;">🏢</div>
+                <div style="font-size: 26px;">🏢</div>
                 <div style="text-align: left;">
-                    <div style="color: #00d2ff; font-size: 10px; font-weight: 800;">PARCEIRO OFICIAL</div>
-                    <div style="font-size: 13px; font-weight: bold;">Crie sua Loja Nuvemshop aqui</div>
+                    <div style="color: #00d2ff; font-size: 10px; font-weight: 800; font-family: 'Orbitron';">PARCEIRO OFICIAL</div>
+                    <div style="font-size: 13px; font-weight: bold; font-family: 'Rajdhani';">Crie sua Loja Nuvemshop aqui</div>
                 </div>
             </div>
         </div>
 
-        <button class="btn btn-logout" onclick="logout()">ENCERRAR SESSÃO</button>
+        <button class="btn btn-logout" onclick="logout()">ENCERRAR SESSÃO OPERACIONAL</button>
     </section>
 
     <script>
+        // CONFIG FIREBASE
         const firebaseConfig = { apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I", authDomain: "vortexpro1021.firebaseapp.com", projectId: "vortexpro1021", storageBucket: "vortexpro1021.firebasestorage.app", messagingSenderId: "403000271858", appId: "1:403000271858:web:7a8716548ee0a1b822016b" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
+        // AUTH COM ANIMAÇÃO
         async function handleAuth() {
             const e = document.getElementById('email').value, p = document.getElementById('pass').value;
-            try { await firebase.auth().signInWithEmailAndPassword(e, p); } catch(err) { alert("Acesso negado."); }
+            if(!e || !p) return alert("Preencha as credenciais!");
+            try { 
+                await firebase.auth().signInWithEmailAndPassword(e, p); 
+            } catch(err) { 
+                alert("Acesso negado. Credenciais incorretas."); 
+            }
         }
 
         firebase.auth().onAuthStateChanged(async (user) => {
@@ -134,9 +187,21 @@
                 const doc = await db.collection("users").doc(user.uid).get();
                 const rankLabel = document.getElementById('rankLabel');
                 const rankCard = document.getElementById('rankCard');
-                const patente = doc.exists ? (doc.data().patente || "BRONZE") : "BRONZE";
-                rankLabel.innerText = `PATENTE: ${patente} ${patente === 'OURO' ? '💎' : '🛡️'}`;
-                if(patente === "OURO") { rankCard.style.borderColor = "var(--gold)"; rankLabel.style.color = "var(--gold)"; }
+                
+                let patente = "BRONZE";
+                if(doc.exists) patente = doc.data().patente || "BRONZE";
+
+                if(patente === "OURO") {
+                    rankLabel.innerText = "PATENTE: OURO 💎";
+                    rankLabel.classList.remove('gold-locked');
+                    rankCard.classList.add('gold-active');
+                } else {
+                    rankLabel.innerText = "PATENTE: BRONZE";
+                    rankLabel.classList.add('gold-locked'); // Mostra que está "bloqueado"
+                    rankCard.classList.remove('gold-active');
+                    rankCard.style.borderColor = "var(--primary)";
+                }
+                
                 document.getElementById('screen-login').classList.remove('active');
                 document.getElementById('screen-app').classList.add('active');
             }
@@ -144,59 +209,107 @@
 
         function logout() { firebase.auth().signOut().then(() => window.location.reload()); }
 
-        function formatVal(v) { return parseFloat(v.toString().replace(',', '.')); }
+        // UTILITÁRIOS DE CÁLCULO
+        function formatInput(val) {
+            return parseFloat(val.toString().replace(',', '.'));
+        }
 
         function atualizarSugestao() {
-            const c = formatVal(document.getElementById('supplier').value) || 0;
-            const f = formatVal(document.getElementById('shipping').value) || 0;
+            const c = formatInput(document.getElementById('supplier').value) || 0;
+            const f = formatInput(document.getElementById('shipping').value) || 0;
             if(c > 0) document.getElementById('sale').value = ((c + f) * 1.33).toFixed(2).replace('.', ',');
         }
 
+        // VIA CEP API COM FEEDBACK VISUAL
         async function validarCEP(el) {
             const display = document.getElementById('locDisplay');
             const cep = el.value.replace(/\D/g, '');
             if(cep.length === 8) {
-                display.innerText = "⏳ Conectando...";
+                display.innerText = "⏳ Sincronizando satélite...";
                 try {
                     const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
                     const d = await r.json();
                     if(!d.erro) {
                         display.innerHTML = `📍 ${d.localidade} - ${d.uf}`;
-                        const vF = (d.uf === 'SP' ? 12.90 : 22.50);
-                        document.getElementById('shipping').value = vF.toFixed(2).replace('.', ',');
+                        const valorFrete = (d.uf === 'SP' ? 12.90 : 22.50);
+                        document.getElementById('shipping').value = valorFrete.toFixed(2).replace('.', ',');
                         atualizarSugestao();
-                    } else { display.innerText = "❌ CEP não encontrado"; }
-                } catch(e) { display.innerText = "⚠️ Erro de sinal. Tente novamente."; }
+                    } else { display.innerText = "❌ Coordenadas inválidas."; }
+                } catch(e) { display.innerText = "⚠️ Erro de sinal regional."; }
+            } else { display.innerText = ""; }
+        }
+
+        // SCRAPINGBEE COM ANIMAÇÃO DE SCANNER (v5.0 Fix)
+        async function capturePrice(btn) {
+            const urlLoja = document.getElementById('productUrl').value;
+            const loader = document.getElementById('extractLoader');
+            if(!urlLoja) return alert("Cole o link primeiro!");
+            
+            btn.innerText = "🔍 ESCANEANDO PROTOCOLOS...";
+            btn.disabled = true;
+            btn.style.opacity = "0.7";
+            loader.style.display = 'block';
+
+            const apiKey = "DFAK7P4M6H3Z015E9RLG"; 
+            try {
+                // ScrapingBee com Proxy Premium e JavaScript para Shopee
+                const response = await fetch(`https://app.scrapingbee.com/api/v1/?api_key=${apiKey}&url=${encodeURIComponent(urlLoja)}&render_js=false&premium_proxy=true`);
+                if (!response.ok) throw new Error();
+                
+                const html = await response.text();
+                // Regex melhorada
+                const priceMatch = html.match(/R\$\s?(\d{1,3}(?:\.\d{3})*,\d{2})/);
+                
+                if(priceMatch) {
+                    const precoFinal = priceMatch[1].replace('.', '').replace(',', '.');
+                    document.getElementById('supplier').value = precoFinal.replace('.', ',');
+                    atualizarSugestao();
+                    alert("✅ Dados extraídos com sucesso!");
+                } else { alert("Site bloqueou a leitura automática. Digite o custo manually."); }
+            } catch (error) {
+                alert("Servidor ocupado. Tente novamente ou digite manualmente.");
+            } finally { 
+                btn.innerText = "INICIAR EXTRAÇÃO"; 
+                btn.disabled = false;
+                btn.style.opacity = "1";
+                loader.style.display = 'none';
             }
         }
 
-        async function capturePrice(btn) {
-            const url = document.getElementById('productUrl').value;
-            if(!url) return alert("Cole o link!");
-            btn.innerText = "🔍 MINERANDO...";
-            btn.disabled = true;
-            try {
-                const response = await fetch(`https://app.scrapingbee.com/api/v1/?api_key=DFAK7P4M6H3Z015E9RLG&url=${encodeURIComponent(url)}&render_js=false&premium_proxy=true`);
-                const html = await response.text();
-                const match = html.match(/R\$\s?(\d{1,3}(?:\.\d{3})*,\d{2})/);
-                if(match) {
-                    const p = match[1].replace('.', '').replace(',', '.');
-                    document.getElementById('supplier').value = p.replace('.', ',');
-                    atualizarSugestao();
-                    alert("✅ Preço extraído!");
-                } else { alert("Preço não detectado. Digite manualmente."); }
-            } catch (e) { alert("Falha na mineração."); } finally { btn.innerText = "EXTRAIR DADOS"; btn.disabled = false; }
-        }
-
+        // CÁLCULO COM ANIMAÇÃO E CONFETI DE OURO
         function calcular() {
-            const v = formatVal(document.getElementById('sale').value) || 0;
-            const c = formatVal(document.getElementById('supplier').value) || 0;
-            const f = formatVal(document.getElementById('shipping').value) || 0;
-            const lucro = v - c - f - (v * 0.12);
-            document.getElementById('resProfit').innerText = "R$ " + lucro.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-            document.getElementById('resProfit').style.color = lucro > 0 ? 'var(--green)' : 'var(--red)';
-            document.getElementById('resultCard').classList.remove('hidden');
-            if(lucro > 0) confetti({ particleCount: 150, spread: 70, origin: { y: 0.7 } });
+            const v = formatInput(document.getElementById('sale').value) || 0;
+            const c = formatInput(document.getElementById('supplier').value) || 0;
+            const f = formatInput(document.getElementById('shipping').value) || 0;
+            const btn = document.getElementById('btnCalc');
+            const loader = document.getElementById('calcLoader');
+            const resultCard = document.getElementById('resultCard');
+            const resProfit = document.getElementById('resProfit');
+            
+            if(v === 0 || c === 0) return alert("Preencha os valores!");
+
+            btn.innerText = "⏳ PROCESSANDO DADOS...";
+            btn.disabled = true;
+            loader.style.display = 'block';
+            resultCard.classList.add('hidden');
+
+            // Simula um tempo de carregamento para gerar dopamina
+            setTimeout(() => {
+                const lucro = v - c - f - (v * 0.12);
+                resProfit.innerText = "R$ " + lucro.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                resProfit.style.color = lucro > 0 ? 'var(--green)' : 'var(--red)';
+                resProfit.style.textShadow = lucro > 0 ? "0 0 15px var(--green)" : "0 0 15px var(--red)";
+                
+                resultCard.classList.remove('hidden');
+                loader.style.display = 'none';
+                btn.innerText = "⚡ EXECUTAR CÁLCULO REAL";
+                btn.disabled = false;
+
+                if(lucro > 0) {
+                    // Confeti customizado: Moedas Douradas e Verde Dinheiro
+                    confetti({ particleCount: 150, spread: 80, origin: { y: 0.7 }, colors: ['#ffd700', '#00ff88', '#b8860b'] });
+                }
+            }, 1000); // 1 segundo de "carregamento"
         }
     </script>
 </body>
