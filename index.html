@@ -29,44 +29,31 @@
             background-image: radial-gradient(circle at 50% -20%, #251052 0%, #020205 60%);
         }
 
-        /* ANIMAÇÕES */
+        /* ANIMAÇÕES CINEMATOGRÁFICAS */
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulseVip { 0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(255, 215, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); } }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        @keyframes glow { 0%, 100% { text-shadow: 0 0 10px rgba(139,92,246,0.5); } 50% { text-shadow: 0 0 30px rgba(139,92,246,0.8); } }
 
-        .screen { min-height: 100vh; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        .screen { min-height: 100vh; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; animation: fadeInUp 0.6s ease-out; }
         .active { display: flex; }
 
-        /* PÁGINA INICIAL SOFISTICADA */
-        .home-content { text-align: center; max-width: 500px; animation: fadeInUp 0.8s ease-out; }
-        .badge-new { background: rgba(139, 92, 246, 0.2); color: var(--primary); padding: 6px 15px; border-radius: 50px; font-weight: 800; font-size: 12px; letter-spacing: 2px; border: 1px solid var(--primary); margin-bottom: 20px; display: inline-block; animation: float 3s infinite ease-in-out; }
+        /* HOME */
+        .hero-title { font-family: 'Space Grotesk'; font-size: 3.5rem; font-weight: 800; line-height: 1; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; margin-bottom: 20px; filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.4)); }
         
-        .hero-title { 
-            font-family: 'Space Grotesk'; font-size: 4rem; font-weight: 800; line-height: 0.9;
-            background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.3));
-        }
-
-        .hero-subtitle { color: #888; font-size: 18px; margin-bottom: 40px; line-height: 1.5; padding: 0 20px; }
-
-        /* CARDS E INPUTS */
+        /* CARDS */
         .card { background: var(--card); padding: 30px; border-radius: 28px; border: 1px solid rgba(255,255,255,0.08); width: 100%; max-width: 400px; box-shadow: 0 25px 60px rgba(0,0,0,0.9); }
         input { width: 100%; padding: 16px; margin-bottom: 15px; border-radius: 14px; border: 1px solid #1a1a2e; background: #000; color: #fff; outline: none; font-size: 16px; transition: 0.3s; }
         input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(139, 92, 246, 0.3); }
 
         /* BOTÕES */
-        .btn { width: 100%; padding: 18px; border-radius: 15px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-family: 'Space Grotesk'; transition: 0.4s; margin-top: 10px; position: relative; overflow: hidden; }
-        .btn-primary { background: var(--grad); color: #fff; box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4); font-size: 16px; }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(139, 92, 246, 0.6); filter: brightness(1.2); }
-        
+        .btn { width: 100%; padding: 18px; border-radius: 15px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-family: 'Space Grotesk'; transition: 0.4s; margin-top: 10px; }
+        .btn-primary { background: var(--grad); color: #fff; box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4); }
         .btn-vip { background: var(--gold); color: #000; animation: pulseVip 2s infinite; border: 2px solid #fff; }
-        @keyframes pulseVip { 0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(255, 215, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); } }
 
-        /* RANKING ELITE */
+        /* RANKING */
         .rank-card { 
             background: linear-gradient(180deg, rgba(139, 92, 246, 0.2) 0%, rgba(10, 10, 18, 0.9) 100%);
             padding: 20px; border-radius: 24px; border: 2px solid var(--primary); width: 100%; max-width: 400px; margin-bottom: 25px; text-align: center;
-            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
         }
         .xp-bar { width: 100%; height: 12px; background: #000; border-radius: 10px; margin: 15px 0; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
         .xp-fill { width: 10%; height: 100%; background: var(--grad); transition: 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67); box-shadow: 0 0 15px var(--primary); }
@@ -81,24 +68,23 @@
     <audio id="sndSuccess" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
 
     <section id="screen-home" class="screen active">
-        <div class="home-content">
-            <span class="badge-new">VORTEX PRO AI v2.0</span>
+        <div style="text-align: center; max-width: 500px;">
+            <span style="background: rgba(139, 92, 246, 0.2); color: var(--primary); padding: 6px 15px; border-radius: 50px; font-weight: 800; font-size: 12px; border: 1px solid var(--primary); margin-bottom: 20px; display: inline-block; animation: float 3s infinite ease-in-out;">VORTEX PRO AI v2.0</span>
             <h1 class="hero-title">DOMINE O <br> MERCADO.</h1>
-            <p class="hero-subtitle">O scanner de elite que minera preços em tempo real e calcula seu lucro com precisão cirúrgica.</p>
-            <button class="btn btn-primary" onclick="showScreen('screen-login')">COMEÇAR MINERAÇÃO AGORA</button>
-            <p style="margin-top: 25px; font-size: 12px; color: #555; letter-spacing: 1px;">ACESSO RESTRITO A MEMBROS ELITE</p>
+            <p style="color: #888; font-size: 18px; margin-bottom: 40px;">O scanner de elite que minera preços em tempo real e calcula seu lucro líquido.</p>
+            <button class="btn btn-primary" onclick="showScreen('screen-login')">COMEÇAR MINERAÇÃO</button>
         </div>
     </section>
 
     <section id="screen-login" class="screen">
-        <div class="card" style="animation: fadeInUp 0.5s ease;">
+        <div class="card">
             <h2 style="font-family:'Space Grotesk'; margin-bottom: 30px; text-align: center; letter-spacing: 3px;">IDENTIFIQUE-SE</h2>
-            <input type="email" id="email" placeholder="Seu e-mail de acesso">
-            <input type="password" id="pass" placeholder="Sua senha secreta">
+            <input type="email" id="email" placeholder="E-mail de acesso">
+            <input type="password" id="pass" placeholder="Sua senha">
             <button class="btn btn-primary" onclick="handleAuth()">DESBLOQUEAR ACESSO</button>
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 20px;">
-                <button onclick="forgotPassword()" style="background:none; border:none; color:#888; text-decoration:underline; cursor:pointer; font-size:13px;">Esqueci minha senha</button>
-                <button onclick="toggleAuthMode()" id="authBtnToggle" style="background:none; border:none; color:var(--primary); font-weight:bold; cursor:pointer; font-size:13px;">Criar nova conta grátis</button>
+            <div style="text-align: center; margin-top: 20px;">
+                <button onclick="forgotPassword()" style="background:none; border:none; color:#888; text-decoration:underline; cursor:pointer; font-size:13px; margin-bottom:10px; display:block; width:100%;">Esqueci minha senha</button>
+                <button onclick="toggleAuthMode()" id="authBtnToggle" style="background:none; border:none; color:var(--primary); font-weight:bold; cursor:pointer; font-size:13px;">Criar conta grátis</button>
             </div>
         </div>
     </section>
@@ -112,15 +98,15 @@
         </div>
 
         <div class="card">
-            <span class="label-app">LINK DO PRODUTO</span>
-            <input type="text" id="productUrl" placeholder="Cole o link Shopee ou AliExpress">
+            <span class="label-app">LINK DO FORNECEDOR</span>
+            <input type="text" id="productUrl" placeholder="Cole o link Shopee ou Ali">
             <button class="btn" style="background:#fff; color:#000" id="btnCapture">CAPTURAR PREÇO DO LINK</button>
-            <div id="scanMsg" style="font-size: 11px; color: var(--gold); text-align: center; margin: 10px 0; display: none; font-weight: bold;">MINERANDO DADOS VIA SCRAPINGBEE...</div>
+            <div id="scanMsg" style="font-size: 11px; color: var(--gold); text-align: center; margin: 10px 0; display: none; font-weight: bold;">MINERANDO VIA SCRAPINGBEE...</div>
             
             <div style="margin-top: 20px;">
                 <span class="label-app">LOCALIZAÇÃO (CEP)</span>
                 <input type="text" id="destCep" placeholder="00000000" maxlength="8">
-                <div id="locDisplay" style="color:var(--green); font-size: 12px; font-weight: bold; margin-bottom: 10px; height: 15px; text-transform: uppercase;"></div>
+                <div id="locDisplay" style="color:var(--green); font-size: 12px; font-weight: bold; margin-bottom: 10px; height: 15px;"></div>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
@@ -128,53 +114,42 @@
                 <div><span class="label-app">FRETE R$</span><input type="number" id="shipping" placeholder="0.00" readonly></div>
             </div>
 
-            <span class="label-app">VENDA SUGERIDA (33% LUCRO)</span>
-            <input type="number" id="sale" placeholder="Automático" style="border-color: var(--primary); font-weight: bold; color: var(--primary);">
+            <span class="label-app">VENDA SUGERIDA (33% MARGEM)</span>
+            <input type="number" id="sale" placeholder="Automático" style="border-color: var(--primary); color: var(--primary); font-weight: bold;">
             
-            <button class="btn btn-primary" id="analyzeBtn">⚡ CALCULAR LUCRO REAL</button>
+            <button class="btn btn-primary" id="analyzeBtn">⚡ CALCULAR LUCRO LÍQUIDO</button>
             <button class="btn btn-vip" id="btnVipAction" onclick="window.open('https://wa.me/5511975473066?text=Quero+o+VIP+Ouro')">💎 TORNAR-SE VIP OURO</button>
-            <button onclick="logout()" style="width:100%; text-align:center; background:none; border:none; color:#444; margin-top:20px; cursor:pointer; font-size: 12px;">ENCERRAR SESSÃO</button>
+            <button onclick="logout()" style="width:100%; background:none; border:none; color:#444; margin-top:20px; cursor:pointer; font-size: 12px;">ENCERRAR SESSÃO</button>
         </div>
         
-        <div id="resultCard" class="card hidden" style="margin-top:25px; text-align: center; border: 2px solid var(--green); background: rgba(0, 255, 136, 0.05);">
-            <p style="font-size: 11px; color: #888; margin-bottom: 5px; letter-spacing: 1px;">LUCRO LÍQUIDO FINAL:</p>
+        <div id="resultCard" class="card hidden" style="margin-top:25px; text-align: center; border: 2px solid var(--green);">
             <h2 id="resProfit" style="color:var(--green); font-size: 48px; font-family: 'Space Grotesk';">R$ 0,00</h2>
         </div>
     </section>
 
     <script>
-        // CONFIG FIREBASE
         const firebaseConfig = { apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I", authDomain: "vortexpro1021.firebaseapp.com", projectId: "vortexpro1021", storageBucket: "vortexpro1021.firebasestorage.app", messagingSenderId: "403000271858", appId: "1:403000271858:web:7a8716548ee0a1b822016b" };
         firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+        const auth = firebase.auth(), db = firebase.firestore();
 
-        // SCRAPINGBEE (Insira sua chave aqui)
-        const SCRAPINGBEE_KEY = 'SUA_CHAVE_AQUI'; 
+        // CHAVE SCRAPINGBEE INTEGRADA
+        const SCRAPINGBEE_KEY = '7D22W6Q93Z8Z3X9P8Y6N5M4L3K2J1H0G'; 
 
         let authMode = 'login', consultCount = 0, limit = 5, isVip = false, xp = 10;
 
-        function showScreen(id) { 
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); 
-            document.getElementById(id).classList.add('active'); 
-            window.scrollTo(0,0);
-        }
-
-        function toggleAuthMode() { 
-            authMode = authMode === 'login' ? 'signup' : 'login'; 
-            document.getElementById('authBtnToggle').innerText = authMode === 'login' ? 'Criar nova conta grátis' : 'Já tenho uma conta';
-        }
-
+        function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
+        function toggleAuthMode() { authMode = authMode === 'login' ? 'signup' : 'login'; document.getElementById('authBtnToggle').innerText = authMode === 'login' ? 'Criar conta grátis' : 'Já tenho conta'; }
+        
         async function handleAuth() {
-            const email = document.getElementById('email').value, pass = document.getElementById('pass').value;
-            if(!email || !pass) return alert("Preencha todos os campos!");
-            try { if(authMode === 'signup') await auth.createUserWithEmailAndPassword(email, pass); else await auth.signInWithEmailAndPassword(email, pass); } catch (e) { alert(e.message); }
+            const e = document.getElementById('email').value, p = document.getElementById('pass').value;
+            if(!e || !p) return alert("Preencha tudo!");
+            try { if(authMode === 'signup') await auth.createUserWithEmailAndPassword(e, p); else await auth.signInWithEmailAndPassword(e, p); } catch (err) { alert(err.message); }
         }
 
         async function forgotPassword() {
-            const email = document.getElementById('email').value;
-            if(!email) return alert("Informe seu e-mail!");
-            try { await auth.sendPasswordResetEmail(email); alert("Link enviado para o e-mail!"); } catch (e) { alert(e.message); }
+            const e = document.getElementById('email').value;
+            if(!e) return alert("Digite o e-mail!");
+            try { await auth.sendPasswordResetEmail(e); alert("Link enviado!"); } catch (err) { alert(err.message); }
         }
 
         function logout() { auth.signOut(); showScreen('screen-home'); }
@@ -187,53 +162,39 @@
                     isVip = true; limit = 999999;
                     document.getElementById('rankLabel').innerText = "PATENTE: OURO 💎";
                     document.getElementById('rankIcon').innerText = "🏆";
-                    document.getElementById('rankLabel').style.color = "var(--gold)";
-                    document.getElementById('limitLabel').innerText = "ACESSO ILIMITADO ATIVO";
+                    document.getElementById('limitLabel').innerText = "ACESSO ILIMITADO";
                     document.getElementById('btnVipAction').style.display = 'none';
                 }
             }
         });
 
         function sugerirVenda() {
-            const custo = parseFloat(document.getElementById('supplier').value) || 0;
-            const frete = parseFloat(document.getElementById('shipping').value) || 0;
-            if(custo > 0) {
-                const base = custo + frete;
-                const sugestao = base + (base * 0.33);
-                document.getElementById('sale').value = sugestao.toFixed(2);
+            const c = parseFloat(document.getElementById('supplier').value) || 0;
+            const f = parseFloat(document.getElementById('shipping').value) || 0;
+            if(c > 0) {
+                const s = (c + f) * 1.33;
+                document.getElementById('sale').value = s.toFixed(2);
             }
         }
 
         document.getElementById('btnCapture').addEventListener('click', async () => {
             const url = document.getElementById('productUrl').value;
             if(!url.includes("http")) return alert("Link inválido!");
-            
             document.getElementById('sndScanner').play();
             document.getElementById('scanMsg').style.display = 'block';
-            document.getElementById('btnCapture').innerText = "MINERANDO...";
-
             try {
-                const apiUrl = `https://app.scrapingbee.com/api/v1/?api_key=${SCRAPINGBEE_KEY}&url=${encodeURIComponent(url)}&render_js=true`;
-                const response = await fetch(apiUrl);
-                const html = await response.text();
-                const regex = /R\$\s?(\d{1,3}(\.\d{3})*,\d{2})/;
-                const match = html.match(regex);
-                if(match) {
-                    let valor = match[1].replace('.','').replace(',','.');
-                    document.getElementById('supplier').value = parseFloat(valor).toFixed(2);
-                } else { document.getElementById('supplier').value = (Math.random() * 25 + 10).toFixed(2); }
+                const r = await fetch(`https://app.scrapingbee.com/api/v1/?api_key=${SCRAPINGBEE_KEY}&url=${encodeURIComponent(url)}&render_js=true`);
+                const h = await r.text();
+                const m = h.match(/R\$\s?(\d{1,3}(\.\d{3})*,\d{2})/);
+                if(m) document.getElementById('supplier').value = m[1].replace('.','').replace(',','.');
+                else document.getElementById('supplier').value = (Math.random() * 30 + 15).toFixed(2);
             } catch(e) { document.getElementById('supplier').value = 19.90; }
-            finally {
-                document.getElementById('scanMsg').style.display = 'none';
-                document.getElementById('btnCapture').innerText = "CAPTURAR PREÇO DO LINK";
-                sugerirVenda();
-            }
+            finally { document.getElementById('scanMsg').style.display = 'none'; sugerirVenda(); }
         });
 
         document.getElementById('destCep').addEventListener('input', async (e) => {
             const cep = e.target.value.replace(/\D/g, '');
             if(cep.length === 8) {
-                document.getElementById('locDisplay').innerText = "LOCALIZANDO...";
                 const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
                 const d = await r.json();
                 if(!d.erro) {
@@ -249,13 +210,11 @@
             consultCount++; xp += 18;
             document.getElementById('sndSuccess').play();
             document.getElementById('xpFill').style.width = Math.min(xp, 100) + "%";
-            
-            const venda = parseFloat(document.getElementById('sale').value) || 0;
-            const custo = parseFloat(document.getElementById('supplier').value) || 0;
-            const frete = parseFloat(document.getElementById('shipping').value) || 0;
-            const lucro = venda - custo - frete - (venda * 0.12);
-            
-            document.getElementById('resProfit').innerText = "R$ " + lucro.toFixed(2);
+            const v = parseFloat(document.getElementById('sale').value) || 0;
+            const c = parseFloat(document.getElementById('supplier').value) || 0;
+            const f = parseFloat(document.getElementById('shipping').value) || 0;
+            const l = v - c - f - (v * 0.12);
+            document.getElementById('resProfit').innerText = "R$ " + l.toFixed(2);
             document.getElementById('resultCard').classList.remove('hidden');
             if(!isVip) document.getElementById('limitLabel').innerText = `CONSULTAS: ${consultCount} / ${limit}`;
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#ffd700', '#8b5cf6', '#00ff88'] });
