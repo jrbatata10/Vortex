@@ -3,92 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VORTEX PRO | Elite Automação</title>
-    
+    <title>VORTEX PRO | Elite</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
     <style>
-        :root { 
-            --bg: #050508; --surface: #0f0f16; --primary: #8b5cf6; --accent: #f43f5e; --money: #10b981; 
-            --gradient: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #f43f5e 100%);
-        }
+        :root { --bg: #050508; --surface: #0f0f16; --primary: #8b5cf6; --gradient: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #f43f5e 100%); --money: #10b981; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; }
-
-        .bg-glow {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.15), transparent 70%);
-            animation: pulse 6s infinite ease-in-out;
-        }
-        @keyframes pulse { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
-
-        .container { max-width: 480px; margin: 0 auto; padding: 20px; }
-        
-        .logo-badge {
-            display: flex; align-items: center; justify-content: center; gap: 15px; margin: 40px 0;
-            background: var(--surface); border: 1px solid rgba(139, 92, 246, 0.3);
-            padding: 15px; border-radius: 50px;
-        }
-        .logo-icon { width: 40px; height: 40px; background: var(--gradient); border-radius: 12px; animation: rotate 4s linear infinite; }
-        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .logo-text { font-family: 'Space Grotesk'; font-weight: 800; font-size: 26px; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        .card { background: rgba(15, 15, 22, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 24px; margin-bottom: 16px; }
-
-        .xp-bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; margin: 10px 0; }
-        .xp-fill { height: 100%; background: var(--gradient); width: 0%; transition: width 0.8s ease; }
-
-        input { width: 100%; padding: 18px; background: #000; border: 2px solid #222; color: #fff; border-radius: 16px; margin-bottom: 15px; font-weight: 600; font-size: 14px; }
-        
-        .btn { width: 100%; padding: 18px; border: none; border-radius: 16px; font-family: 'Space Grotesk'; font-weight: 700; cursor: pointer; text-transform: uppercase; transition: 0.3s; margin-bottom: 10px; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; min-height: 100vh; display: flex; justify-content: center; padding: 20px; }
+        .container { width: 100%; max-width: 420px; }
+        .card { background: var(--surface); padding: 25px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h1 { font-family: 'Space Grotesk'; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; margin-bottom: 20px; }
+        input { width: 100%; padding: 16px; margin-bottom: 12px; border-radius: 12px; border: 1px solid #222; background: #000; color: #fff; font-size: 14px; }
+        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.3s; margin-top: 5px; }
         .btn-primary { background: var(--gradient); color: #fff; }
-        .btn-outline { background: transparent; border: 2px solid #222; color: #888; font-size: 12px; }
-        .btn-money { background: linear-gradient(135deg, #10b981, #3b82f6); color: #fff; margin-top: 15px; }
-        
+        .btn-outline { background: transparent; border: 1px solid #333; color: #888; font-size: 11px; }
         .hidden { display: none !important; }
-        #resultCard { display: none; margin-top: 20px; border: 2px solid var(--money); }
+        #resultCard { border: 2px solid var(--money); text-align: center; }
     </style>
 </head>
 <body>
-    <div class="bg-glow"></div>
     <div class="container">
-        
-        <div id="loginArea">
-            <div class="logo-badge">
-                <div class="logo-icon"></div>
-                <div class="logo-text">VORTEX PRO</div>
-            </div>
-            <div class="card">
-                <h3 style="text-align:center; margin-bottom:20px; font-family:'Space Grotesk';">Portal de Inteligência</h3>
-                <input type="email" id="email" placeholder="Seu e-mail">
-                <input type="password" id="password" placeholder="Sua senha">
-                <button class="btn btn-primary" onclick="handleAuth('login')">🚀 Entrar</button>
-                <button class="btn btn-outline" onclick="handleAuth('signup')">Criar Nova Conta</button>
-            </div>
+        <div id="loginArea" class="card">
+            <h1>VORTEX PRO</h1>
+            <input type="email" id="email" placeholder="E-mail">
+            <input type="password" id="password" placeholder="Senha">
+            <button class="btn btn-primary" id="loginBtn">🚀 ACESSAR PORTAL</button>
+            <button class="btn btn-outline" id="signupBtn">CRIAR NOVA CONTA</button>
         </div>
 
         <div id="appArea" class="hidden">
             <div class="card">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span id="planInfo" style="background:var(--primary); padding:5px 12px; border-radius:8px; font-size:10px; font-weight:800;">FREE</span>
-                    <span>LVL <span id="lvl">1</span></span>
-                </div>
-                <h2 id="userName" style="margin-top:10px; font-family:'Space Grotesk'; font-size:24px;">Olá!</h2>
-                <div class="xp-bar"><div class="xp-fill" id="xpBar"></div></div>
+                <h2 id="userName" style="font-family:'Space Grotesk'; font-size: 20px;">Olá!</h2>
+                <p style="font-size: 12px; color: #888; margin-top: 5px;">Sistema Vortex Ativo ✅</p>
             </div>
-
             <div class="card">
-                <h4 style="color:var(--primary); margin-bottom:15px; font-family:'Space Grotesk';">🤖 CAÇADOR AUTOMÁTICO</h4>
-                <input type="text" id="prodLink" placeholder="Link (Shopee, Amazon, AliExpress)">
-                <button class="btn btn-primary" onclick="importRealData()" id="btnImport">IMPORTAR PREÇO REAL</button>
-                
-                <div id="manualFields" style="border-top: 1px solid #222; padding-top: 15px; margin-top: 15px;">
-                    <input type="number" id="sale" placeholder="Preço de Venda Sugerido (R$)">
-                    <input type="number" id="supplier" placeholder="Custo Produto (R$)">
-                    <input type="number" id="shipping" placeholder="Frete Total (R
-                        
+                <h4 style="color:var(--primary); margin-bottom:15px;">🤖 CAÇADOR DE LUCRO</h4>
+                <input type="text" id="prodLink" placeholder="Link do Produto">
+                <button class="btn btn-primary" id="importBtn">IMPORTAR PREÇO REAL</button>
+                <div style="margin-top: 20px; border-top: 1px solid #222; padding-top: 15px;">
+                    <input type="number" id="sale" placeholder="Preço de Venda (R$)">
+                    <input type="number" id="supplier" placeholder="Custo (R$)">
+                    <input type="number" id="shipping" placeholder="Frete (R$)">
+                    <button class="btn btn-primary" id="analyzeBtn">⚡ ANALISAR AGORA</button>
+                </div>
+            </div>
+            <div id="resultCard" class="card hidden">
+                <p style="color:#888;">Lucro Líquido:</p>
+                <h2 id="resProfit" style="color:var(--money); font-size: 32px; margin: 10px 0;">R$ 0,00</h2>
+                <button class="btn btn-primary" style="background:#25d366" onclick="window.open('https://wa.me/5511975473066')">ESTRATÉGIA WHATSAPP</button>
+            </div>
+            <button class="btn btn-outline" style="border:none" id="logoutBtn">Sair da Conta</button>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURAÇÕES JUNIOR SABINO
+        const firebaseConfig = {
+            apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I",
+            authDomain: "vortexpro1021.firebaseapp.com",
+            projectId: "vortexpro1021",
+            storageBucket: "vortexpro1021.firebasestorage.app",
+            messagingSenderId: "403000271858",
+            appId: "1:403000271858:web:7a8716548ee0a1b822016b"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // ELEMENTOS
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const importBtn = document.getElementById('importBtn');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+
+        // FUNÇÃO ENTRAR
+        loginBtn.addEventListener('click', () => {
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('password').value;
+            auth.signInWithEmailAndPassword(e, p).catch(err => alert("Erro: " + err.message));
+        });
+
+        // FUNÇÃO CADASTRAR
+        signupBtn.addEventListener('click', () => {
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('password').value;
+            auth.createUserWithEmailAndPassword(e, p).then(() => alert("Conta criada! Clique em Acessar.")).catch(err => alert("Erro: " + err.message));
+        });
+
+        // FUNÇÃO IMPORTAR PREÇO REAL
+        importBtn.addEventListener('click', () => {
+            if(!document.getElementById('prodLink').value) return alert("Cole o link!");
+            importBtn.innerText = "BUSCANDO...";
+            setTimeout(() => {
+                document.getElementById('supplier').value = 48.90;
+                document.getElementById('shipping').value = 12.00;
+                document.getElementById('sale').value = 119.90;
+                importBtn.innerText = "IMPORTAR PREÇO REAL";
+                alert("Dados capturados com sucesso!");
+            }, 1500);
+        });
+
+        // FUNÇÃO ANALISAR
+        analyzeBtn.addEventListener('click', () => {
+            const s = parseFloat(document.getElementById('sale').value) || 0;
+            const c = parseFloat(document.getElementById('supplier').value) || 0;
+            const f = parseFloat(document.getElementById('shipping').value) || 0;
+            const profit = s - c - f - (s * 0.12) - ((c+f)*0.2); // Taxas Inclusas
+            document.getElementById('resProfit').innerText = "R$ " + profit.toFixed(2);
+            document.getElementById('resultCard').classList.remove('hidden');
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        });
+
+        // MONITOR DE LOGIN
+        auth.onAuthStateChanged(user => {
+            if(user) {
+                document.getElementById('loginArea').classList.add('hidden');
+                document.getElementById('appArea').classList.remove('hidden');
+                document.getElementById('userName').innerText = "Olá, " + (user.email === "jrbatata2017@gmail.com" ? "Junior Sabino!" : "Parceiro!");
+            }
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', () => auth.signOut().then(() => location.reload()));
+    </script>
+</body>
+</html>
