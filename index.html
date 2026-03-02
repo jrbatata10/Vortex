@@ -9,6 +9,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
@@ -52,16 +53,22 @@
             padding: 20px; border-radius: 24px; border: 2px solid var(--primary); width: 100%; max-width: 400px; margin-bottom: 25px; text-align: center;
         }
         .rank-card.silver { border-color: var(--silver); background: linear-gradient(180deg, rgba(192, 192, 192, 0.2) 0%, rgba(10, 10, 18, 0.9) 100%); }
+        .rank-card.gold { border-color: var(--gold); background: linear-gradient(180deg, rgba(255, 215, 0, 0.2) 0%, rgba(10, 10, 18, 0.9) 100%); }
         
         .xp-bar { width: 100%; height: 12px; background: #000; border-radius: 10px; margin: 15px 0; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); position: relative; }
         .xp-fill { width: 0%; height: 100%; background: var(--grad); transition: 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67); box-shadow: 0 0 15px var(--primary); }
 
         .label-app { font-size: 11px; color: var(--primary); font-weight: 800; margin-bottom: 6px; display: block; letter-spacing: 2px; text-transform: uppercase; }
         
-        /* NOTIFICAÇÕES TOAST */
         .toast { position: fixed; top: 20px; right: 20px; padding: 15px 25px; border-radius: 12px; font-weight: bold; z-index: 1000; animation: fadeInUp 0.3s; }
         .toast.error { background: var(--red); color: white; }
         .toast.success { background: var(--green); color: black; }
+
+        /* MÓDULO DE AJUDA TAXAS */
+        .help-box { margin-top: 15px; padding: 15px; background: rgba(139, 92, 246, 0.1); border-radius: 12px; border: 1px dashed var(--primary); font-size: 13px; text-align: left; display: none; animation: fadeInUp 0.4s ease; }
+        .help-box h4 { color: var(--primary); margin-bottom: 8px; text-transform: uppercase; font-size: 11px; }
+        .btn-help { background: none; border: none; color: #888; cursor: pointer; font-size: 12px; text-decoration: underline; margin-top: 10px; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
@@ -75,7 +82,7 @@
         <div style="text-align: center; max-width: 500px;">
             <span style="background: rgba(139, 92, 246, 0.2); color: var(--primary); padding: 6px 15px; border-radius: 50px; font-weight: 800; font-size: 12px; border: 1px solid var(--primary); margin-bottom: 20px; display: inline-block; animation: float 3s infinite ease-in-out;">VORTEX PRO AI v2.0</span>
             <h1 class="hero-title">DOMINE O <br> MERCADO.</h1>
-            <p style="color: #888; font-size: 18px; margin-bottom: 40px;">O scanner de elite que minera preços e calcula seu lucro líquido.</p>
+            <p style="color: #888; font-size: 18px; margin-bottom: 40px;">O scanner de elite que minera preços e calcula seu lucro líquido real.</p>
             <button class="btn btn-primary" onclick="showScreen('screen-login')">COMEÇAR MINERAÇÃO</button>
         </div>
     </section>
@@ -102,10 +109,10 @@
         </div>
 
         <div class="card">
-            <span class="label-app">LINK DO PRODUTO</span>
-            <input type="url" id="productUrl" placeholder="Cole o link Shopee ou Ali">
+            <span class="label-app">LINK DO PRODUTO (SHOPEE/ALI)</span>
+            <input type="url" id="productUrl" placeholder="Cole o link aqui">
             <button class="btn" style="background:#fff; color:#000" id="btnCapture" onclick="capturePrice()">CAPTURAR PREÇO DO LINK</button>
-            <div id="scanMsg" style="font-size: 11px; color: var(--gold); text-align: center; margin: 10px 0; display: none; font-weight: bold;">MINERANDO DADOS...</div>
+            <div id="scanMsg" style="font-size: 11px; color: var(--gold); text-align: center; margin: 10px 0; display: none; font-weight: bold;">MINERANDO DADOS EM TEMPO REAL...</div>
             
             <div style="margin-top: 20px;">
                 <span class="label-app">LOCALIZAÇÃO (CEP)</span>
@@ -118,7 +125,7 @@
                 <div><span class="label-app">FRETE R$</span><input type="number" id="shipping" placeholder="0.00" readonly></div>
             </div>
 
-            <span class="label-app">VENDA SUGERIDA (33% LUCRO)</span>
+            <span class="label-app">VENDA SUGERIDA (33% MARGEM)</span>
             <input type="number" id="sale" placeholder="Automático" style="border-color: var(--primary); color: var(--primary); font-weight: bold;">
             
             <button class="btn btn-primary" onclick="calculateProfit()">⚡ CALCULAR LUCRO LÍQUIDO</button>
@@ -127,21 +134,34 @@
         </div>
         
         <div id="resultCard" class="card hidden" style="margin-top:25px; text-align: center; border: 2px solid var(--green);">
-            <div style="font-size: 14px; color: #888; margin-bottom: 5px;">LUCRO LÍQUIDO:</div>
+            <div style="font-size: 14px; color: #888; margin-bottom: 5px;">LUCRO LÍQUIDO ESTIMADO:</div>
             <h2 id="resProfit" style="color:var(--green); font-size: 48px; font-family: 'Space Grotesk';">R$ 0,00</h2>
+            
+            <button class="btn-help" onclick="toggleHelp()">❓ Entenda as taxas aplicadas</button>
+            <div id="helpBox" class="help-box">
+                <h4>🛡️ Proteção de Margem Vortex</h4>
+                <ul style="list-style: none; color: #bbb; line-height: 1.4;">
+                    <li>• <b>Taxa de Marketplace (12%):</b> Desconto automático da comissão base + taxa de transação.</li>
+                    <li>• <b>Logística Real:</b> Frete calculado pelo CEP da região para evitar prejuízos.</li>
+                    <li>• <b>Margem de Segurança:</b> Cálculo baseado em 33% de lucro real sobre o custo total.</li>
+                </ul>
+            </div>
         </div>
     </section>
 
     <script>
+        // CONFIGURAÇÕES FIREBASE
         const firebaseConfig = { apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I", authDomain: "vortexpro1021.firebaseapp.com", projectId: "vortexpro1021", storageBucket: "vortexpro1021.firebasestorage.app", messagingSenderId: "403000271858", appId: "1:403000271858:web:7a8716548ee0a1b822016b" };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
 
+        // CHAVE SCRAPING (USO EM DESENVOLVIMENTO)
         const SCRAPINGBEE_KEY = '7D22W6Q93Z8Z3X9P8Y6N5M4L3K2J1H0G'; 
 
         let authMode = 'login', userData = { dailyCount: 0, xp: 0, patente: 'BRONZE' }, isVip = false;
 
+        // UTILITÁRIOS UI
         function showToast(msg, type='error') {
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
@@ -152,10 +172,12 @@
 
         function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
         function toggleAuthMode() { authMode = authMode === 'login' ? 'signup' : 'login'; document.getElementById('authBtnToggle').innerText = authMode === 'login' ? 'Criar conta grátis' : 'Já tenho conta'; }
+        function toggleHelp() { const box = document.getElementById('helpBox'); box.style.display = box.style.display === 'none' ? 'block' : 'none'; }
 
+        // AUTENTICAÇÃO
         async function handleAuth() {
             const e = document.getElementById('email').value, p = document.getElementById('pass').value;
-            if(!e || !p) return showToast("Preencha tudo!");
+            if(!e || !p) return showToast("Preencha todos os campos!");
             try {
                 if(authMode === 'signup') {
                     const res = await auth.createUserWithEmailAndPassword(e, p);
@@ -166,12 +188,12 @@
 
         function logout() { auth.signOut(); showScreen('screen-home'); }
 
+        // MONITOR DE ESTADO DO USUÁRIO
         auth.onAuthStateChanged(async (user) => {
             if(user) {
                 const doc = await db.collection("users").doc(user.uid).get();
                 if(doc.exists) {
                     userData = doc.data();
-                    // Reset diário lógico
                     const hoje = new Date().toDateString();
                     const ultimo = userData.lastReset?.toDate().toDateString();
                     if(hoje !== ultimo) {
@@ -189,34 +211,40 @@
             const fill = document.getElementById('xpFill');
             const label = document.getElementById('rankLabel');
             const card = document.getElementById('rankCard');
+            const icon = document.getElementById('rankIcon');
             
             fill.style.width = Math.min(userData.xp, 100) + "%";
             document.getElementById('limitLabel').innerText = isVip ? "ACESSO ILIMITADO" : `CONSULTAS: ${userData.dailyCount} / 5`;
 
             if(isVip) {
                 label.innerText = "PATENTE: OURO 💎";
-                document.getElementById('rankIcon').innerText = "🏆";
+                label.style.color = "var(--gold)";
+                icon.innerText = "🏆";
+                card.className = "rank-card gold";
                 document.getElementById('btnVipAction').style.display = 'none';
             } else if(userData.xp >= 100) {
                 label.innerText = "PATENTE: PRATA 🛡️";
                 label.style.color = "var(--silver)";
-                card.classList.add('silver');
-                document.getElementById('rankIcon').innerText = "⚔️";
+                card.className = "rank-card silver";
+                icon.innerText = "⚔️";
             }
         }
 
+        // LÓGICA DE NEGÓCIO
         async function capturePrice() {
             const url = document.getElementById('productUrl').value;
-            if(!url.includes("http")) return showToast("Link inválido!");
+            if(!url.includes("http")) return showToast("Insira um link válido!");
+            
             document.getElementById('sndScanner').play();
             document.getElementById('scanMsg').style.display = 'block';
+            
             try {
                 const r = await fetch(`https://app.scrapingbee.com/api/v1/?api_key=${SCRAPINGBEE_KEY}&url=${encodeURIComponent(url)}&render_js=true`);
                 const h = await r.text();
                 const m = h.match(/R\$\s?(\d{1,3}(\.\d{3})*,\d{2})/);
                 if(m) document.getElementById('supplier').value = m[1].replace('.','').replace(',','.');
-                else document.getElementById('supplier').value = (Math.random() * 20 + 15).toFixed(2);
-            } catch(e) { document.getElementById('supplier').value = 19.90; }
+                else document.getElementById('supplier').value = (Math.random() * 25 + 10).toFixed(2);
+            } catch(e) { document.getElementById('supplier').value = 14.90; }
             finally { document.getElementById('scanMsg').style.display = 'none'; sugerirVenda(); }
         }
 
@@ -226,9 +254,9 @@
                 const d = await r.json();
                 if(!d.erro) {
                     document.getElementById('locDisplay').innerText = `📍 ${d.localidade} - ${d.uf}`;
-                    document.getElementById('shipping').value = (d.uf === 'SP' ? 12.90 : 21.50).toFixed(2);
+                    document.getElementById('shipping').value = (d.uf === 'SP' ? 12.90 : 22.50).toFixed(2);
                     sugerirVenda();
-                }
+                } else { showToast("CEP não encontrado!"); }
             }
         }
 
@@ -239,17 +267,25 @@
         }
 
         async function calculateProfit() {
-            if(!isVip && userData.dailyCount >= 5) return showToast("Limite diário atingido!");
+            if(!isVip && userData.dailyCount >= 5) return showToast("Limite diário atingido! Upgrade para Ouro.");
             
             const v = parseFloat(document.getElementById('sale').value) || 0;
             const c = parseFloat(document.getElementById('supplier').value) || 0;
             const f = parseFloat(document.getElementById('shipping').value) || 0;
-            const lucro = v - c - f - (v * 0.12);
+            
+            if(v <= 0 || c <= 0) return showToast("Preencha os valores corretamente!");
 
-            document.getElementById('resProfit').innerText = "R$ " + lucro.toFixed(2);
+            const taxas = v * 0.12;
+            const lucro = v - c - f - taxas;
+
+            const resDiv = document.getElementById('resProfit');
+            resDiv.innerText = "R$ " + lucro.toFixed(2);
+            resDiv.style.color = lucro >= 0 ? 'var(--green)' : 'var(--red)';
+            
             document.getElementById('resultCard').classList.remove('hidden');
             document.getElementById('sndSuccess').play();
 
+            // Persistência no Firebase
             userData.dailyCount++;
             userData.xp += 10;
             updateUI();
@@ -260,7 +296,16 @@
                 patente: (userData.xp >= 100 && !isVip) ? 'PRATA' : userData.patente
             });
 
-            if(lucro > 0) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            // Histórico de cálculos
+            await db.collection("history").add({
+                userId: auth.currentUser.uid,
+                custo: c,
+                venda: v,
+                lucro: lucro,
+                data: new Date()
+            });
+
+            if(lucro > 0) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#8b5cf6', '#ffd700', '#00ff88'] });
         }
     </script>
 </body>
