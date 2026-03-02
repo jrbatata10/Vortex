@@ -3,218 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VORTEX PRO | Elite Rank</title>
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/686/686589.png">
-    
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <title>VORTEX PRO | Domine o Dropshipping</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
     <style>
         :root { 
-            --bg: #020205; --card-bg: #0a0a12; --primary: #8b5cf6; 
-            --neon-green: #00ff88; --gold: #ffd700; --text: #e2e8f0;
+            --bg: #020205; --primary: #8b5cf6; --secondary: #ec4899;
+            --gold: #ffd700; --neon-green: #00ff88;
             --gradient: linear-gradient(90deg, #8b5cf6 0%, #ec4899 100%);
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: 'Rajdhani', sans-serif; 
             background: var(--bg); 
-            background-image: radial-gradient(circle at 50% -20%, #25104a 0%, #020205 80%);
-            color: var(--text); 
-            padding: 15px; 
-            display: flex; 
-            justify-content: center; 
-            min-height: 100vh;
+            color: #fff; 
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 0%, #25104a 0%, #020205 70%);
         }
-        .container { width: 100%; max-width: 400px; }
 
-        /* RANKING SYSTEM */
-        .rank-card { background: rgba(139, 92, 246, 0.1); padding: 15px; border-radius: 15px; border: 1px solid var(--primary); margin-bottom: 15px; text-align: center; }
-        .rank-name { font-family: 'Space Grotesk'; font-weight: 800; font-size: 18px; color: var(--gold); text-transform: uppercase; text-shadow: 0 0 10px rgba(255,215,0,0.5); }
-        .xp-bar-bg { width: 100%; height: 8px; background: #1a1a2e; border-radius: 4px; margin: 10px 0; overflow: hidden; }
-        .xp-bar-fill { width: 10%; height: 100%; background: var(--gradient); transition: 0.8s; box-shadow: 0 0 10px var(--primary); }
-        .limit-info { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        /* HERO SECTION */
+        .hero { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+        h1 { font-family: 'Space Grotesk'; font-size: 3.5rem; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; line-height: 1; }
+        p { font-size: 1.2rem; color: #aaa; max-width: 600px; margin-bottom: 30px; }
 
-        h1 { font-family: 'Space Grotesk'; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; font-size: 28px; margin-bottom: 20px; filter: drop-shadow(0 0 5px rgba(139, 92, 246, 0.3)); }
-
-        .card { background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .label-tag { font-size: 10px; color: var(--primary); font-weight: 700; margin-bottom: 5px; display: block; text-transform: uppercase; letter-spacing: 1px; }
-        
-        input { width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #1a1a2e; background: #000; color: #fff; outline: none; font-size: 14px; transition: 0.3s; }
-        input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(139, 92, 246, 0.2); }
-        
-        .btn { width: 100%; padding: 15px; border-radius: 10px; border: none; font-weight: 800; font-family: 'Space Grotesk'; cursor: pointer; text-transform: uppercase; transition: 0.3s; margin-bottom: 10px; }
-        .btn-primary { background: var(--gradient); color: #fff; box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3); }
-        .btn-capture { background: #fff; color: #000; }
-        
-        .btn-vip { 
-            background: var(--gold); 
-            color: #000; 
-            border: 2px solid #fff; 
-            animation: pulse 2s infinite; 
-            margin-top: 5px;
-            font-size: 13px;
+        .btn-start { 
+            padding: 18px 40px; border-radius: 50px; background: var(--gradient); color: #fff; 
+            text-decoration: none; font-weight: 800; font-family: 'Space Grotesk'; text-transform: uppercase;
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.5); transition: 0.3s;
         }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); } 70% { box-shadow: 0 0 0 12px rgba(255, 215, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); } }
+        .btn-start:hover { transform: scale(1.05); box-shadow: 0 0 50px rgba(236, 72, 153, 0.6); }
 
-        .history-item { background: rgba(255,255,255,0.02); padding: 12px; border-radius: 12px; margin-top: 8px; border-left: 3px solid var(--neon-green); font-size: 12px; }
-        #locationBadge { color: var(--neon-green); font-size: 11px; margin-top: -8px; margin-bottom: 12px; display: block; font-weight: 600; }
-        .hidden { display: none !important; }
+        /* PLANOS */
+        .plans { padding: 80px 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+        .plan-card { 
+            background: #0a0a12; border: 1px solid rgba(255,255,255,0.05); 
+            padding: 30px; border-radius: 20px; width: 300px; text-align: center; transition: 0.3s;
+        }
+        .plan-card:hover { border-color: var(--primary); transform: translateY(-10px); }
+        .plan-card.vip { border: 2px solid var(--gold); box-shadow: 0 0 30px rgba(255, 215, 0, 0.2); }
+        
+        .price { font-size: 2.5rem; font-family: 'Space Grotesk'; margin: 20px 0; }
+        .price span { font-size: 1rem; color: #666; }
+
+        ul { list-style: none; text-align: left; margin-bottom: 30px; }
+        li { margin-bottom: 10px; color: #ccc; font-size: 0.9rem; }
+        li::before { content: '✓'; color: var(--neon-green); margin-right: 10px; font-weight: bold; }
+
+        .footer { padding: 40px; text-align: center; color: #444; font-size: 0.8rem; border-top: 1px solid #111; }
     </style>
 </head>
 <body>
-    <audio id="sndScanner" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
-    <audio id="sndSuccess" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
 
-    <div class="container">
-        <div class="rank-card">
-            <div id="rankLabel" class="rank-name">Patente: BRONZE</div>
-            <div class="xp-bar-bg"><div id="xpFill" class="xp-bar-fill"></div></div>
-            <div id="limitLabel" class="limit-info">Consultas Hoje: 0 / 5</div>
+    <section class="hero">
+        <div style="font-size: 0.9rem; color: var(--primary); letter-spacing: 5px; font-weight: bold; margin-bottom: 10px;">VORTEX PRO AI</div>
+        <h1>MINERE O LUCRO <br> EM SEGUNDOS.</h1>
+        <p>A primeira inteligência gamer para dropshipping que calcula custo real, frete por CEP e margem líquida automaticamente.</p>
+        <a href="#planos" class="btn-start">COMEÇAR AGORA</a>
+    </section>
+
+    <section id="planos" class="plans">
+        <div class="plan-card">
+            <h3 style="color: #cd7f32;">PATENTE BRONZE</h3>
+            <div class="price">R$ 0 <span>/grátis</span></div>
+            <ul>
+                <li>5 Scanners por dia</li>
+                <li>Cálculo de Frete Básico</li>
+                <li>Sem Histórico em Nuvem</li>
+            </ul>
+            <a href="app.html" style="color: #666; text-decoration: none; font-weight: bold;">USAR GRÁTIS →</a>
         </div>
 
-        <h1>VORTEX PRO</h1>
-        
-        <div class="card">
-            <span class="label-tag">📡 Injetar URL de Carga</span>
-            <input type="text" id="productUrl" placeholder="Link da Shopee / AliExpress">
-            <button class="btn btn-capture" id="btnCapture">SCANNER DE PREÇO</button>
-
-            <span class="label-tag">📍 Coordenadas (CEP)</span>
-            <input type="text" id="destCep" placeholder="Digite o CEP" maxlength="8">
-            <span id="locationBadge">Aguardando GPS...</span>
-            
-            <span class="label-tag">💰 Painel Financeiro</span>
-            <input type="number" id="supplier" placeholder="Custo do Produto (R$)">
-            <input type="number" id="shipping" placeholder="Custo do Frete (R$)" readonly>
-            <input type="number" id="sale" placeholder="Venda Sugerida (R$)">
-            
-            <button class="btn btn-primary" id="analyzeBtn">⚡ EXECUTAR ANÁLISE</button>
-            
-            <button class="btn btn-vip" onclick="window.open('https://wa.me/5511975473066?text=Olá+Junior!+Quero+me+tornar+VIP+OURO+na+Vortex+Pro+e+ter+acesso+ilimitado.')">💎 TORNAR-SE VIP OURO (ILIMITADO)</button>
+        <div class="plan-card vip">
+            <h3 style="color: var(--gold);">PATENTE OURO VIP</h3>
+            <div class="price">R$ 29<span>,90</span></div>
+            <ul>
+                <li>Scanners ILIMITADOS</li>
+                <li>Suporte no WhatsApp</li>
+                <li>Mineração de Produtos VIP</li>
+                <li>Histórico Completo</li>
+            </ul>
+            <a href="https://wa.me/5511975473066?text=Quero+o+VIP+Ouro" class="btn-start" style="padding: 10px 20px; font-size: 0.8rem;">QUERO SER VIP</a>
         </div>
+    </section>
 
-        <div id="resultCard" class="card hidden" style="text-align: center; border: 1px solid var(--neon-green);">
-            <p style="color:#888; font-size: 12px;">RETORNO LÍQUIDO:</p>
-            <h2 id="resProfit" style="color:var(--neon-green); font-size: 38px; margin: 10px 0;">R$ 0,00</h2>
-            <button class="btn btn-primary" id="saveHistoryBtn" style="font-size: 11px; background: rgba(139, 92, 246, 0.2); border: 1px solid var(--primary);">💾 ARQUIVAR NO HISTÓRICO</button>
-        </div>
+    <footer class="footer">
+        © 2026 Vortex Pro - Criado por Junior Sabino. Todos os direitos reservados.
+    </footer>
 
-        <div class="card">
-            <h4 style="font-size: 12px; color: var(--primary); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px;">📂 Database de Mineração</h4>
-            <div id="historyList"></div>
-        </div>
-    </div>
-
-    <script>
-        // CONFIGURAÇÕES FIREBASE
-        const firebaseConfig = {
-            apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I",
-            authDomain: "vortexpro1021.firebaseapp.com",
-            projectId: "vortexpro1021",
-            storageBucket: "vortexpro1021.firebasestorage.app",
-            messagingSenderId: "403000271858",
-            appId: "1:403000271858:web:7a8716548ee0a1b822016b"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
-        let pesquisasHoje = 0;
-        let limiteDiario = 5;
-        let xp = 10;
-
-        const sndScanner = document.getElementById('sndScanner');
-        const sndSuccess = document.getElementById('sndSuccess');
-
-        // SCANNER DE PREÇO
-        document.getElementById('btnCapture').addEventListener('click', () => {
-            if(pesquisasHoje >= limiteDiario) return alert("LIMITE BRONZE ATINGIDO! Faça o upgrade para o VIP OURO para continuar minerando.");
-            sndScanner.play();
-            document.getElementById('btnCapture').innerText = "SCANNING DATABASE...";
-            setTimeout(() => {
-                document.getElementById('supplier').value = 18.88;
-                document.getElementById('btnCapture').innerText = "SCAN COMPLETO ✅";
-                atualizarSugestao();
-            }, 1200);
-        });
-
-        // CEP & LOCALIDADE
-        document.getElementById('destCep').addEventListener('input', async (e) => {
-            const cep = e.target.value.replace(/\D/g, '');
-            if(cep.length === 8) {
-                document.getElementById('locationBadge').innerText = "SINCRONIZANDO...";
-                const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-                const data = await response.json();
-                if(!data.erro) {
-                    document.getElementById('locationBadge').innerText = `CONNECTED: ${data.localidade} (${data.uf})`;
-                    let f = data.uf === 'SP' ? 12.90 : 21.50;
-                    document.getElementById('shipping').value = f.toFixed(2);
-                    atualizarSugestao();
-                }
-            }
-        });
-
-        function atualizarSugestao() {
-            const c = parseFloat(document.getElementById('supplier').value) || 0;
-            const f = parseFloat(document.getElementById('shipping').value) || 0;
-            if(c > 0) document.getElementById('sale').value = (c + f + 20).toFixed(2);
-        }
-
-        // EXECUÇÃO DE ANÁLISE + XP
-        document.getElementById('analyzeBtn').addEventListener('click', () => {
-            if(pesquisasHoje >= limiteDiario) return alert("SISTEMA BLOQUEADO! Adquira o VIP OURO para acesso ilimitado.");
-            
-            pesquisasHoje++;
-            xp += 18;
-            sndSuccess.play();
-            
-            // UI Update
-            document.getElementById('xpFill').style.width = (xp % 100) + "%";
-            document.getElementById('limitLabel').innerText = `Consultas Hoje: ${pesquisasHoje} / ${limiteDiario}`;
-            
-            if(xp >= 100) {
-                document.getElementById('rankLabel').innerText = "Patente: PRATA";
-                limiteDiario = 10;
-            }
-
-            const s = parseFloat(document.getElementById('sale').value) || 0;
-            const c = parseFloat(document.getElementById('supplier').value) || 0;
-            const f = parseFloat(document.getElementById('shipping').value) || 0;
-            const lucro = s - c - f - (s * 0.12);
-            
-            document.getElementById('resProfit').innerText = "R$ " + lucro.toFixed(2);
-            document.getElementById('resultCard').classList.remove('hidden');
-            if(lucro > 0) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#ffd700', '#8b5cf6', '#00ff88'] });
-        });
-
-        // SALVAR HISTÓRICO
-        document.getElementById('saveHistoryBtn').addEventListener('click', () => {
-            const data = {
-                custo: document.getElementById('supplier').value,
-                venda: document.getElementById('sale').value,
-                lucro: document.getElementById('resProfit').innerText,
-                timestamp: Date.now()
-            };
-            db.collection("history").add(data).then(() => {
-                alert("OFERTA ARQUIVADA COM SUCESSO!");
-                carregarHistorico();
-            });
-        });
-
-        function carregarHistorico() {
-            db.collection("history").orderBy("timestamp", "desc").limit(3).get().then((snap) => {
-                const list = document.getElementById('historyList');
-                list.innerHTML = "";
-                snap.forEach(doc => {
-                    const item = doc.data();
-                    list.innerHTML += `<div class="history-item"><strong style="color:var(--neon-green)">LUCRO: ${item.lucro}</strong><br>Custo: R$ ${item.custo} | Venda: R$ ${item.venda}</div>`;
-                });
-            });
-        }
-        carregarHistorico();
-    </script>
 </body>
 </html>
