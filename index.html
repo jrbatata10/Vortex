@@ -3,89 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VORTEX PRO | Caçador de Lucro</title>
-    
+    <title>Vortex Pro | Inteligência em Dropshipping</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --bg: #050508; --surface: #0f0f16; --surface-light: #1a1a24;
-            --primary: #8b5cf6; --accent: #f43f5e; --money: #10b981; --warning: #fbbf24;
-            --gradient-1: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #f43f5e 100%);
-            --gradient-2: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; }
-        .container { max-width: 480px; margin: 0 auto; padding: 20px; }
-        .logo-container { text-align: center; padding: 40px 0 30px; }
-        .logo-badge { display: inline-flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid rgba(139, 92, 246, 0.3); padding: 12px 24px; border-radius: 50px; }
-        .logo-icon { width: 44px; height: 44px; background: var(--gradient-1); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
-        .logo-text { font-family: 'Space Grotesk', sans-serif; font-weight: 800; font-size: 28px; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .card { background: rgba(15, 15, 22, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; padding: 24px; margin-bottom: 16px; }
-        .xp-bar { height: 10px; background: rgba(255,255,255,0.1); border-radius: 5px; overflow: hidden; margin-top: 10px; }
-        .xp-fill { height: 100%; background: var(--gradient-1); width: 0%; transition: width 0.5s; }
-        input { width: 100%; padding: 18px 18px 18px 52px; background: rgba(0,0,0,0.6); border: 2px solid rgba(255,255,255,0.1); color: #fff; border-radius: 16px; margin-bottom: 16px; }
-        .btn { width: 100%; padding: 20px; border: none; border-radius: 16px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; text-transform: uppercase; transition: 0.3s; }
-        .btn-primary { background: var(--gradient-1); color: white; }
-        .btn-money { background: var(--gradient-2); color: white; margin-top: 20px; }
+        :root { --bg: #060608; --card: #111116; --primary: #8b5cf6; --accent: #f43f5e; --money: #10b981; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #fff; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { width: 100%; max-width: 400px; padding: 20px; }
+        .card { background: var(--card); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h1 { text-align: center; font-size: 32px; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -2px; margin-bottom: 20px; }
+        input { width: 100%; padding: 14px; background: #000; border: 2px solid #222; color: #fff; border-radius: 12px; margin: 8px 0; box-sizing: border-box; }
+        button { width: 100%; padding: 16px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
         .hidden { display: none !important; }
-        .result-card { display: none; background: rgba(0,0,0,0.5); border: 2px solid var(--money); border-radius: 20px; padding: 24px; margin-top: 20px; }
-        .result-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .badge-pro { background: linear-gradient(135deg, #ffd700, #f59e0b) !important; color: #000 !important; }
+        #result { margin-top: 20px; padding-top: 20px; border-top: 1px solid #222; font-size: 14px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div id="loginArea">
-            <div class="logo-container">
-                <div class="logo-badge">
-                    <div class="logo-icon">🌀</div>
-                    <div class="logo-text">VORTEX PRO</div>
-                </div>
-            </div>
-            <div class="card">
-                <h3 style="text-align:center; margin-bottom:20px;">Acessar Sistema</h3>
-                <input type="email" id="email" placeholder="Seu e-mail">
-                <input type="password" id="password" placeholder="Sua senha">
-                <button class="btn btn-primary" onclick="login()">🚀 Entrar / Criar Conta</button>
-            </div>
+        <div id="loginArea" class="card">
+            <h1>VORTEX PRO</h1>
+            <input type="email" id="email" placeholder="Seu e-mail">
+            <input type="password" id="password" placeholder="Sua senha">
+            <button onclick="login()">ACESSAR SISTEMA</button>
         </div>
 
-        <div id="appArea" class="hidden">
-            <div class="card">
-                <div style="display:flex;justify-content:space-between;align-items:center;">
-                    <span id="planInfo" style="background:var(--primary); padding:5px 10px; border-radius:8px; font-size:10px; font-weight:800;">PLANO FREE</span>
-                    <span id="usageCounter" style="font-size:11px;color:#888;">0/5 USOS</span>
+        <div id="appArea" class="card hidden">
+            <h2 id="userName" style="font-size: 20px; margin-bottom: 15px;">Olá!</h2>
+            <input type="number" id="sale" placeholder="Preço de Venda">
+            <input type="number" id="supplier" placeholder="Custo Fornecedor">
+            <input type="number" id="shipping" placeholder="Frete">
+            <button onclick="analyze()">ANALISAR LUCRO</button>
+            <div id="result" class="hidden">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span>Lucro Líquido:</span><b id="resProfit" style="color:var(--money)">R$ 0,00</b>
                 </div>
-                <h2 id="userName" style="margin-top:15px; font-family:'Space Grotesk';">Olá!</h2>
-                <div class="xp-bar"><div class="xp-fill" id="xpBar"></div></div>
-                <div style="font-size:10px; color:#555; margin-top:5px;">LEVEL <span id="userLevel">1</span></div>
+                <button style="background: #25d366;" onclick="window.open('https://wa.me/5511975473066')">FALAR COM JUNIOR</button>
             </div>
-
-            <div class="card">
-                <h4 style="color:var(--primary);margin-bottom:15px;">📊 CALCULADORA</h4>
-                <input type="number" id="sale" placeholder="Preço de Venda">
-                <input type="number" id="supplier" placeholder="Custo Fornecedor">
-                <input type="number" id="shipping" placeholder="Frete">
-                <button class="btn btn-primary" onclick="analyze()">⚡ ANALISAR LUCRO</button>
-
-                <div id="resultCard" class="result-card">
-                    <div class="result-row"><span>Custo Total</span><span id="resCost">R$ 0,00</span></div>
-                    <div class="result-row"><span>Lucro Líquido</span><b id="resProfit" style="color:var(--money)">R$ 0,00</b></div>
-                    <div class="result-row"><span>Margem</span><span id="resMargin">0%</span></div>
-                    <div style="background:var(--gradient-2); padding:15px; border-radius:12px; margin-top:15px; text-align:center;">
-                        <div style="font-size:10px;">PREÇO IDEAL (30%)</div>
-                        <div id="resSuggested" style="font-size:20px; font-weight:800;">R$ 0,00</div>
-                    </div>
-                    <button class="btn btn-money" onclick="enviarZap()">📱 VALIDAR COM JUNIOR</button>
-                </div>
-            </div>
-            <button class="btn" style="background:#222; margin-top:10px;" onclick="logout()">SAIR</button>
+            <button style="background: #222; margin-top: 20px; font-size: 12px;" onclick="auth.signOut().then(()=>location.reload())">SAIR</button>
         </div>
     </div>
 
@@ -98,24 +54,14 @@
             messagingSenderId: "403000271858",
             appId: "1:403000271858:web:7a8716548ee0a1b8764f69"
         };
-
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
-        const db = firebase.firestore();
-        const ADMIN_EMAIL = "jrbatata2017@gmail.com";
-        const MY_PHONE = "5511975473066";
 
         function login() {
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('password').value;
-            if(!email || !pass) return alert("Preencha os campos!");
-            
-            auth.signInWithEmailAndPassword(email, pass).catch(() => {
-                auth.createUserWithEmailAndPassword(email, pass).then(u => {
-                    db.collection("users").doc(u.user.uid).set({
-                        plan:"free", dailyUsage:0, xp:0, level:1, lastReset: new Date().toISOString().split("T")[0]
-                    });
-                }).catch(e => alert(e.message));
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('password').value;
+            auth.signInWithEmailAndPassword(e, p).catch(() => {
+                auth.createUserWithEmailAndPassword(e, p).catch(err => alert("Erro: " + err.message));
             });
         }
 
@@ -123,56 +69,18 @@
             if(user) {
                 document.getElementById('loginArea').classList.add('hidden');
                 document.getElementById('appArea').classList.remove('hidden');
-                updateUI(user);
+                document.getElementById('userName').innerText = user.email === "jrbatata2017@gmail.com" ? "Olá, Junior Sabino!" : "Olá, Afiliado!";
             }
         });
 
-        async function updateUI(user) {
-            const doc = await db.collection("users").doc(user.uid).get();
-            const data = doc.data() || {};
-            document.getElementById('userName').innerText = user.email === ADMIN_EMAIL ? "Olá, Junior Sabino!" : "Olá, Afiliado!";
-            document.getElementById('usageCounter').innerText = (user.email === ADMIN_EMAIL || data.plan === "pro") ? "ILIMITADO" : `${data.dailyUsage || 0}/5 USOS`;
-            document.getElementById('userLevel').innerText = data.level || 1;
-            document.getElementById('xpBar').style.width = ((data.xp || 0) % 100) + "%";
-            if(user.email === ADMIN_EMAIL || data.plan === "pro") document.getElementById('planInfo').classList.add('badge-pro');
-        }
-
-        async function analyze() {
-            const user = auth.currentUser;
-            const doc = await db.collection("users").doc(user.uid).get();
-            const data = doc.data();
-
-            if(data.plan === "free" && data.dailyUsage >= 5 && user.email !== ADMIN_EMAIL) {
-                alert("Limite atingido! Chame o Junior no Zap.");
-                return;
-            }
-
+        function analyze() {
             const sale = parseFloat(document.getElementById('sale').value) || 0;
             const supplier = parseFloat(document.getElementById('supplier').value) || 0;
             const shipping = parseFloat(document.getElementById('shipping').value) || 0;
-
-            const totalCost = supplier + shipping + (sale * 0.12);
-            const profit = sale - totalCost;
-            const margin = (profit / sale) * 100;
-            const suggested = totalCost / 0.7;
-
-            document.getElementById('resCost').innerText = "R$ " + totalCost.toFixed(2);
+            const profit = sale - supplier - shipping - (sale * 0.12);
             document.getElementById('resProfit').innerText = "R$ " + profit.toFixed(2);
-            document.getElementById('resMargin').innerText = margin.toFixed(1) + "%";
-            document.getElementById('resSuggested').innerText = "R$ " + suggested.toFixed(2);
-            document.getElementById('resultCard').style.display = "block";
-
-            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-            
-            await db.collection("users").doc(user.uid).update({
-                dailyUsage: (data.dailyUsage || 0) + 1,
-                xp: (data.xp || 0) + 20
-            });
-            updateUI(user);
+            document.getElementById('result').classList.remove('hidden');
         }
-
-        function logout() { auth.signOut().then(() => location.reload()); }
-        function enviarZap() { window.open(`https://wa.me/${MY_PHONE}?text=Olá Junior! Vi um lucro bom no Vortex Pro e quero validar!`); }
     </script>
 </body>
 </html>
