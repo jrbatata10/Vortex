@@ -21,32 +21,31 @@
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { font-family: 'Rajdhani', sans-serif; background: var(--bg); color: #fff; overflow-x: hidden; }
         
-        /* GERENCIAMENTO DE TELAS */
         .screen { min-height: 100vh; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
         .active { display: flex; }
 
-        /* ESTILO LANDING PAGE */
+        /* LANDING PAGE */
         .hero h1 { font-family: 'Space Grotesk'; font-size: 3.5rem; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; line-height: 1; }
-        .hero p { color: #aaa; margin: 20px 0 40px; text-align: center; max-width: 300px; }
+        .hero p { color: #aaa; margin: 20px 0 40px; text-align: center; max-width: 320px; font-size: 1.1rem; }
 
-        /* ESTILO CARDS */
-        .card { background: var(--card); padding: 25px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); width: 100%; max-width: 400px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-        input { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 10px; border: 1px solid #1a1a2e; background: #000; color: #fff; outline: none; font-size: 16px; }
-        input:focus { border-color: var(--primary); }
+        /* CARDS */
+        .card { background: var(--card); padding: 25px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.05); width: 100%; max-width: 400px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        input { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px; border: 1px solid #1a1a2e; background: #000; color: #fff; outline: none; font-size: 16px; transition: 0.3s; }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(139, 92, 246, 0.2); }
         
         .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-family: 'Space Grotesk'; transition: 0.3s; margin-top: 10px; }
-        .btn-primary { background: var(--grad); color: #fff; }
+        .btn-primary { background: var(--grad); color: #fff; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); }
         .btn-vip { background: var(--gold); color: #000; animation: pulse 2s infinite; border: 2px solid #fff; }
         .btn-capture { background: #fff; color: #000; }
         
         .link-alt { background: transparent; color: #888; font-size: 13px; border: none; cursor: pointer; margin-top: 15px; text-decoration: underline; }
 
-        /* SISTEMA DE RANKING */
+        /* RANKING */
         .rank-card { background: rgba(139, 92, 246, 0.1); padding: 15px; border-radius: 15px; border: 1px solid var(--primary); width: 100%; max-width: 400px; margin-bottom: 15px; text-align: center; }
-        .xp-bar { width: 100%; height: 10px; background: #1a1a2e; border-radius: 5px; margin: 10px 0; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
-        .xp-fill { width: 10%; height: 100%; background: var(--grad); transition: 0.8s; box-shadow: 0 0 10px var(--primary); }
+        .xp-bar { width: 100%; height: 10px; background: #1a1a2e; border-radius: 5px; margin: 10px 0; overflow: hidden; }
+        .xp-fill { width: 10%; height: 100%; background: var(--grad); transition: 0.8s; }
 
-        @keyframes pulse { 0% {box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);} 70% {box-shadow: 0 0 0 10px rgba(255, 215, 0, 0);} 100% {box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.5);} }
+        @keyframes pulse { 0% {box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);} 70% {box-shadow: 0 0 0 12px rgba(255, 215, 0, 0);} 100% {box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.5);} }
         .hidden { display: none !important; }
         .label-app { font-size: 10px; color: var(--primary); font-weight: 700; margin-bottom: 4px; display: block; letter-spacing: 1px; }
     </style>
@@ -59,19 +58,16 @@
     <section id="screen-home" class="screen active hero">
         <div style="color:var(--primary); letter-spacing: 5px; font-weight: bold; margin-bottom: 10px;">VORTEX PRO AI</div>
         <h1>MINERE O LUCRO EM SEGUNDOS.</h1>
-        <p>Acesse a inteligência artificial gamer que calcula sua margem de dropshipping real.</p>
-        <button class="btn btn-primary" onclick="showScreen('screen-login')" style="max-width:300px">INICIAR APLICAÇÃO</button>
+        <p>A inteligência artificial que calcula sua margem líquida de dropshipping automaticamente.</p>
+        <button class="btn btn-primary" onclick="showScreen('screen-login')" style="max-width:300px">INICIAR SISTEMA</button>
     </section>
 
     <section id="screen-login" class="screen">
         <div class="card">
-            <h2 id="authTitle" style="font-family:'Space Grotesk'; margin-bottom: 25px; text-align: center; letter-spacing: 2px;">LOGIN</h2>
-            
-            <input type="email" id="email" placeholder="E-mail de acesso">
-            <input type="password" id="pass" placeholder="Sua senha secreta">
-            
+            <h2 id="authTitle" style="font-family:'Space Grotesk'; margin-bottom: 25px; text-align: center;">LOGIN</h2>
+            <input type="email" id="email" placeholder="Seu E-mail">
+            <input type="password" id="pass" placeholder="Sua Senha">
             <button class="btn btn-primary" id="mainAuthBtn" onclick="handleAuth()">ENTRAR NO SISTEMA</button>
-            
             <div style="display: flex; flex-direction: column; align-items: center;">
                 <button class="link-alt" onclick="forgotPassword()">Esqueci minha senha</button>
                 <button class="link-alt" id="toggleAuth" onclick="toggleAuthMode()">Não tem conta? Criar acesso grátis</button>
@@ -82,9 +78,9 @@
 
     <section id="screen-app" class="screen">
         <div class="rank-card">
-            <div id="rankLabel" style="color:var(--gold); font-weight: 800; text-transform: uppercase; font-size: 18px;">Patente: Bronze</div>
+            <div id="rankLabel" style="color:var(--primary); font-weight: 800; text-transform: uppercase; font-size: 18px;">Patente: Bronze</div>
             <div class="xp-bar"><div id="xpFill" class="xp-fill"></div></div>
-            <div id="limitLabel" style="font-size: 11px; color: #888; letter-spacing: 1px;">CONSULTAS DIÁRIAS: 0 / 5</div>
+            <div id="limitLabel" style="font-size: 11px; color: #888;">CONSULTAS DIÁRIAS: 0 / 5</div>
         </div>
 
         <div class="card">
@@ -93,41 +89,33 @@
             <button class="btn btn-capture" id="btnCapture">EXECUTAR SCANNER</button>
             
             <div style="margin-top: 15px;">
-                <span class="label-app">LOGÍSTICA (CEP)</span>
-                <input type="text" id="destCep" placeholder="Digite o CEP destino" maxlength="8">
+                <span class="label-app">CEP DESTINO</span>
+                <input type="text" id="destCep" placeholder="00000000" maxlength="8">
                 <span id="locDisplay" style="color:var(--green); font-size: 11px; font-weight: bold;"></span>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
-                <div>
-                    <span class="label-app">CUSTO (R$)</span>
-                    <input type="number" id="supplier" placeholder="0,00">
-                </div>
-                <div>
-                    <span class="label-app">FRETE (R$)</span>
-                    <input type="number" id="shipping" placeholder="0,00" readonly>
-                </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div><span class="label-app">CUSTO (R$)</span><input type="number" id="supplier" placeholder="0.00"></div>
+                <div><span class="label-app">FRETE (R$)</span><input type="number" id="shipping" placeholder="0.00" readonly></div>
             </div>
 
             <span class="label-app">VALOR DE VENDA (R$)</span>
-            <input type="number" id="sale" placeholder="Preço final na sua loja">
+            <input type="number" id="sale" placeholder="Preço final na loja">
             
             <button class="btn btn-primary" id="analyzeBtn">⚡ ANALISAR VIABILIDADE</button>
-            
-            <button class="btn btn-vip" onclick="window.open('https://wa.me/5511975473066?text=Olá+Junior!+Quero+me+tornar+VIP+OURO+na+Vortex+Pro+e+ter+acesso+ilimitado.')">💎 TORNAR-SE VIP OURO (ILIMITADO)</button>
+            <button class="btn btn-vip" id="btnVipAction" onclick="window.open('https://wa.me/5511975473066?text=Olá+Junior!+Meu+limite+acabou.+Quero+ser+VIP+OURO+Ilimitado.')">💎 TORNAR-SE VIP OURO (ILIMITADO)</button>
             
             <button class="link-alt" onclick="logout()" style="width:100%; text-align:center">Sair da conta</button>
         </div>
         
-        <div id="resultCard" class="card hidden" style="margin-top:15px; text-align: center; border: 1px solid var(--green); background: rgba(0, 255, 136, 0.05);">
-            <p style="font-size: 12px; color: #888;">LUCRO LÍQUIDO ESTIMADO:</p>
-            <h2 id="resProfit" style="color:var(--green); font-size: 42px; margin: 5px 0;">R$ 0,00</h2>
-            <p style="font-size: 10px; color: #555;">(Já descontados 12% de taxas de plataforma)</p>
+        <div id="resultCard" class="card hidden" style="margin-top:15px; text-align: center; border: 1px solid var(--green);">
+            <p style="font-size: 11px; color: #888;">LUCRO LÍQUIDO:</p>
+            <h2 id="resProfit" style="color:var(--green); font-size: 40px;">R$ 0,00</h2>
         </div>
     </section>
 
     <script>
-        // CONFIGURAÇÃO FIREBASE (Junior Sabino Project)
+        // CONFIGURAÇÃO FIREBASE
         const firebaseConfig = { 
             apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I", 
             authDomain: "vortexpro1021.firebaseapp.com", 
@@ -142,17 +130,15 @@
 
         let authMode = 'login';
         let consultCount = 0;
+        let limit = 5;
         let userXP = 10;
-        const dailyLimit = 5;
+        let isVip = false;
 
-        // --- NAVEGAÇÃO ---
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            window.scrollTo(0,0);
         }
 
-        // --- AUTENTICAÇÃO ---
         function toggleAuthMode() {
             authMode = authMode === 'login' ? 'signup' : 'login';
             document.getElementById('authTitle').innerText = authMode === 'login' ? 'LOGIN' : 'CRIAR CONTA';
@@ -163,105 +149,73 @@
         async function handleAuth() {
             const email = document.getElementById('email').value;
             const pass = document.getElementById('pass').value;
-            if(!email || !pass) return alert("Por favor, preencha e-mail e senha.");
-
+            if(!email || !pass) return alert("Preencha os campos!");
             try {
                 if(authMode === 'signup') {
-                    await auth.createUserWithEmailAndPassword(email, pass);
-                    alert("Conta criada com sucesso! Bem-vindo ao Vortex Pro.");
+                    const res = await auth.createUserWithEmailAndPassword(email, pass);
+                    // Cria documento do usuário no banco ao cadastrar
+                    await db.collection("users").doc(res.user.uid).set({ email: email, patente: "BRONZE", xp: 10 });
                 } else {
                     await auth.signInWithEmailAndPassword(email, pass);
                 }
-            } catch (e) { 
-                alert("Erro: " + e.message); 
-            }
+            } catch (e) { alert("Erro: " + e.message); }
         }
 
         async function forgotPassword() {
             const email = document.getElementById('email').value;
-            if(!email) return alert("Digite seu e-mail no campo acima primeiro.");
-            try {
-                await auth.sendPasswordResetEmail(email);
-                alert("Enviamos um link de recuperação para o seu e-mail. Verifique sua caixa de entrada.");
-            } catch (e) { alert("Erro: " + e.message); }
+            if(!email) return alert("Digite seu e-mail para recuperar!");
+            try { await auth.sendPasswordResetEmail(email); alert("Link de recuperação enviado!"); } catch (e) { alert(e.message); }
         }
 
-        function logout() {
-            auth.signOut();
-            showScreen('screen-home');
-        }
+        function logout() { auth.signOut(); showScreen('screen-home'); }
 
-        // Monitor de Estado do Usuário
-        auth.onAuthStateChanged(user => {
-            if(user) showScreen('screen-app');
-        });
-
-        // --- LÓGICA DO APLICATIVO ---
-        
-        // 1. Scanner de Preço
-        document.getElementById('btnCapture').addEventListener('click', () => {
-            if(consultCount >= dailyLimit) return alert("LIMITE ATINGIDO! Sua patente Bronze permite 5 buscas/dia. Torne-se Ouro para ilimitado.");
-            
-            document.getElementById('sndScanner').play();
-            document.getElementById('btnCapture').innerText = "SCANNEANDO...";
-            
-            setTimeout(() => { 
-                document.getElementById('supplier').value = 18.88; 
-                document.getElementById('btnCapture').innerText = "CAPTURAR PREÇO";
-                alert("Preço capturado com sucesso!");
-            }, 1200);
-        });
-
-        // 2. Busca de CEP
-        document.getElementById('destCep').addEventListener('input', async (e) => {
-            const cep = e.target.value.replace(/\D/g, '');
-            if(cep.length === 8) {
-                document.getElementById('locDisplay').innerText = "BUSCANDO...";
-                const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-                const d = await r.json();
-                if(!d.erro) {
-                    document.getElementById('locDisplay').innerText = `📍 ${d.localidade} - ${d.uf}`;
-                    document.getElementById('shipping').value = (d.uf === 'SP' ? 12.90 : 21.50).toFixed(2);
-                } else {
-                    document.getElementById('locDisplay').innerText = "CEP INVÁLIDO";
+        // MONITOR DE ESTADO VIP
+        auth.onAuthStateChanged(async (user) => {
+            if(user) {
+                showScreen('screen-app');
+                const doc = await db.collection("users").doc(user.uid).get();
+                if(doc.exists && doc.data().patente === "OURO") {
+                    isVip = true;
+                    limit = 999999;
+                    document.getElementById('rankLabel').innerText = "Patente: OURO 💎";
+                    document.getElementById('rankLabel').style.color = "var(--gold)";
+                    document.getElementById('limitLabel').innerText = "ACESSO ILIMITADO ATIVO";
+                    document.getElementById('btnVipAction').classList.add('hidden');
                 }
             }
         });
 
-        // 3. Análise de Lucro e XP
-        document.getElementById('analyzeBtn').addEventListener('click', () => {
-            if(consultCount >= dailyLimit) return alert("Limite de Consultas Bronze atingido! Evolua para OURO.");
+        // LÓGICA DO APP
+        document.getElementById('btnCapture').addEventListener('click', () => {
+            if(consultCount >= limit) return alert("LIMITE BRONZE ATINGIDO!");
+            document.getElementById('sndScanner').play();
+            setTimeout(() => { document.getElementById('supplier').value = 18.88; }, 1000);
+        });
 
-            const venda = parseFloat(document.getElementById('sale').value) || 0;
-            const custo = parseFloat(document.getElementById('supplier').value) || 0;
-            const frete = parseFloat(document.getElementById('shipping').value) || 0;
-
-            if(venda <= 0 || custo <= 0) return alert("Insira os valores de custo e venda!");
-
-            // Cálculo: Venda - Custo - Frete - 12% Taxa
-            const taxa = venda * 0.12;
-            const lucro = venda - custo - frete - taxa;
-
-            // Sucesso
-            consultCount++;
-            userXP += 18;
-            document.getElementById('sndSuccess').play();
-            
-            // Atualizar UI de Patente
-            document.getElementById('xpFill').style.width = (userXP % 100) + "%";
-            document.getElementById('limitLabel').innerText = `CONSULTAS DIÁRIAS: ${consultCount} / ${dailyLimit}`;
-            
-            if(userXP >= 100) {
-                document.getElementById('rankLabel').innerText = "Patente: Prata";
+        document.getElementById('destCep').addEventListener('input', async (e) => {
+            const cep = e.target.value.replace(/\D/g, '');
+            if(cep.length === 8) {
+                const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                const d = await r.json();
+                if(!d.erro) {
+                    document.getElementById('locDisplay').innerText = `📍 ${d.localidade} (${d.uf})`;
+                    document.getElementById('shipping').value = (d.uf === 'SP' ? 12.90 : 21.50).toFixed(2);
+                }
             }
+        });
 
-            // Exibir Resultado
+        document.getElementById('analyzeBtn').addEventListener('click', () => {
+            if(consultCount >= limit) return alert("Limite atingido! Torne-se VIP.");
+            consultCount++;
+            userXP += 15;
+            document.getElementById('sndSuccess').play();
+            document.getElementById('xpFill').style.width = (userXP % 100) + "%";
+            if(!isVip) document.getElementById('limitLabel').innerText = `CONSULTAS DIÁRIAS: ${consultCount} / ${limit}`;
+            
+            const lucro = (parseFloat(document.getElementById('sale').value) || 0) - (parseFloat(document.getElementById('supplier').value) || 0) - (parseFloat(document.getElementById('shipping').value) || 0) - (parseFloat(document.getElementById('sale').value) * 0.12);
             document.getElementById('resProfit').innerText = "R$ " + lucro.toFixed(2);
             document.getElementById('resultCard').classList.remove('hidden');
-            
-            if(lucro > 0) {
-                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#ffd700', '#8b5cf6', '#00ff88'] });
-            }
+            confetti({ particleCount: 150, colors: ['#ffd700', '#8b5cf6'] });
         });
     </script>
 </body>
