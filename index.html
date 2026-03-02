@@ -26,12 +26,11 @@
             background: var(--bg); color: #fff; 
             background-image: radial-gradient(circle at 50% -20%, #251052 0%, #020205 60%);
             min-height: 100vh; display: flex; flex-direction: column; align-items: center;
-            padding: 20px; padding-bottom: 50px;
+            padding: 20px; padding-bottom: 50px; overflow-x: hidden;
         }
 
-        /* LOGO ANIMADO */
         .vortex-logo {
-            width: 70px; height: 70px; margin: 30px 0;
+            width: 75px; height: 75px; margin: 20px 0;
             background: linear-gradient(45deg, #251052, #020205);
             border-radius: 50%; border: 2px solid var(--primary);
             box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
@@ -44,7 +43,7 @@
             animation: rotateVortex 4s linear infinite;
         }
         .vortex-logo-v {
-            font-family: 'Space Grotesk', sans-serif; font-size: 30px;
+            font-family: 'Space Grotesk', sans-serif; font-size: 32px;
             color: #fff; font-weight: 800; z-index: 10;
             background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
@@ -52,28 +51,30 @@
 
         .screen { width: 100%; display: none; flex-direction: column; align-items: center; max-width: 400px; animation: fadeInUp 0.4s ease; }
         .active { display: flex; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
         .card { background: var(--card); padding: 25px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.08); width: 100%; margin-bottom: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
-        input { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px; border: 1px solid #1a1a2e; background: #000; color: #fff; outline: none; font-weight: bold; transition: 0.3s; }
-        input:focus { border-color: var(--primary); box-shadow: 0 0 8px var(--primary); }
+        input { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px; border: 1px solid #1a1a2e; background: #000; color: #fff; outline: none; font-weight: bold; font-size: 16px; transition: 0.3s; }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(139, 92, 246, 0.3); }
 
-        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-family: 'Space Grotesk'; transition: 0.3s; }
+        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-family: 'Space Grotesk'; transition: 0.3s; margin-bottom: 5px; }
         .btn-primary { background: var(--grad); color: #fff; }
-        .btn-extract { background: #fff; color: #000; margin-bottom: 15px; }
+        .btn-extract { background: #fff; color: #000; }
         .btn-logout { background: none; color: #444; text-decoration: underline; font-size: 11px; margin-top: 20px; border: none; cursor: pointer; }
         
-        .label-app { font-size: 10px; color: var(--primary); font-weight: 800; margin-bottom: 5px; display: block; letter-spacing: 1.5px; text-transform: uppercase; }
+        .label-app { font-size: 10px; color: var(--primary); font-weight: 800; margin-bottom: 6px; display: block; letter-spacing: 1.5px; text-transform: uppercase; }
         .ad-banner { width: 100%; padding: 15px; border-radius: 16px; cursor: pointer; display: flex; align-items: center; gap: 15px; margin-top: 20px; border: 1px solid #0046ff; background: linear-gradient(45deg, #001a4d, #0a0a12); transition: 0.3s; }
+        .ad-banner:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 70, 255, 0.3); }
+        
+        #locDisplay { color: var(--green); font-size: 11px; font-weight: 700; margin-bottom: 10px; min-height: 16px; display: flex; align-items: center; gap: 5px; }
         .hidden { display: none; }
-        #locDisplay { color: var(--green); font-size: 11px; font-weight: 700; margin-bottom: 10px; height: 16px; display: flex; align-items: center; gap: 5px; }
     </style>
 </head>
 <body>
 
     <section id="screen-login" class="screen active">
         <div class="vortex-logo"><span class="vortex-logo-v">V</span></div>
-        <h1 style="font-family:'Space Grotesk'; margin-bottom: 50px; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 40px; font-weight: 800; text-align: center;">VORTEX PRO AI</h1>
+        <h1 style="font-family:'Space Grotesk'; margin-bottom: 40px; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 38px; font-weight: 800; text-align: center;">VORTEX PRO AI</h1>
         <div class="card">
             <input type="email" id="email" placeholder="E-mail de acesso">
             <input type="password" id="pass" placeholder="Senha">
@@ -83,25 +84,25 @@
 
     <section id="screen-app" class="screen">
         <div id="rankCard" class="card" style="border-color: var(--primary); text-align: center; padding: 15px; background: rgba(139, 92, 246, 0.05);">
-            <div id="rankLabel" style="color:var(--primary); font-weight: 800; font-size: 16px;">PATENTE: CARREGANDO...</div>
+            <div id="rankLabel" style="color:var(--primary); font-weight: 800; font-size: 16px;">AUTENTICANDO...</div>
         </div>
 
         <div class="card">
             <span class="label-app">MINERAÇÃO DE LINK</span>
             <input type="url" id="productUrl" placeholder="Link Shopee ou AliExpress">
-            <button class="btn btn-extract" onclick="capturePrice(this)">EXTRAIR DADOS</button>
+            <button class="btn btn-extract" id="btnExtract" onclick="capturePrice()">EXTRAIR DADOS</button>
             
-            <span class="label-app">LOGÍSTICA (CEP DO DESTINO)</span>
+            <span class="label-app" style="margin-top: 15px;">LOGÍSTICA (CEP DO DESTINO)</span>
             <input type="text" id="destCep" placeholder="00000000" maxlength="8" oninput="validarCEP(this)">
             <div id="locDisplay"></div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <div><span class="label-app">CUSTO FORN.</span><input type="number" id="supplier" placeholder="0.00" oninput="atualizarSugestao()"></div>
-                <div><span class="label-app">FRETE (R$)</span><input type="number" id="shipping" value="0.00" readonly style="color: #666;"></div>
+                <div><span class="label-app">CUSTO FORN.</span><input type="text" id="supplier" placeholder="0.00" oninput="atualizarSugestao()"></div>
+                <div><span class="label-app">FRETE (R$)</span><input type="text" id="shipping" value="0.00" readonly style="color: #666;"></div>
             </div>
 
             <span class="label-app">VALOR DE REVENDA SUGERIDO</span>
-            <input type="number" id="sale" style="color: var(--primary); font-size: 20px; border-color: var(--primary);">
+            <input type="text" id="sale" style="color: var(--primary); font-size: 20px; border-color: var(--primary);">
             
             <button class="btn btn-primary" onclick="calcular()">⚡ CALCULAR MARGEM REAL</button>
         </div>
@@ -123,103 +124,115 @@
     </section>
 
     <script>
-        // CONFIGURAÇÃO FIREBASE
+        // CONFIG FIREBASE
         const firebaseConfig = { apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I", authDomain: "vortexpro1021.firebaseapp.com", projectId: "vortexpro1021", storageBucket: "vortexpro1021.firebasestorage.app", messagingSenderId: "403000271858", appId: "1:403000271858:web:7a8716548ee0a1b822016b" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
+        // AUTH
         async function handleAuth() {
             const e = document.getElementById('email').value, p = document.getElementById('pass').value;
-            try { await firebase.auth().signInWithEmailAndPassword(e, p); } catch(err) { alert("Acesso negado."); }
+            if(!e || !p) return alert("Preencha os campos!");
+            try { await firebase.auth().signInWithEmailAndPassword(e, p); } catch(err) { alert("Operador não reconhecido."); }
         }
 
-        // PERSISTÊNCIA DE PATENTE FIREBASE
         firebase.auth().onAuthStateChanged(async (user) => {
             if(user) {
                 const doc = await db.collection("users").doc(user.uid).get();
                 const rankLabel = document.getElementById('rankLabel');
                 const rankCard = document.getElementById('rankCard');
                 
-                if(doc.exists) {
-                    const data = doc.data();
-                    const patente = data.patente || 'BRONZE';
-                    rankLabel.innerText = `PATENTE: ${patente} ${patente === 'OURO' ? '💎' : '🛡️'}`;
-                    if(patente === "OURO") {
-                        rankCard.style.borderColor = "var(--gold)";
-                        rankLabel.style.color = "var(--gold)";
-                    }
-                } else {
-                    rankLabel.innerText = "PATENTE: BRONZE 🛡️";
+                let patente = "BRONZE";
+                if(doc.exists) patente = doc.data().patente || "BRONZE";
+
+                rankLabel.innerText = `PATENTE: ${patente} ${patente === 'OURO' ? '💎' : '🛡️'}`;
+                if(patente === "OURO") {
+                    rankCard.style.borderColor = "var(--gold)";
+                    rankLabel.style.color = "var(--gold)";
                 }
+                
                 document.getElementById('screen-login').classList.remove('active');
                 document.getElementById('screen-app').classList.add('active');
             }
         });
 
-        function logout() { firebase.auth().signOut(); window.location.reload(); }
+        function logout() { firebase.auth().signOut().then(() => window.location.reload()); }
 
-        // CÁLCULOS AUTOMÁTICOS
-        function atualizarSugestao() {
-            const c = parseFloat(document.getElementById('supplier').value) || 0;
-            const f = parseFloat(document.getElementById('shipping').value) || 0;
-            if(c > 0) document.getElementById('sale').value = ((c + f) * 1.33).toFixed(2);
+        // FORMATADOR DE MOEDA (TRATA VÍRGULA E PONTO)
+        function formatInput(val) {
+            return parseFloat(val.toString().replace(',', '.'));
         }
 
-        // VIA CEP API
+        function atualizarSugestao() {
+            const c = formatInput(document.getElementById('supplier').value) || 0;
+            const f = formatInput(document.getElementById('shipping').value) || 0;
+            if(c > 0) document.getElementById('sale').value = ((c + f) * 1.33).toFixed(2).replace('.', ',');
+        }
+
+        // VIA CEP API BLINDADA
         async function validarCEP(el) {
             const display = document.getElementById('locDisplay');
-            if(el.value.length === 8) {
-                display.innerText = "⏳ Localizando...";
+            const cep = el.value.replace(/\D/g, '');
+            if(cep.length === 8) {
+                display.innerText = "⏳ Localizando rota...";
                 try {
-                    const r = await fetch(`https://viacep.com.br/ws/${el.value}/json/`);
+                    const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
                     const d = await r.json();
                     if(!d.erro) {
                         display.innerHTML = `📍 ${d.localidade} - ${d.uf}`;
                         const valorFrete = (d.uf === 'SP' ? 12.90 : 22.50);
-                        document.getElementById('shipping').value = valorFrete.toFixed(2);
+                        document.getElementById('shipping').value = valorFrete.toFixed(2).replace('.', ',');
                         atualizarSugestao();
-                    } else { display.innerText = "❌ CEP não encontrado"; }
-                } catch(e) { display.innerText = "⚠️ Erro de conexão"; }
+                    } else { display.innerText = "❌ CEP não localizado."; }
+                } catch(e) { display.innerText = "⚠️ Erro de sinal. Tente novamente."; }
             }
         }
 
-        // SCRAPINGBEE API (FIXED WITH PARAMETER)
-        async function capturePrice(btn) {
+        // SCRAPINGBEE REFORÇADO
+        async function capturePrice() {
             const urlLoja = document.getElementById('productUrl').value;
-            if(!urlLoja) return alert("Cole o link!");
+            const btn = document.getElementById('btnExtract');
+            if(!urlLoja) return alert("Cole o link do produto!");
             
             btn.innerText = "🔍 MINERANDO...";
             btn.disabled = true;
-            btn.style.opacity = "0.5";
 
             const apiKey = "DFAK7P4M6H3Z015E9RLG"; 
             try {
-                const response = await fetch(`https://app.scrapingbee.com/api/v1/?api_key=${apiKey}&url=${encodeURIComponent(urlLoja)}&render_js=false`);
+                // Usando Premium Proxy para Shopee/Ali
+                const response = await fetch(`https://app.scrapingbee.com/api/v1/?api_key=${apiKey}&url=${encodeURIComponent(urlLoja)}&render_js=false&premium_proxy=true`);
                 const html = await response.text();
+                
+                // Regex de alta precisão para R$
                 const priceMatch = html.match(/R\$\s?(\d{1,3}(?:\.\d{3})*,\d{2})/);
+                
                 if(priceMatch) {
-                    const preco = priceMatch[1].replace('.', '').replace(',', '.');
-                    document.getElementById('supplier').value = parseFloat(preco).toFixed(2);
+                    const precoFinal = priceMatch[1].replace('.', '').replace(',', '.');
+                    document.getElementById('supplier').value = precoFinal.replace('.', ',');
                     atualizarSugestao();
-                } else { alert("Preço não detectado. Digite manualmente."); }
-            } catch (error) { alert("Servidor ocupado."); } 
+                    alert("✅ Preço extraído com sucesso!");
+                } else { alert("Bloqueio de segurança detectado. Digite o custo manualmente."); }
+            } catch (error) { alert("Servidor instável. Digite o custo manualmente."); } 
             finally { 
                 btn.innerText = "EXTRAIR DADOS"; 
                 btn.disabled = false;
-                btn.style.opacity = "1";
             }
         }
 
-        // CALCULAR MARGEM
+        // CÁLCULO FINAL
         function calcular() {
-            const v = parseFloat(document.getElementById('sale').value) || 0;
-            const c = parseFloat(document.getElementById('supplier').value) || 0;
-            const f = parseFloat(document.getElementById('shipping').value) || 0;
+            const v = formatInput(document.getElementById('sale').value) || 0;
+            const c = formatInput(document.getElementById('supplier').value) || 0;
+            const f = formatInput(document.getElementById('shipping').value) || 0;
+            
+            if(v === 0 || c === 0) return alert("Preencha os valores para calcular!");
+
             const lucro = v - c - f - (v * 0.12);
-            document.getElementById('resProfit').innerText = "R$ " + lucro.toFixed(2);
+            document.getElementById('resProfit').innerText = "R$ " + lucro.toLocaleString('pt-BR', {minimumFractionDigits: 2});
             document.getElementById('resProfit').style.color = lucro > 0 ? 'var(--green)' : 'var(--red)';
             document.getElementById('resultCard').classList.remove('hidden');
-            if(lucro > 0) confetti({ particleCount: 100, spread: 70, origin: { y: 0.7 } });
+            
+            if(lucro > 0) confetti({ particleCount: 120, spread: 80, origin: { y: 0.7 } });
         }
     </script>
 </body>
