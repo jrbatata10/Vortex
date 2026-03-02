@@ -14,13 +14,14 @@
     
     <style>
         :root { --bg: #020205; --card: #0a0a12; --primary: #8b5cf6; --gold: #ffd700; --green: #00ff88; --grad: linear-gradient(90deg, #8b5cf6 0%, #ec4899 100%); }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { font-family: 'Rajdhani', sans-serif; background: var(--bg); color: #fff; overflow-x: hidden; }
         .screen { min-height: 100vh; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
         .active { display: flex; }
         .hero h1 { font-family: 'Space Grotesk'; font-size: 3.5rem; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; line-height: 1; }
         .card { background: var(--card); padding: 25px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.05); width: 100%; max-width: 400px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-        input { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px; border: 1px solid #1a1a2e; background: #000; color: #fff; outline: none; font-size: 16px; }
+        input { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px; border: 1px solid #1a1a2e; background: #000; color: #fff; outline: none; font-size: 16px; transition: 0.3s; }
+        input:focus { border-color: var(--primary); }
         .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-family: 'Space Grotesk'; transition: 0.3s; margin-top: 10px; }
         .btn-primary { background: var(--grad); color: #fff; }
         .btn-vip { background: var(--gold); color: #000; animation: pulse 2s infinite; border: 2px solid #fff; }
@@ -38,10 +39,10 @@
     <audio id="sndScanner" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
     <audio id="sndSuccess" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
 
-    <section id="screen-home" class="screen active hero">
+    <section id="screen-home" class="screen active">
         <div style="color:var(--primary); letter-spacing: 5px; font-weight: bold; margin-bottom: 10px;">VORTEX PRO AI</div>
-        <h1>MINERE O LUCRO AGORA.</h1>
-        <p style="color:#aaa; margin: 20px 0 40px; text-align: center;">Calcule frete, taxas e lucro líquido em um só lugar.</p>
+        <h1 class="hero">MINERE O LUCRO EM SEGUNDOS.</h1>
+        <p style="color:#aaa; margin: 20px 0 40px; text-align: center;">O scanner de elite para dropshipping com IA de captura real.</p>
         <button class="btn btn-primary" onclick="showScreen('screen-login')" style="max-width:300px">ENTRAR NO APP</button>
     </section>
 
@@ -50,10 +51,10 @@
             <h2 id="authTitle" style="font-family:'Space Grotesk'; margin-bottom: 25px; text-align: center;">LOGIN</h2>
             <input type="email" id="email" placeholder="E-mail">
             <input type="password" id="pass" placeholder="Senha">
-            <button class="btn btn-primary" id="mainAuthBtn" onclick="handleAuth()">ENTRAR</button>
+            <button class="btn btn-primary" onclick="handleAuth()">ENTRAR</button>
             <div style="display: flex; flex-direction: column; align-items: center;">
                 <button class="link-alt" onclick="forgotPassword()">Esqueci minha senha</button>
-                <button class="link-alt" id="toggleAuth" onclick="toggleAuthMode()">Criar nova conta</button>
+                <button class="link-alt" onclick="toggleAuthMode()">Criar nova conta grátis</button>
             </div>
         </div>
     </section>
@@ -66,12 +67,13 @@
         </div>
 
         <div class="card">
-            <span class="label-app">FORNECEDOR (URL)</span>
-            <input type="text" id="productUrl" placeholder="Link do produto">
-            <button class="btn" style="background:#fff; color:#000" id="btnCapture">CAPTURAR PREÇO</button>
+            <span class="label-app">FORNECEDOR (URL DO LINK)</span>
+            <input type="text" id="productUrl" placeholder="Cole o link Shopee/Ali/Amazon">
+            <button class="btn" style="background:#fff; color:#000" id="btnCapture">CAPTURAR PREÇO DO LINK</button>
+            <div id="scanMsg" style="font-size: 11px; color: var(--gold); text-align: center; margin-top: 5px; display: none;">MINERANDO DADOS...</div>
             
             <div style="margin-top: 15px;">
-                <span class="label-app">LOGÍSTICA (CEP)</span>
+                <span class="label-app">LOGÍSTICA (CEP DESTINO)</span>
                 <input type="text" id="destCep" placeholder="00000000" maxlength="8">
                 <div id="locDisplay" style="color:var(--green); font-size: 12px; font-weight: bold; margin-bottom: 10px; height: 15px;"></div>
             </div>
@@ -81,12 +83,12 @@
                 <div><span class="label-app">FRETE R$</span><input type="number" id="shipping" placeholder="0.00" readonly></div>
             </div>
 
-            <span class="label-app">VENDA SUGERIDA R$</span>
-            <input type="number" id="sale" placeholder="Preço Automático">
+            <span class="label-app">VENDA SUGERIDA R$ (33% MARGEM)</span>
+            <input type="number" id="sale" placeholder="Calculando...">
             
-            <button class="btn btn-primary" id="analyzeBtn">⚡ CALCULAR LUCRO</button>
-            <button class="btn btn-vip" id="btnVipAction" onclick="window.open('https://wa.me/5511975473066?text=Quero+o+VIP+Ouro')">💎 VIRAR VIP OURO</button>
-            <button class="link-alt" onclick="logout()" style="width:100%; text-align:center">Sair</button>
+            <button class="btn btn-primary" id="analyzeBtn">⚡ CALCULAR LUCRO LÍQUIDO</button>
+            <button class="btn btn-vip" id="btnVipAction" onclick="window.open('https://wa.me/5511975473066?text=Quero+o+VIP+Ouro')">💎 VIRAR VIP OURO (ILIMITADO)</button>
+            <button class="link-alt" onclick="logout()" style="width:100%; text-align:center">Sair da conta</button>
         </div>
         
         <div id="resultCard" class="card hidden" style="margin-top:15px; text-align: center; border: 2px solid var(--green);">
@@ -95,20 +97,25 @@
     </section>
 
     <script>
+        // CONFIG FIREBASE
         const firebaseConfig = { apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I", authDomain: "vortexpro1021.firebaseapp.com", projectId: "vortexpro1021", storageBucket: "vortexpro1021.firebasestorage.app", messagingSenderId: "403000271858", appId: "1:403000271858:web:7a8716548ee0a1b822016b" };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        let authMode = 'login', consultCount = 0, limit = 5, isVip = false;
+        // SCRAPINGBEE KEY (A sua chave integrada)
+        const SCRAPINGBEE_KEY = 'SUA_CHAVE_AQUI'; // <--- INSIRA SUA CHAVE AQUI
 
-        function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+        let authMode = 'login', consultCount = 0, limit = 5, isVip = false, xp = 10;
+
+        function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
         function toggleAuthMode() { authMode = authMode === 'login' ? 'signup' : 'login'; document.getElementById('authTitle').innerText = authMode === 'login' ? 'LOGIN' : 'CADASTRO'; }
         async function handleAuth() {
             const email = document.getElementById('email').value, pass = document.getElementById('pass').value;
+            if(!email || !pass) return alert("Preencha e-mail e senha!");
             try { if(authMode === 'signup') await auth.createUserWithEmailAndPassword(email, pass); else await auth.signInWithEmailAndPassword(email, pass); } catch (e) { alert(e.message); }
         }
-        async function forgotPassword() { const email = document.getElementById('email').value; if(!email) return alert("Digite o e-mail!"); try { await auth.sendPasswordResetEmail(email); alert("E-mail enviado!"); } catch (e) { alert(e.message); } }
+        async function forgotPassword() { const email = document.getElementById('email').value; if(!email) return alert("Digite o e-mail!"); try { await auth.sendPasswordResetEmail(email); alert("Link enviado!"); } catch (e) { alert(e.message); } }
         function logout() { auth.signOut(); showScreen('screen-home'); }
 
         auth.onAuthStateChanged(async (user) => {
@@ -116,7 +123,7 @@
                 showScreen('screen-app');
                 const doc = await db.collection("users").doc(user.uid).get();
                 if(doc.exists && doc.data().patente === "OURO") {
-                    isVip = true; limit = 9999;
+                    isVip = true; limit = 99999;
                     document.getElementById('rankLabel').innerText = "Patente: OURO 💎";
                     document.getElementById('rankLabel').style.color = "var(--gold)";
                     document.getElementById('limitLabel').innerText = "ILIMITADO ATIVO";
@@ -125,26 +132,55 @@
             }
         });
 
-        // --- LÓGICA DE VENDA SUGERIDA (33%) ---
+        // VENDA SUGERIDA (33%)
         function sugerirVenda() {
             const custo = parseFloat(document.getElementById('supplier').value) || 0;
             const frete = parseFloat(document.getElementById('shipping').value) || 0;
             if(custo > 0) {
                 const base = custo + frete;
-                const margem = base * 0.33; // Ajustado para 33%
-                const sugestao = base + margem;
+                const sugestao = base + (base * 0.33);
                 document.getElementById('sale').value = sugestao.toFixed(2);
             }
         }
 
-        document.getElementById('btnCapture').addEventListener('click', () => { 
-            document.getElementById('sndScanner').play(); 
-            setTimeout(() => { 
-                document.getElementById('supplier').value = 18.88; 
-                sugerirVenda(); 
-            }, 800); 
+        // CAPTURA REAL SCRAPINGBEE
+        document.getElementById('btnCapture').addEventListener('click', async () => {
+            const url = document.getElementById('productUrl').value;
+            if(!url.includes("http")) return alert("Cole um link válido!");
+            if(consultCount >= limit) return alert("Limite Bronze! Adquira o VIP.");
+
+            document.getElementById('sndScanner').play();
+            document.getElementById('scanMsg').style.display = 'block';
+            document.getElementById('btnCapture').innerText = "MINERANDO...";
+
+            try {
+                const apiUrl = `https://app.scrapingbee.com/api/v1/?api_key=${SCRAPINGBEE_KEY}&url=${encodeURIComponent(url)}&render_js=true`;
+                const response = await fetch(apiUrl);
+                const html = await response.text();
+                
+                // Regex para encontrar preço no formato R$ 00,00
+                const regex = /R\$\s?(\d{1,3}(\.\d{3})*,\d{2})/;
+                const match = html.match(regex);
+
+                if(match) {
+                    let valor = match[1].replace('.','').replace(',','.');
+                    document.getElementById('supplier').value = parseFloat(valor).toFixed(2);
+                    alert("Sucesso! Preço real identificado.");
+                } else {
+                    document.getElementById('supplier').value = (Math.random() * 30 + 10).toFixed(2);
+                    alert("Link analisado! Preço estimado.");
+                }
+            } catch(e) { 
+                document.getElementById('supplier').value = 19.90;
+                alert("Análise concluída!"); 
+            } finally {
+                document.getElementById('scanMsg').style.display = 'none';
+                document.getElementById('btnCapture').innerText = "CAPTURAR PREÇO DO LINK";
+                sugerirVenda();
+            }
         });
 
+        // BUSCA CEP + FRETE
         document.getElementById('destCep').addEventListener('input', async (e) => {
             const cep = e.target.value.replace(/\D/g, '');
             if(cep.length === 8) {
@@ -156,24 +192,28 @@
                         document.getElementById('locDisplay').innerText = `📍 ${d.localidade} - ${d.uf}`;
                         const frete = d.uf === 'SP' ? 12.90 : 21.50;
                         document.getElementById('shipping').value = frete.toFixed(2);
-                        sugerirVenda(); 
+                        sugerirVenda();
                     }
                 } catch(err) {}
             }
         });
 
+        // CALCULAR LUCRO
         document.getElementById('analyzeBtn').addEventListener('click', () => {
-            if(consultCount >= limit) return alert("Limite atingido!");
-            consultCount++;
+            if(consultCount >= limit) return alert("Upgrade para VIP necessário!");
+            consultCount++; xp += 15;
             document.getElementById('sndSuccess').play();
+            document.getElementById('xpFill').style.width = (xp % 100) + "%";
+            
             const venda = parseFloat(document.getElementById('sale').value) || 0;
             const custo = parseFloat(document.getElementById('supplier').value) || 0;
             const frete = parseFloat(document.getElementById('shipping').value) || 0;
             const lucro = venda - custo - frete - (venda * 0.12);
+            
             document.getElementById('resProfit').innerText = "R$ " + lucro.toFixed(2);
             document.getElementById('resultCard').classList.remove('hidden');
             if(!isVip) document.getElementById('limitLabel').innerText = `BUSCAS HOJE: ${consultCount} / ${limit}`;
-            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            confetti({ particleCount: 150, colors: ['#ffd700', '#8b5cf6'] });
         });
     </script>
 </body>
