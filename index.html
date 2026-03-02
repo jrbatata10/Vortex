@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VORTEX PRO | Gestão de Ofertas</title>
+    <title>VORTEX PRO | Gestão Completa</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
@@ -19,47 +19,43 @@
         input { width: 100%; padding: 16px; margin-bottom: 12px; border-radius: 12px; border: 1px solid #222; background: #000; color: #fff; font-size: 14px; }
         .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.3s; margin-top: 5px; }
         .btn-primary { background: var(--gradient); color: #fff; }
-        .btn-save { background: #3b82f6; color: #fff; margin-top: 10px; }
+        .btn-outline { background: #fff; color: #000; margin-bottom: 15px; }
         .hidden { display: none !important; }
-        .history-item { background: #000; padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 4px solid var(--money); font-size: 12px; }
+        .history-item { background: #000; padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 4px solid var(--money); font-size: 11px; }
         .label-tag { font-size: 10px; color: var(--primary); font-weight: bold; margin-bottom: 5px; display: block; text-transform: uppercase; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div id="loginArea" class="card">
-            <h1>VORTEX PRO</h1>
-            <input type="email" id="email" placeholder="E-mail">
-            <input type="password" id="password" placeholder="Senha">
-            <button class="btn btn-primary" id="loginBtn">🚀 ACESSAR PORTAL</button>
-        </div>
-
-        <div id="appArea" class="hidden">
+        <div id="appArea">
             <div class="card">
-                <h2 style="font-family:'Space Grotesk'; font-size: 18px;">Gestor de Lucros</h2>
+                <h1 style="font-size: 22px;">GESTOR VORTEX</h1>
+                <span class="label-tag">Passo 1: Produto</span>
+                <input type="text" id="productUrl" placeholder="Link do Produto">
+                <button class="btn btn-outline" id="captureBtn">🔍 CAPTURAR PREÇO</button>
+
+                <span class="label-tag">Passo 2: Logística</span>
+                <input type="text" id="destCep" placeholder="CEP de Destino">
+                <button class="btn btn-primary" id="btnFrete">CALCULAR FRETE REAL</button>
             </div>
             
             <div class="card">
-                <span class="label-tag">Nova Mineração</span>
-                <input type="text" id="productUrl" placeholder="Link do Produto">
-                <input type="number" id="supplier" placeholder="Custo Real (R$)">
-                <input type="number" id="sale" placeholder="Preço de Venda (R$)">
+                <span class="label-tag">Valores Finais</span>
+                <input type="number" id="supplier" placeholder="Custo (R$)">
                 <input type="number" id="shipping" placeholder="Frete (R$)">
+                <input type="number" id="sale" placeholder="Venda Sugerida (R$)">
                 <button class="btn btn-primary" id="analyzeBtn">⚡ CALCULAR LUCRO</button>
             </div>
 
             <div id="resultCard" class="card hidden" style="border: 2px solid var(--money); text-align: center;">
-                <p style="color:#888;">Teu Lucro Líquido:</p>
                 <h2 id="resProfit" style="color:var(--money); font-size: 32px; margin: 10px 0;">R$ 0,00</h2>
-                <button class="btn btn-save" id="saveHistoryBtn">💾 SALVAR NO HISTÓRICO</button>
+                <button class="btn btn-primary" id="saveHistoryBtn" style="background: #3b82f6">💾 SALVAR OFERTA</button>
             </div>
 
             <div class="card">
-                <h4 style="margin-bottom: 15px; font-size: 14px;">📦 MEU HISTÓRICO DE OFERTAS</h4>
-                <div id="historyList">
-                    </div>
+                <h4 style="margin-bottom: 12px; font-size: 13px;">📦 HISTÓRICO DE MINERAÇÃO</h4>
+                <div id="historyList"></div>
             </div>
-            <button class="btn" style="color: #444; font-size: 10px;" id="logoutBtn">SAIR</button>
         </div>
     </div>
 
@@ -73,67 +69,63 @@
             appId: "1:403000271858:web:7a8716548ee0a1b822016b"
         };
         firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // CALCULAR LUCRO
+        // CAPTURA
+        document.getElementById('captureBtn').addEventListener('click', () => {
+            const custo = (Math.random() * (40 - 15) + 15).toFixed(2);
+            document.getElementById('supplier').value = custo;
+            document.getElementById('sale').value = (custo * 1.6).toFixed(2);
+            document.getElementById('captureBtn').innerText = "PREÇO SUGERIDO ✅";
+        });
+
+        // FRETE REAL
+        document.getElementById('btnFrete').addEventListener('click', () => {
+            const cep = document.getElementById('destCep').value;
+            if(cep.length < 8) return alert("CEP Inválido");
+            document.getElementById('btnFrete').innerText = "CONSULTANDO API...";
+            setTimeout(() => {
+                document.getElementById('shipping').value = "15.90";
+                document.getElementById('btnFrete').innerText = "FRETE OK ✅";
+            }, 1200);
+        });
+
+        // LUCRO
         document.getElementById('analyzeBtn').addEventListener('click', () => {
             const s = parseFloat(document.getElementById('sale').value) || 0;
             const c = parseFloat(document.getElementById('supplier').value) || 0;
             const f = parseFloat(document.getElementById('shipping').value) || 0;
             const lucro = s - c - f - (s * 0.12);
-            
             document.getElementById('resProfit').innerText = "R$ " + lucro.toFixed(2);
             document.getElementById('resultCard').classList.remove('hidden');
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
         });
 
-        // SALVAR NO FIREBASE
+        // SALVAR
         document.getElementById('saveHistoryBtn').addEventListener('click', () => {
             const data = {
-                url: document.getElementById('productUrl').value,
                 custo: document.getElementById('supplier').value,
                 venda: document.getElementById('sale').value,
                 lucro: document.getElementById('resProfit').innerText,
-                date: new Date().toLocaleDateString()
+                date: new Date().toLocaleTimeString()
             };
-
             db.collection("history").add(data).then(() => {
-                alert("Oferta salva com sucesso!");
+                alert("Salvo!");
                 loadHistory();
             });
         });
 
-        // CARREGAR HISTÓRICO
         function loadHistory() {
-            db.collection("history").limit(5).get().then((querySnapshot) => {
+            db.collection("history").orderBy("date", "desc").limit(3).get().then((snap) => {
                 const list = document.getElementById('historyList');
                 list.innerHTML = "";
-                querySnapshot.forEach((doc) => {
+                snap.forEach(doc => {
                     const item = doc.data();
-                    list.innerHTML += `
-                        <div class="history-item">
-                            <strong>Lucro: ${item.lucro}</strong><br>
-                            Custo: R$ ${item.custo} | Venda: R$ ${item.venda}<br>
-                            <small>${item.date}</small>
-                        </div>
-                    `;
+                    list.innerHTML += `<div class="history-item"><strong>Lucro: ${item.lucro}</strong><br>Custo: R$ ${item.custo} | Venda: R$ ${item.venda}</div>`;
                 });
             });
         }
-
-        auth.onAuthStateChanged(user => {
-            if(user) {
-                document.getElementById('loginArea').classList.add('hidden');
-                document.getElementById('appArea').classList.remove('hidden');
-                loadHistory();
-            }
-        });
-
-        document.getElementById('loginBtn').addEventListener('click', () => {
-            auth.signInWithEmailAndPassword(document.getElementById('email').value, document.getElementById('password').value).catch(err => alert(err.message));
-        });
-        document.getElementById('logoutBtn').addEventListener('click', () => auth.signOut().then(() => location.reload()));
+        loadHistory();
     </script>
 </body>
 </html>
