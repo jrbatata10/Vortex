@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VORTEX PRO | Gamer Edition</title>
+    <title>VORTEX PRO | Elite Rank</title>
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/686/686589.png">
     
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -13,174 +13,104 @@
     
     <style>
         :root { 
-            --bg: #020205; 
-            --card-bg: #0a0a12; 
-            --primary: #8b5cf6; 
-            --secondary: #ec4899;
-            --neon-green: #00ff88;
-            --neon-purple: #a855f7;
-            --text: #e2e8f0;
+            --bg: #020205; --card-bg: #0a0a12; --primary: #8b5cf6; 
+            --neon-green: #00ff88; --gold: #ffd700; --text: #e2e8f0;
             --gradient: linear-gradient(90deg, #8b5cf6 0%, #ec4899 100%);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         body { 
             font-family: 'Rajdhani', sans-serif; 
             background: var(--bg); 
             background-image: radial-gradient(circle at 50% -20%, #25104a 0%, #020205 80%);
             color: var(--text); 
-            padding: 20px; 
+            padding: 15px; 
             display: flex; 
-            justify-content: center;
+            justify-content: center; 
             min-height: 100vh;
         }
-
         .container { width: 100%; max-width: 400px; }
 
-        h1 { 
-            font-family: 'Space Grotesk'; 
-            font-weight: 800;
-            background: var(--gradient); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            text-align: center; 
-            font-size: 32px;
-            letter-spacing: -1px;
-            margin-bottom: 25px;
-            text-transform: uppercase;
-            filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.5));
-        }
+        /* RANKING SYSTEM */
+        .rank-card { background: rgba(139, 92, 246, 0.1); padding: 15px; border-radius: 15px; border: 1px solid var(--primary); margin-bottom: 15px; text-align: center; }
+        .rank-name { font-family: 'Space Grotesk'; font-weight: 800; font-size: 18px; color: var(--gold); text-transform: uppercase; text-shadow: 0 0 10px rgba(255,215,0,0.5); }
+        .xp-bar-bg { width: 100%; height: 8px; background: #1a1a2e; border-radius: 4px; margin: 10px 0; overflow: hidden; }
+        .xp-bar-fill { width: 10%; height: 100%; background: var(--gradient); transition: 0.8s; box-shadow: 0 0 10px var(--primary); }
+        .limit-info { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
 
-        .card { 
-            background: var(--card-bg); 
-            padding: 22px; 
-            border-radius: 20px; 
-            border: 1px solid rgba(139, 92, 246, 0.2); 
-            margin-bottom: 18px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
-        }
+        h1 { font-family: 'Space Grotesk'; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; font-size: 28px; margin-bottom: 20px; filter: drop-shadow(0 0 5px rgba(139, 92, 246, 0.3)); }
 
-        .label-tag { 
-            font-size: 11px; 
-            color: var(--neon-purple); 
-            font-weight: 700; 
-            margin-bottom: 8px; 
-            display: block; 
-            text-transform: uppercase; 
-            letter-spacing: 2px;
-        }
-
-        input { 
-            width: 100%; 
-            padding: 14px; 
-            margin-bottom: 15px; 
-            border-radius: 10px; 
-            border: 1px solid #1a1a2e; 
-            background: #05050a; 
-            color: #fff; 
-            font-size: 15px; 
-            outline: none; 
-            transition: 0.3s;
-        }
-
-        input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(139, 92, 246, 0.3); }
-
-        .btn { 
-            width: 100%; 
-            padding: 16px; 
-            border-radius: 12px; 
-            border: none; 
-            font-weight: 800; 
-            font-family: 'Space Grotesk';
-            cursor: pointer; 
-            text-transform: uppercase; 
-            transition: 0.4s; 
-            margin-bottom: 12px;
-            letter-spacing: 1px;
-        }
-
-        .btn-primary { 
-            background: var(--gradient); 
-            color: #fff; 
-            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
-        }
-
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6); }
-
-        .btn-capture { 
-            background: transparent; 
-            border: 2px solid var(--primary); 
-            color: var(--primary);
-        }
-
-        .btn-capture:hover { background: var(--primary); color: #fff; }
-
-        #locationBadge { 
-            font-size: 12px; 
-            color: var(--neon-green); 
-            margin-top: -10px; 
-            margin-bottom: 15px; 
-            display: block; 
-            font-weight: 600;
-            text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
-        }
-
-        .history-item { 
-            background: rgba(255,255,255,0.03); 
-            padding: 14px; 
-            border-radius: 12px; 
-            margin-top: 10px; 
-            border-right: 3px solid var(--secondary);
+        .card { background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .label-tag { font-size: 10px; color: var(--primary); font-weight: 700; margin-bottom: 5px; display: block; text-transform: uppercase; letter-spacing: 1px; }
+        
+        input { width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #1a1a2e; background: #000; color: #fff; outline: none; font-size: 14px; transition: 0.3s; }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(139, 92, 246, 0.2); }
+        
+        .btn { width: 100%; padding: 15px; border-radius: 10px; border: none; font-weight: 800; font-family: 'Space Grotesk'; cursor: pointer; text-transform: uppercase; transition: 0.3s; margin-bottom: 10px; }
+        .btn-primary { background: var(--gradient); color: #fff; box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3); }
+        .btn-capture { background: #fff; color: #000; }
+        
+        .btn-vip { 
+            background: var(--gold); 
+            color: #000; 
+            border: 2px solid #fff; 
+            animation: pulse 2s infinite; 
+            margin-top: 5px;
             font-size: 13px;
         }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); } 70% { box-shadow: 0 0 0 12px rgba(255, 215, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); } }
 
-        #resProfit { 
-            font-family: 'Space Grotesk';
-            color: var(--neon-green); 
-            font-size: 42px; 
-            margin: 15px 0;
-            text-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
-        }
-
+        .history-item { background: rgba(255,255,255,0.02); padding: 12px; border-radius: 12px; margin-top: 8px; border-left: 3px solid var(--neon-green); font-size: 12px; }
+        #locationBadge { color: var(--neon-green); font-size: 11px; margin-top: -8px; margin-bottom: 12px; display: block; font-weight: 600; }
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
+    <audio id="sndScanner" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
+    <audio id="sndSuccess" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
+
     <div class="container">
+        <div class="rank-card">
+            <div id="rankLabel" class="rank-name">Patente: BRONZE</div>
+            <div class="xp-bar-bg"><div id="xpFill" class="xp-bar-fill"></div></div>
+            <div id="limitLabel" class="limit-info">Consultas Hoje: 0 / 5</div>
+        </div>
+
+        <h1>VORTEX PRO</h1>
+        
         <div class="card">
-            <h1>VORTEX PRO</h1>
-            
-            <span class="label-tag">📡 Radar de Fornecedor</span>
-            <input type="text" id="productUrl" placeholder="Link da Oferta (Shopee/Ali)">
+            <span class="label-tag">📡 Injetar URL de Carga</span>
+            <input type="text" id="productUrl" placeholder="Link da Shopee / AliExpress">
             <button class="btn btn-capture" id="btnCapture">SCANNER DE PREÇO</button>
 
-            <span class="label-tag">📍 Destino da Carga</span>
+            <span class="label-tag">📍 Coordenadas (CEP)</span>
             <input type="text" id="destCep" placeholder="Digite o CEP" maxlength="8">
-            <span id="locationBadge">SISTEMA OFFLINE</span>
+            <span id="locationBadge">Aguardando GPS...</span>
             
-            <span class="label-tag">💎 Painel de Lucro</span>
-            <input type="number" id="supplier" placeholder="Custo de Entrada (R$)">
-            <input type="number" id="shipping" placeholder="Frete Logístico (R$)" readonly>
-            <input type="number" id="sale" placeholder="Preço de Venda Final (R$)">
+            <span class="label-tag">💰 Painel Financeiro</span>
+            <input type="number" id="supplier" placeholder="Custo do Produto (R$)">
+            <input type="number" id="shipping" placeholder="Custo do Frete (R$)" readonly>
+            <input type="number" id="sale" placeholder="Venda Sugerida (R$)">
             
             <button class="btn btn-primary" id="analyzeBtn">⚡ EXECUTAR ANÁLISE</button>
+            
+            <button class="btn btn-vip" onclick="window.open('https://wa.me/5511975473066?text=Olá+Junior!+Quero+me+tornar+VIP+OURO+na+Vortex+Pro+e+ter+acesso+ilimitado.')">💎 TORNAR-SE VIP OURO (ILIMITADO)</button>
         </div>
 
-        <div id="resultCard" class="card hidden" style="text-align: center;">
-            <p style="color:rgba(255,255,255,0.5); font-size: 13px; text-transform: uppercase;">Retorno Líquido:</p>
-            <h2 id="resProfit">R$ 0,00</h2>
-            <button class="btn btn-primary" id="saveHistoryBtn" style="font-size: 12px;">💾 SALVAR NO BANCO DE DADOS</button>
+        <div id="resultCard" class="card hidden" style="text-align: center; border: 1px solid var(--neon-green);">
+            <p style="color:#888; font-size: 12px;">RETORNO LÍQUIDO:</p>
+            <h2 id="resProfit" style="color:var(--neon-green); font-size: 38px; margin: 10px 0;">R$ 0,00</h2>
+            <button class="btn btn-primary" id="saveHistoryBtn" style="font-size: 11px; background: rgba(139, 92, 246, 0.2); border: 1px solid var(--primary);">💾 ARQUIVAR NO HISTÓRICO</button>
         </div>
 
         <div class="card">
-            <h4 style="font-size: 14px; color: var(--primary); text-transform: uppercase; margin-bottom: 15px;">📂 Histórico de Mineração</h4>
+            <h4 style="font-size: 12px; color: var(--primary); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px;">📂 Database de Mineração</h4>
             <div id="historyList"></div>
         </div>
     </div>
 
     <script>
+        // CONFIGURAÇÕES FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I",
             authDomain: "vortexpro1021.firebaseapp.com",
@@ -192,53 +122,75 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // CAPTURA
+        let pesquisasHoje = 0;
+        let limiteDiario = 5;
+        let xp = 10;
+
+        const sndScanner = document.getElementById('sndScanner');
+        const sndSuccess = document.getElementById('sndSuccess');
+
+        // SCANNER DE PREÇO
         document.getElementById('btnCapture').addEventListener('click', () => {
-            const url = document.getElementById('productUrl').value;
-            if(!url) return alert("Insira o Link Gamer!");
-            document.getElementById('btnCapture').innerText = "SCANNING...";
+            if(pesquisasHoje >= limiteDiario) return alert("LIMITE BRONZE ATINGIDO! Faça o upgrade para o VIP OURO para continuar minerando.");
+            sndScanner.play();
+            document.getElementById('btnCapture').innerText = "SCANNING DATABASE...";
             setTimeout(() => {
-                let precoReal = 18.88; 
-                document.getElementById('supplier').value = precoReal;
+                document.getElementById('supplier').value = 18.88;
                 document.getElementById('btnCapture').innerText = "SCAN COMPLETO ✅";
                 atualizarSugestao();
             }, 1200);
         });
 
-        // CEP & LOCAL
+        // CEP & LOCALIDADE
         document.getElementById('destCep').addEventListener('input', async (e) => {
             const cep = e.target.value.replace(/\D/g, '');
             if(cep.length === 8) {
-                document.getElementById('locationBadge').innerText = "Sincronizando Local...";
+                document.getElementById('locationBadge').innerText = "SINCRONIZANDO...";
                 const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
                 const data = await response.json();
                 if(!data.erro) {
                     document.getElementById('locationBadge').innerText = `CONNECTED: ${data.localidade} (${data.uf})`;
-                    let frete = data.uf === 'SP' ? 12.90 : 21.50;
-                    document.getElementById('shipping').value = frete.toFixed(2);
+                    let f = data.uf === 'SP' ? 12.90 : 21.50;
+                    document.getElementById('shipping').value = f.toFixed(2);
                     atualizarSugestao();
                 }
             }
         });
 
         function atualizarSugestao() {
-            const custo = parseFloat(document.getElementById('supplier').value) || 0;
-            const frete = parseFloat(document.getElementById('shipping').value) || 0;
-            if(custo > 0) document.getElementById('sale').value = (custo + frete + 20).toFixed(2);
+            const c = parseFloat(document.getElementById('supplier').value) || 0;
+            const f = parseFloat(document.getElementById('shipping').value) || 0;
+            if(c > 0) document.getElementById('sale').value = (c + f + 20).toFixed(2);
         }
 
-        // LUCRO
+        // EXECUÇÃO DE ANÁLISE + XP
         document.getElementById('analyzeBtn').addEventListener('click', () => {
+            if(pesquisasHoje >= limiteDiario) return alert("SISTEMA BLOQUEADO! Adquira o VIP OURO para acesso ilimitado.");
+            
+            pesquisasHoje++;
+            xp += 18;
+            sndSuccess.play();
+            
+            // UI Update
+            document.getElementById('xpFill').style.width = (xp % 100) + "%";
+            document.getElementById('limitLabel').innerText = `Consultas Hoje: ${pesquisasHoje} / ${limiteDiario}`;
+            
+            if(xp >= 100) {
+                document.getElementById('rankLabel').innerText = "Patente: PRATA";
+                limiteDiario = 10;
+            }
+
             const s = parseFloat(document.getElementById('sale').value) || 0;
             const c = parseFloat(document.getElementById('supplier').value) || 0;
             const f = parseFloat(document.getElementById('shipping').value) || 0;
             const lucro = s - c - f - (s * 0.12);
+            
             document.getElementById('resProfit').innerText = "R$ " + lucro.toFixed(2);
             document.getElementById('resultCard').classList.remove('hidden');
-            if(lucro > 0) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#8b5cf6', '#ec4899', '#00ff88'] });
+            if(lucro > 0) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#ffd700', '#8b5cf6', '#00ff88'] });
         });
 
-        // HISTÓRICO
+        // SALVAR HISTÓRICO
         document.getElementById('saveHistoryBtn').addEventListener('click', () => {
             const data = {
                 custo: document.getElementById('supplier').value,
@@ -247,7 +199,7 @@
                 timestamp: Date.now()
             };
             db.collection("history").add(data).then(() => {
-                alert("OFERTA ARQUIVADA!");
+                alert("OFERTA ARQUIVADA COM SUCESSO!");
                 carregarHistorico();
             });
         });
