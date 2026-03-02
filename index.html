@@ -4,53 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VORTEX PRO | Elite</title>
-    
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
     <style>
-        :root { 
-            --bg: #050508; --surface: #0f0f16; --primary: #8b5cf6; --accent: #f43f5e; --money: #10b981; 
-            --gradient: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #f43f5e 100%);
-        }
+        :root { --bg: #050508; --surface: #0f0f16; --primary: #8b5cf6; --accent: #f43f5e; --money: #10b981; --gradient: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #f43f5e 100%); }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; }
-
-        /* FUNDO ANIMADO */
-        .bg-glow {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.15), transparent 70%);
-            animation: pulse 6s infinite ease-in-out;
-        }
+        .bg-glow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.15), transparent 70%); animation: pulse 6s infinite ease-in-out; }
         @keyframes pulse { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
-
         .container { max-width: 480px; margin: 0 auto; padding: 20px; }
-        
-        .logo-badge {
-            display: flex; align-items: center; justify-content: center; gap: 15px; margin: 40px 0;
-            background: var(--surface); border: 1px solid rgba(139, 92, 246, 0.3);
-            padding: 15px; border-radius: 50px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-        }
+        .logo-badge { display: flex; align-items: center; justify-content: center; gap: 15px; margin: 40px 0; background: var(--surface); border: 1px solid rgba(139, 92, 246, 0.3); padding: 15px; border-radius: 50px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
         .logo-icon { width: 40px; height: 40px; background: var(--gradient); border-radius: 12px; animation: rotate 4s linear infinite; }
         @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .logo-text { font-family: 'Space Grotesk'; font-weight: 800; font-size: 26px; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
         .card { background: rgba(15, 15, 22, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 24px; margin-bottom: 16px; }
-
         .xp-bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; margin: 10px 0; }
         .xp-fill { height: 100%; background: var(--gradient); width: 0%; transition: width 0.8s ease; }
-
         input { width: 100%; padding: 18px; background: #000; border: 2px solid #222; color: #fff; border-radius: 16px; margin-bottom: 15px; font-weight: 600; }
-        
         .btn { width: 100%; padding: 18px; border: none; border-radius: 16px; font-family: 'Space Grotesk'; font-weight: 700; cursor: pointer; text-transform: uppercase; transition: 0.3s; margin-bottom: 10px; }
         .btn-primary { background: var(--gradient); color: #fff; }
         .btn-outline { background: transparent; border: 2px solid #222; color: #888; font-size: 12px; }
         .btn-money { background: linear-gradient(135deg, #10b981, #3b82f6); color: #fff; margin-top: 15px; }
-        
         .hidden { display: none !important; }
         #resultCard { display: none; margin-top: 20px; border: 2px solid var(--money); }
     </style>
@@ -58,55 +35,33 @@
 <body>
     <div class="bg-glow"></div>
     <div class="container">
-        
         <div id="loginArea">
-            <div class="logo-badge">
-                <div class="logo-icon"></div>
-                <div class="logo-text">VORTEX PRO</div>
-            </div>
+            <div class="logo-badge"><div class="logo-icon"></div><div class="logo-text">VORTEX PRO</div></div>
             <div class="card">
-                <h3 style="text-align:center; margin-bottom:20px; font-family:'Space Grotesk';">Portal de Inteligência</h3>
-                <input type="email" id="email" placeholder="Seu e-mail">
-                <input type="password" id="password" placeholder="Sua senha">
-                
+                <h3 style="text-align:center; margin-bottom:20px;">Portal de Inteligência</h3>
+                <input type="email" id="email" placeholder="Seu e-mail"><input type="password" id="password" placeholder="Sua senha">
                 <button class="btn btn-primary" onclick="handleAuth('login')">🚀 Entrar</button>
                 <button class="btn btn-outline" onclick="handleAuth('signup')">Criar Nova Conta</button>
             </div>
         </div>
-
         <div id="appArea" class="hidden">
             <div class="card">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span id="planInfo" style="background:var(--primary); padding:5px 12px; border-radius:8px; font-size:10px; font-weight:800;">FREE</span>
-                    <span style="font-size:11px; color:#888;">LVL <span id="lvl">1</span></span>
-                </div>
-                <h2 id="userName" style="margin-top:10px; font-family:'Space Grotesk'; font-size:24px;">Olá!</h2>
-                <div class="xp-bar"><div class="xp-fill" id="xpBar"></div></div>
+                <div style="display:flex; justify-content:space-between; align-items:center;"><span id="planInfo" style="background:var(--primary); padding:5px 12px; border-radius:8px; font-size:10px; font-weight:800;">FREE</span><span>LVL <span id="lvl">1</span></span></div>
+                <h2 id="userName" style="margin-top:10px; font-family:'Space Grotesk';">Olá!</h2><div class="xp-bar"><div class="xp-fill" id="xpBar"></div></div>
             </div>
-
             <div class="card">
-                <h4 style="color:var(--primary); margin-bottom:15px; font-family:'Space Grotesk';">🔍 ANALISADOR DE MARGEM</h4>
-                <input type="number" id="sale" placeholder="Preço de Venda (R$)">
-                <input type="number" id="supplier" placeholder="Custo Produto (R$)">
-                <input type="number" id="shipping" placeholder="Frete Total (R$)">
-                
+                <h4 style="color:var(--primary); margin-bottom:15px;">🔍 ANALISADOR DE MARGEM</h4>
+                <input type="number" id="sale" placeholder="Preço de Venda (R$)"><input type="number" id="supplier" placeholder="Custo Produto (R$)"><input type="number" id="shipping" placeholder="Frete Total (R$)">
                 <button class="btn btn-primary" onclick="analyze()">⚡ CALCULAR LÍQUIDO</button>
-
                 <div id="resultCard" class="card" style="background: #000;">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                        <span style="color:#888;">Lucro Real:</span><b id="resProfit" style="color:var(--money); font-size:20px;">R$ 0,00</b>
-                    </div>
-                    <div style="background:var(--surface); padding:15px; border-radius:12px; text-align:center;">
-                        <div style="font-size:10px; color:#555; margin-bottom:5px;">PREÇO SUGERIDO (30% LUCRO)</div>
-                        <div id="resSug" style="font-size:24px; font-weight:800; color:#fff;">R$ 0,00</div>
-                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span style="color:#888;">Lucro Real:</span><b id="resProfit" style="color:var(--money); font-size:20px;">R$ 0,00</b></div>
+                    <div style="background:var(--surface); padding:15px; border-radius:12px; text-align:center;"><div style="font-size:10px; color:#555; margin-bottom:5px;">PREÇO SUGERIDO (30% LUCRO)</div><div id="resSug" style="font-size:24px; font-weight:800; color:#fff;">R$ 0,00</div></div>
                     <button class="btn btn-money" onclick="window.open('https://wa.me/5511975473066')">ESTRATÉGIA NO WHATSAPP</button>
                 </div>
             </div>
             <button class="btn btn-outline" style="border:none;" onclick="auth.signOut().then(()=>location.reload())">Sair da Conta</button>
         </div>
     </div>
-
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-10bN_I",
@@ -116,26 +71,22 @@
             messagingSenderId: "403000271858",
             appId: "1:403000271858:web:7a8716548ee0a1b8764f69"
         };
-
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
-
         function handleAuth(mode) {
             const e = document.getElementById('email').value;
             const p = document.getElementById('password').value;
             if(!e || !p) return alert("Preencha e-mail e senha!");
-
             if(mode === 'login') {
                 auth.signInWithEmailAndPassword(e,p).catch(err => alert("Erro: " + err.message));
             } else {
                 auth.createUserWithEmailAndPassword(e,p).then(u => {
                     db.collection("users").doc(u.user.uid).set({plan:"free", xp:0, level:1, usage:0});
-                    alert("Conta criada com sucesso!");
+                    alert("Conta criada!");
                 }).catch(err => alert("Erro ao cadastrar: " + err.message));
             }
         }
-
         auth.onAuthStateChanged(user => {
             if(user) {
                 document.getElementById('loginArea').classList.add('hidden');
@@ -143,7 +94,6 @@
                 updateUI(user);
             }
         });
-
         async function updateUI(user) {
             const doc = await db.collection("users").doc(user.uid).get();
             const d = doc.data() || {level:1, xp:0};
@@ -151,20 +101,16 @@
             document.getElementById('lvl').innerText = d.level;
             document.getElementById('xpBar').style.width = (d.xp % 100) + "%";
         }
-
         async function analyze() {
             const s = parseFloat(document.getElementById('sale').value) || 0;
             const c = parseFloat(document.getElementById('supplier').value) || 0;
             const f = parseFloat(document.getElementById('shipping').value) || 0;
-            if(s === 0) return alert("Insira o valor de venda!");
-
+            if(s === 0) return alert("Insira o valor!");
             const p = s - c - f - (s * 0.12);
             document.getElementById('resProfit').innerText = "R$ " + p.toFixed(2);
             document.getElementById('resSug').innerText = "R$ " + ((c+f)/0.7).toFixed(2);
             document.getElementById('resultCard').style.display = "block";
-            
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-
             const user = auth.currentUser;
             const doc = await db.collection("users").doc(user.uid).get();
             const data = doc.data() || {xp:0};
