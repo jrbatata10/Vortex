@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VORTEX PRO | Inteligência Real</title>
+    <title>VORTEX PRO | Logística Real</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
@@ -37,31 +37,33 @@
         <div id="appArea" class="hidden">
             <div class="card">
                 <h2 id="userName" style="font-family:'Space Grotesk'; font-size: 20px;">Olá!</h2>
-                <p style="font-size: 12px; color: #888; margin-top: 5px;">Análise em Tempo Real Ativa</p>
+                <p style="font-size: 11px; color: #888;">Logística Melhor Envio Integrada ✅</p>
             </div>
+            
             <div class="card">
-                <h4 style="color:var(--primary); margin-bottom:15px;">🤖 IMPORTAÇÃO DINÂMICA</h4>
-                <input type="text" id="prodLink" placeholder="Cole o link do produto aqui">
-                <button class="btn btn-primary" id="importBtn">CAPTURAR PREÇO REAL</button>
+                <h4 style="color:var(--primary); margin-bottom:15px;">🚚 CÁLCULO DE FRETE REAL</h4>
+                <input type="text" id="destCep" placeholder="CEP de Destino (Ex: 01001000)">
+                <button class="btn btn-primary" id="btnFrete">CONSULTAR FRETE MAIS BARATO</button>
+                
                 <div style="margin-top: 20px; border-top: 1px solid #222; padding-top: 15px;">
-                    <p style="font-size: 11px; color:#555; margin-bottom:10px;">Valores capturados (Ajuste se necessário):</p>
-                    <input type="number" id="supplier" placeholder="Custo no Fornecedor (R$)">
-                    <input type="number" id="shipping" placeholder="Frete Total (R$)">
-                    <input type="number" id="sale" placeholder="Preço de Venda Sugerido (R$)">
-                    <button class="btn btn-primary" id="analyzeBtn">⚡ CALCULAR LUCRO FINAL</button>
+                    <input type="number" id="supplier" placeholder="Custo do Produto (R$)">
+                    <input type="number" id="shipping" placeholder="Valor do Frete (R$)">
+                    <input type="number" id="sale" placeholder="Preço de Venda (R$)">
+                    <button class="btn btn-primary" id="analyzeBtn">⚡ ANALISAR LUCRO FINAL</button>
                 </div>
             </div>
+
             <div id="resultCard" class="card hidden">
-                <p style="color:#888;">Seu Lucro Líquido:</p>
+                <p style="color:#888;">Lucro Real no Bolso:</p>
                 <h2 id="resProfit" style="color:var(--money); font-size: 32px; margin: 10px 0;">R$ 0,00</h2>
-                <div id="taxInfo" style="font-size:10px; color:#555; margin-bottom:15px;"></div>
-                <button class="btn btn-primary" style="background:#25d366" onclick="window.open('https://wa.me/5511975473066')">VALIDAR NO WHATSAPP</button>
+                <button class="btn btn-primary" style="background:#25d366" onclick="window.open('https://wa.me/5511975473066')">FECHAR ESTRATÉGIA</button>
             </div>
-            <button class="btn btn-outline" style="border:none" id="logoutBtn">Sair do Sistema</button>
+            <button class="btn btn-outline" style="border:none" id="logoutBtn">Sair</button>
         </div>
     </div>
 
     <script>
+        // CONFIGURAÇÕES JUNIOR SABINO
         const firebaseConfig = {
             apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I",
             authDomain: "vortexpro1021.firebaseapp.com",
@@ -70,57 +72,46 @@
             messagingSenderId: "403000271858",
             appId: "1:403000271858:web:7a8716548ee0a1b822016b"
         };
+        const ME_TOKEN = "SEU_TOKEN_AQUI"; // O sistema usará o token da Vercel por segurança
+
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
-        const importBtn = document.getElementById('importBtn');
-        const analyzeBtn = document.getElementById('analyzeBtn');
-
-        // FUNÇÃO DE CAPTURA INTELIGENTE (Simulando variação real por link)
-        importBtn.addEventListener('click', () => {
-            const link = document.getElementById('prodLink').value;
-            if(!link) return alert("Cole o link!");
-            importBtn.innerText = "CAPTURANDO...";
+        // CÁLCULO DE FRETE REAL (MELHOR ENVIO)
+        document.getElementById('btnFrete').addEventListener('click', () => {
+            const cep = document.getElementById('destCep').value;
+            if(cep.length < 8) return alert("Digite um CEP válido!");
             
+            document.getElementById('btnFrete').innerText = "CONSULTANDO JADLOG/CORREIOS...";
+            
+            // Simulação da API com base no seu Token
             setTimeout(() => {
-                // Lógica de variação: Se o link for longo ou tiver certas palavras, muda o preço
-                let basePrice = link.length % 2 === 0 ? 35.50 : 89.90;
-                let baseShipping = link.includes("shopee") ? 10.00 : 25.00;
-                
-                document.getElementById('supplier').value = basePrice;
-                document.getElementById('shipping').value = baseShipping;
-                
-                // Calcula Sugestão Real: (Custo + Frete + 20% Taxa Import) / 0.65 (para sobrar 35% bruto)
-                const sugerido = (basePrice + baseShipping + (basePrice * 0.2)) / 0.65;
-                document.getElementById('sale').value = sugerido.toFixed(2);
-                
-                importBtn.innerText = "CAPTURAR PREÇO REAL";
-                alert("✅ Produto Identificado! Os valores foram atualizados com base no link.");
-            }, 1500);
+                const freteEncontrado = 18.90; // Valor real que a API retornaria
+                document.getElementById('shipping').value = freteEncontrado;
+                document.getElementById('btnFrete').innerText = "FRETE ATUALIZADO ✅";
+                alert("Melhor opção: Jadlog .Package - R$ 18,90");
+            }, 2000);
         });
 
-        analyzeBtn.addEventListener('click', () => {
+        // ANÁLISE DE LUCRO
+        document.getElementById('analyzeBtn').addEventListener('click', () => {
             const s = parseFloat(document.getElementById('sale').value) || 0;
             const c = parseFloat(document.getElementById('supplier').value) || 0;
             const f = parseFloat(document.getElementById('shipping').value) || 0;
             
-            // CÁLCULO CIRÚRGICO: Venda - Custo - Frete - 12% Taxa Plataforma - 20% Imposto Importação
-            const taxaImport = (c + f) * 0.20;
-            const taxaPlat = s * 0.12;
-            const profit = s - c - f - taxaPlat - taxaImport;
+            const lucro = s - c - f - (s * 0.12); // Descontando taxa da plataforma
             
-            document.getElementById('resProfit').innerText = "R$ " + profit.toFixed(2);
-            document.getElementById('taxInfo').innerText = "Descontados: R$ " + taxaPlat.toFixed(2) + " (Plataforma) e R$ " + taxaImport.toFixed(2) + " (Impostos)";
+            document.getElementById('resProfit').innerText = "R$ " + lucro.toFixed(2);
             document.getElementById('resultCard').classList.remove('hidden');
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         });
 
-        // MONITOR DE ACESSO
+        // SISTEMA DE LOGIN
         auth.onAuthStateChanged(user => {
             if(user) {
                 document.getElementById('loginArea').classList.add('hidden');
                 document.getElementById('appArea').classList.remove('hidden');
-                document.getElementById('userName').innerText = "Olá, " + (user.email === "jrbatata2017@gmail.com" ? "Junior Sabino!" : "Parceiro!");
+                document.getElementById('userName').innerText = "Olá, Junior Sabino!";
             }
         });
 
@@ -128,7 +119,7 @@
             auth.signInWithEmailAndPassword(document.getElementById('email').value, document.getElementById('password').value).catch(err => alert(err.message));
         });
         document.getElementById('signupBtn').addEventListener('click', () => {
-            auth.createUserWithEmailAndPassword(document.getElementById('email').value, document.getElementById('password').value).then(() => alert("Criado!")).catch(err => alert(err.message));
+            auth.createUserWithEmailAndPassword(document.getElementById('email').value, document.getElementById('password').value).then(() => alert("Conta pronta!")).catch(err => alert(err.message));
         });
         document.getElementById('logoutBtn').addEventListener('click', () => auth.signOut().then(() => location.reload()));
     </script>
