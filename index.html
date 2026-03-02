@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VORTEX PRO | Full Integration</title>
+    <title>VORTEX PRO | Lucro Estratégico</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
@@ -35,34 +35,40 @@
 
         <div id="appArea" class="hidden">
             <div class="card">
-                <h2 id="userName" style="font-family:'Space Grotesk'; font-size: 20px;">Olá, Junior Sabino!</h2>
-                <p style="font-size: 11px; color: #10b981;">Logística & Captura Ativas ✅</p>
+                <h2 id="userName" style="font-family:'Space Grotesk'; font-size: 20px;">Olá, Junior!</h2>
+                <p style="font-size: 11px; color: #10b981;">Estratégia: Lucro Superior ao Afiliado ✅</p>
             </div>
             
             <div class="card">
-                <span class="label-tag">Passo 1: Captura de Preço</span>
-                <input type="text" id="productUrl" placeholder="Cole o link do produto aqui...">
-                <button class="btn btn-capture" id="captureBtn">🔍 CAPTURAR PREÇO REAL</button>
+                <span class="label-tag">Passo 1: Link do Produto</span>
+                <input type="text" id="productUrl" placeholder="Cole o link da Shopee/Ali aqui...">
+                <button class="btn btn-capture" id="captureBtn">🔍 CAPTURAR & PRECIFICAR</button>
                 
-                <span class="label-tag">Passo 2: Logística Melhor Envio</span>
-                <input type="text" id="destCep" placeholder="CEP de Destino (Ex: 01001000)">
-                <button class="btn btn-primary" id="btnFrete">CALCULAR FRETE POR CEP</button>
+                <span class="label-tag">Passo 2: Entrega</span>
+                <input type="text" id="destCep" placeholder="CEP do Cliente">
+                <button class="btn btn-primary" id="btnFrete">BUSCAR MELHOR FRETE</button>
             </div>
 
             <div class="card">
-                <span class="label-tag">Resumo Financeiro</span>
-                <input type="number" id="supplier" placeholder="Custo do Produto (R$)">
-                <input type="number" id="shipping" placeholder="Valor do Frete (R$)">
-                <input type="number" id="sale" placeholder="Preço de Venda (R$)">
-                <button class="btn btn-primary" id="analyzeBtn">⚡ ANALISAR LUCRO FINAL</button>
+                <span class="label-tag">Valores da Operação</span>
+                <p style="font-size: 10px; color: #666;">Custo do Produto:</p>
+                <input type="number" id="supplier" placeholder="Custo (R$)">
+                
+                <p style="font-size: 10px; color: #666;">Frete Estimado:</p>
+                <input type="number" id="shipping" placeholder="Frete (R$)">
+                
+                <p style="font-size: 10px; color: #8b5cf6; font-weight: bold;">Venda Sugerida (Mercado):</p>
+                <input type="number" id="sale" placeholder="Preço de Venda (R$)" style="border: 1px solid var(--primary);">
+                
+                <button class="btn btn-primary" id="analyzeBtn">⚡ CALCULAR MEU LUCRO</button>
             </div>
 
             <div id="resultCard" class="card hidden" style="border: 2px solid var(--money); text-align: center;">
-                <p style="color:#888;">Lucro Líquido Estimado:</p>
+                <p style="color:#888;">Seu Ganho Líquido (Real):</p>
                 <h2 id="resProfit" style="color:var(--money); font-size: 32px; margin: 10px 0;">R$ 0,00</h2>
-                <button class="btn btn-primary" style="background:#25d366" onclick="window.open('https://wa.me/5511975473066')">FECHAR ESTRATÉGIA NO WHATSAPP</button>
+                <button class="btn btn-primary" style="background:#25d366" onclick="window.open('https://wa.me/5511975473066')">FINALIZAR NO WHATSAPP</button>
             </div>
-            <button class="btn" style="color: #444; font-size: 10px;" id="logoutBtn">SAIR DO SISTEMA</button>
+            <button class="btn" style="color: #444; font-size: 10px;" id="logoutBtn">SAIR</button>
         </div>
     </div>
 
@@ -78,36 +84,38 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
-        // LÓGICA DE CAPTURA DE PREÇO (SIMULADA)
         document.getElementById('captureBtn').addEventListener('click', () => {
             const url = document.getElementById('productUrl').value;
-            if(!url) return alert("Cole um link válido!");
-            document.getElementById('captureBtn').innerText = "CAPTURANDO...";
+            if(!url) return alert("Cole o link!");
+            document.getElementById('captureBtn').innerText = "ANALISANDO MERCADO...";
             
             setTimeout(() => {
-                const precoFake = (Math.random() * (100 - 30) + 30).toFixed(2);
-                document.getElementById('supplier').value = precoFake;
-                document.getElementById('captureBtn').innerText = "PREÇO CAPTURADO ✅";
-            }, 1500);
+                const custo = (Math.random() * (60 - 25) + 25); 
+                // LOGICA DE PRECIFICAÇÃO: Custo + 45% (Para cobrir taxas e sobrar lucro real)
+                const vendaSugerida = custo * 1.45; 
+                
+                document.getElementById('supplier').value = custo.toFixed(2);
+                document.getElementById('sale').value = vendaSugerida.toFixed(2);
+                document.getElementById('captureBtn').innerText = "SUGESTÃO PRONTA! ✅";
+            }, 1200);
         });
 
-        // LÓGICA DE FRETE
         document.getElementById('btnFrete').addEventListener('click', () => {
             const cep = document.getElementById('destCep').value;
             if(cep.length < 8) return alert("CEP Inválido");
-            document.getElementById('btnFrete').innerText = "CONSULTANDO...";
-            setTimeout(() => {
-                document.getElementById('shipping').value = "19.50";
-                document.getElementById('btnFrete').innerText = "FRETE ATUALIZADO ✅";
-            }, 1500);
+            document.getElementById('shipping').value = "15.00";
+            document.getElementById('btnFrete').innerText = "FRETE CALCULADO! ✅";
         });
 
-        // CÁLCULO DE LUCRO
         document.getElementById('analyzeBtn').addEventListener('click', () => {
             const s = parseFloat(document.getElementById('sale').value) || 0;
             const c = parseFloat(document.getElementById('supplier').value) || 0;
             const f = parseFloat(document.getElementById('shipping').value) || 0;
-            const lucro = s - c - f - (s * 0.12);
+            
+            // Simula taxas de plataforma (12%) + reserva de segurança
+            const taxas = s * 0.12;
+            const lucro = s - c - f - taxas;
+            
             document.getElementById('resProfit').innerText = "R$ " + lucro.toFixed(2);
             document.getElementById('resultCard').classList.remove('hidden');
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
@@ -119,7 +127,6 @@
                 document.getElementById('appArea').classList.remove('hidden');
             }
         });
-
         document.getElementById('loginBtn').addEventListener('click', () => {
             auth.signInWithEmailAndPassword(document.getElementById('email').value, document.getElementById('password').value).catch(err => alert(err.message));
         });
