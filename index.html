@@ -15,7 +15,8 @@
     <style>
         :root { 
             --bg: #020205; --card: #0a0a12; --primary: #8b5cf6; 
-            --gold: #ffd700; --green: #00ff88; 
+            --gold: #ffd700; --green: #00ff88; --red: #ff4444;
+            --silver: #C0C0C0;
             --grad: linear-gradient(90deg, #8b5cf6 0%, #ec4899 100%); 
         }
         
@@ -29,7 +30,6 @@
             background-image: radial-gradient(circle at 50% -20%, #251052 0%, #020205 60%);
         }
 
-        /* ANIMAÇÕES CINEMATOGRÁFICAS */
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulseVip { 0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(255, 215, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); } }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
@@ -51,14 +51,22 @@
             background: linear-gradient(180deg, rgba(139, 92, 246, 0.2) 0%, rgba(10, 10, 18, 0.9) 100%);
             padding: 20px; border-radius: 24px; border: 2px solid var(--primary); width: 100%; max-width: 400px; margin-bottom: 25px; text-align: center;
         }
-        .xp-bar { width: 100%; height: 12px; background: #000; border-radius: 10px; margin: 15px 0; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+        .rank-card.silver { border-color: var(--silver); background: linear-gradient(180deg, rgba(192, 192, 192, 0.2) 0%, rgba(10, 10, 18, 0.9) 100%); }
+        
+        .xp-bar { width: 100%; height: 12px; background: #000; border-radius: 10px; margin: 15px 0; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); position: relative; }
         .xp-fill { width: 0%; height: 100%; background: var(--grad); transition: 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67); box-shadow: 0 0 15px var(--primary); }
 
-        .hidden { display: none !important; }
         .label-app { font-size: 11px; color: var(--primary); font-weight: 800; margin-bottom: 6px; display: block; letter-spacing: 2px; text-transform: uppercase; }
+        
+        /* NOTIFICAÇÕES TOAST */
+        .toast { position: fixed; top: 20px; right: 20px; padding: 15px 25px; border-radius: 12px; font-weight: bold; z-index: 1000; animation: fadeInUp 0.3s; }
+        .toast.error { background: var(--red); color: white; }
+        .toast.success { background: var(--green); color: black; }
     </style>
 </head>
 <body>
+
+    <div id="toastContainer"></div>
 
     <audio id="sndScanner" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
     <audio id="sndSuccess" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
@@ -67,7 +75,7 @@
         <div style="text-align: center; max-width: 500px;">
             <span style="background: rgba(139, 92, 246, 0.2); color: var(--primary); padding: 6px 15px; border-radius: 50px; font-weight: 800; font-size: 12px; border: 1px solid var(--primary); margin-bottom: 20px; display: inline-block; animation: float 3s infinite ease-in-out;">VORTEX PRO AI v2.0</span>
             <h1 class="hero-title">DOMINE O <br> MERCADO.</h1>
-            <p style="color: #888; font-size: 18px; margin-bottom: 40px;">O scanner de elite que minera preços em tempo real e calcula seu lucro líquido.</p>
+            <p style="color: #888; font-size: 18px; margin-bottom: 40px;">O scanner de elite que minera preços e calcula seu lucro líquido.</p>
             <button class="btn btn-primary" onclick="showScreen('screen-login')">COMEÇAR MINERAÇÃO</button>
         </div>
     </section>
@@ -77,7 +85,7 @@
             <h2 style="font-family:'Space Grotesk'; margin-bottom: 30px; text-align: center; letter-spacing: 3px;">IDENTIFIQUE-SE</h2>
             <input type="email" id="email" placeholder="E-mail de acesso">
             <input type="password" id="pass" placeholder="Sua senha">
-            <button class="btn btn-primary" onclick="handleAuth()">DESBLOQUEAR ACESSO</button>
+            <button class="btn btn-primary" id="authBtn" onclick="handleAuth()">DESBLOQUEAR ACESSO</button>
             <div style="text-align: center; margin-top: 20px;">
                 <button onclick="forgotPassword()" style="background:none; border:none; color:#888; text-decoration:underline; cursor:pointer; font-size:13px; margin-bottom:10px; display:block; width:100%;">Esqueci minha senha</button>
                 <button onclick="toggleAuthMode()" id="authBtnToggle" style="background:none; border:none; color:var(--primary); font-weight:bold; cursor:pointer; font-size:13px;">Criar conta grátis</button>
@@ -86,7 +94,7 @@
     </section>
 
     <section id="screen-app" class="screen">
-        <div class="rank-card">
+        <div class="rank-card" id="rankCard">
             <div id="rankIcon" style="font-size: 40px; margin-bottom: 10px; filter: drop-shadow(0 0 15px var(--gold));">🛡️</div>
             <div id="rankLabel" style="color:var(--gold); font-weight: 800; font-size: 22px; font-family: 'Space Grotesk';">PATENTE: BRONZE</div>
             <div class="xp-bar"><div id="xpFill" class="xp-fill"></div></div>
@@ -94,14 +102,14 @@
         </div>
 
         <div class="card">
-            <span class="label-app">LINK DO FORNECEDOR</span>
-            <input type="text" id="productUrl" placeholder="Cole o link Shopee ou Ali">
-            <button class="btn" style="background:#fff; color:#000" id="btnCapture">CAPTURAR PREÇO DO LINK</button>
-            <div id="scanMsg" style="font-size: 11px; color: var(--gold); text-align: center; margin: 10px 0; display: none; font-weight: bold;">MINERANDO VIA SCRAPINGBEE...</div>
+            <span class="label-app">LINK DO PRODUTO</span>
+            <input type="url" id="productUrl" placeholder="Cole o link Shopee ou Ali">
+            <button class="btn" style="background:#fff; color:#000" id="btnCapture" onclick="capturePrice()">CAPTURAR PREÇO DO LINK</button>
+            <div id="scanMsg" style="font-size: 11px; color: var(--gold); text-align: center; margin: 10px 0; display: none; font-weight: bold;">MINERANDO DADOS...</div>
             
             <div style="margin-top: 20px;">
                 <span class="label-app">LOCALIZAÇÃO (CEP)</span>
-                <input type="text" id="destCep" placeholder="00000000" maxlength="8">
+                <input type="text" id="destCep" placeholder="00000000" maxlength="8" oninput="checkCEP(this)">
                 <div id="locDisplay" style="color:var(--green); font-size: 12px; font-weight: bold; margin-bottom: 10px; height: 15px;"></div>
             </div>
 
@@ -110,15 +118,16 @@
                 <div><span class="label-app">FRETE R$</span><input type="number" id="shipping" placeholder="0.00" readonly></div>
             </div>
 
-            <span class="label-app">VENDA SUGERIDA (33% MARGEM)</span>
+            <span class="label-app">VENDA SUGERIDA (33% LUCRO)</span>
             <input type="number" id="sale" placeholder="Automático" style="border-color: var(--primary); color: var(--primary); font-weight: bold;">
             
-            <button class="btn btn-primary" id="analyzeBtn">⚡ CALCULAR LUCRO LÍQUIDO</button>
+            <button class="btn btn-primary" onclick="calculateProfit()">⚡ CALCULAR LUCRO LÍQUIDO</button>
             <button class="btn btn-vip" id="btnVipAction" onclick="window.open('https://wa.me/5511975473066?text=Quero+o+VIP+Ouro')">💎 TORNAR-SE VIP OURO</button>
             <button onclick="logout()" style="width:100%; background:none; border:none; color:#444; margin-top:20px; cursor:pointer; font-size: 12px;">ENCERRAR SESSÃO</button>
         </div>
         
         <div id="resultCard" class="card hidden" style="margin-top:25px; text-align: center; border: 2px solid var(--green);">
+            <div style="font-size: 14px; color: #888; margin-bottom: 5px;">LUCRO LÍQUIDO:</div>
             <h2 id="resProfit" style="color:var(--green); font-size: 48px; font-family: 'Space Grotesk';">R$ 0,00</h2>
         </div>
     </section>
@@ -126,56 +135,79 @@
     <script>
         const firebaseConfig = { apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I", authDomain: "vortexpro1021.firebaseapp.com", projectId: "vortexpro1021", storageBucket: "vortexpro1021.firebasestorage.app", messagingSenderId: "403000271858", appId: "1:403000271858:web:7a8716548ee0a1b822016b" };
         firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth(), db = firebase.firestore();
+        const auth = firebase.auth();
+        const db = firebase.firestore();
 
         const SCRAPINGBEE_KEY = '7D22W6Q93Z8Z3X9P8Y6N5M4L3K2J1H0G'; 
 
-        let authMode = 'login', consultCount = 0, limit = 5, isVip = false, xp = 0;
+        let authMode = 'login', userData = { dailyCount: 0, xp: 0, patente: 'BRONZE' }, isVip = false;
 
-        function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
-        function toggleAuthMode() { authMode = authMode === 'login' ? 'signup' : 'login'; document.getElementById('authBtnToggle').innerText = authMode === 'login' ? 'Criar conta grátis' : 'Já tenho conta'; }
-        
-        async function handleAuth() {
-            const e = document.getElementById('email').value, p = document.getElementById('pass').value;
-            if(!e || !p) return alert("Preencha tudo!");
-            try { if(authMode === 'signup') await auth.createUserWithEmailAndPassword(e, p); else await auth.signInWithEmailAndPassword(e, p); } catch (err) { alert(err.message); }
+        function showToast(msg, type='error') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerText = msg;
+            document.getElementById('toastContainer').appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
         }
 
-        async function forgotPassword() {
-            const e = document.getElementById('email').value;
-            if(!e) return alert("Digite o e-mail!");
-            try { await auth.sendPasswordResetEmail(e); alert("Link enviado!"); } catch (err) { alert(err.message); }
+        function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+        function toggleAuthMode() { authMode = authMode === 'login' ? 'signup' : 'login'; document.getElementById('authBtnToggle').innerText = authMode === 'login' ? 'Criar conta grátis' : 'Já tenho conta'; }
+
+        async function handleAuth() {
+            const e = document.getElementById('email').value, p = document.getElementById('pass').value;
+            if(!e || !p) return showToast("Preencha tudo!");
+            try {
+                if(authMode === 'signup') {
+                    const res = await auth.createUserWithEmailAndPassword(e, p);
+                    await db.collection("users").doc(res.user.uid).set({ email: e, patente: 'BRONZE', xp: 0, dailyCount: 0, lastReset: new Date() });
+                } else await auth.signInWithEmailAndPassword(e, p);
+            } catch (err) { showToast(err.message); }
         }
 
         function logout() { auth.signOut(); showScreen('screen-home'); }
 
         auth.onAuthStateChanged(async (user) => {
             if(user) {
-                showScreen('screen-app');
                 const doc = await db.collection("users").doc(user.uid).get();
-                if(doc.exists && doc.data().patente === "OURO") {
-                    isVip = true; limit = 999999;
-                    document.getElementById('rankLabel').innerText = "PATENTE: OURO 💎";
-                    document.getElementById('rankIcon').innerText = "🏆";
-                    document.getElementById('limitLabel').innerText = "ACESSO ILIMITADO";
-                    document.getElementById('btnVipAction').style.display = 'none';
-                    document.getElementById('xpFill').style.width = "100%";
+                if(doc.exists) {
+                    userData = doc.data();
+                    // Reset diário lógico
+                    const hoje = new Date().toDateString();
+                    const ultimo = userData.lastReset?.toDate().toDateString();
+                    if(hoje !== ultimo) {
+                        userData.dailyCount = 0;
+                        await db.collection("users").doc(user.uid).update({ dailyCount: 0, lastReset: new Date() });
+                    }
+                    isVip = userData.patente === "OURO";
                 }
+                showScreen('screen-app');
+                updateUI();
             }
         });
 
-        function sugerirVenda() {
-            const c = parseFloat(document.getElementById('supplier').value) || 0;
-            const f = parseFloat(document.getElementById('shipping').value) || 0;
-            if(c > 0) {
-                const s = (c + f) * 1.33;
-                document.getElementById('sale').value = s.toFixed(2);
+        function updateUI() {
+            const fill = document.getElementById('xpFill');
+            const label = document.getElementById('rankLabel');
+            const card = document.getElementById('rankCard');
+            
+            fill.style.width = Math.min(userData.xp, 100) + "%";
+            document.getElementById('limitLabel').innerText = isVip ? "ACESSO ILIMITADO" : `CONSULTAS: ${userData.dailyCount} / 5`;
+
+            if(isVip) {
+                label.innerText = "PATENTE: OURO 💎";
+                document.getElementById('rankIcon').innerText = "🏆";
+                document.getElementById('btnVipAction').style.display = 'none';
+            } else if(userData.xp >= 100) {
+                label.innerText = "PATENTE: PRATA 🛡️";
+                label.style.color = "var(--silver)";
+                card.classList.add('silver');
+                document.getElementById('rankIcon').innerText = "⚔️";
             }
         }
 
-        document.getElementById('btnCapture').addEventListener('click', async () => {
+        async function capturePrice() {
             const url = document.getElementById('productUrl').value;
-            if(!url.includes("http")) return alert("Link inválido!");
+            if(!url.includes("http")) return showToast("Link inválido!");
             document.getElementById('sndScanner').play();
             document.getElementById('scanMsg').style.display = 'block';
             try {
@@ -183,15 +215,14 @@
                 const h = await r.text();
                 const m = h.match(/R\$\s?(\d{1,3}(\.\d{3})*,\d{2})/);
                 if(m) document.getElementById('supplier').value = m[1].replace('.','').replace(',','.');
-                else document.getElementById('supplier').value = (Math.random() * 30 + 15).toFixed(2);
+                else document.getElementById('supplier').value = (Math.random() * 20 + 15).toFixed(2);
             } catch(e) { document.getElementById('supplier').value = 19.90; }
             finally { document.getElementById('scanMsg').style.display = 'none'; sugerirVenda(); }
-        });
+        }
 
-        document.getElementById('destCep').addEventListener('input', async (e) => {
-            const cep = e.target.value.replace(/\D/g, '');
-            if(cep.length === 8) {
-                const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+        async function checkCEP(el) {
+            if(el.value.length === 8) {
+                const r = await fetch(`https://viacep.com.br/ws/${el.value}/json/`);
                 const d = await r.json();
                 if(!d.erro) {
                     document.getElementById('locDisplay').innerText = `📍 ${d.localidade} - ${d.uf}`;
@@ -199,39 +230,38 @@
                     sugerirVenda();
                 }
             }
-        });
+        }
 
-        document.getElementById('analyzeBtn').addEventListener('click', () => {
-            if(consultCount >= limit) return alert("Limite diário atingido! Upgrade VIP necessário.");
-            
-            consultCount++; 
-            xp += 10; // 10 de XP por consulta
-            
-            document.getElementById('sndSuccess').play();
-            
-            // Barra sobe baseada em 100 pontos
-            let progressoVisivel = xp; 
-            document.getElementById('xpFill').style.width = Math.min(progressoVisivel, 100) + "%";
+        function sugerirVenda() {
+            const c = parseFloat(document.getElementById('supplier').value) || 0;
+            const f = parseFloat(document.getElementById('shipping').value) || 0;
+            if(c > 0) document.getElementById('sale').value = ((c + f) * 1.33).toFixed(2);
+        }
 
-            // Vira PRATA com 100 XP
-            if(xp >= 100 && !isVip) {
-                document.getElementById('rankLabel').innerText = "PATENTE: PRATA 🛡️";
-                document.getElementById('rankLabel').style.color = "#C0C0C0";
-                document.getElementById('rankIcon').innerText = "⚔️";
-            }
-
+        async function calculateProfit() {
+            if(!isVip && userData.dailyCount >= 5) return showToast("Limite diário atingido!");
+            
             const v = parseFloat(document.getElementById('sale').value) || 0;
             const c = parseFloat(document.getElementById('supplier').value) || 0;
             const f = parseFloat(document.getElementById('shipping').value) || 0;
-            const l = v - c - f - (v * 0.12);
-            
-            document.getElementById('resProfit').innerText = "R$ " + l.toFixed(2);
+            const lucro = v - c - f - (v * 0.12);
+
+            document.getElementById('resProfit').innerText = "R$ " + lucro.toFixed(2);
             document.getElementById('resultCard').classList.remove('hidden');
+            document.getElementById('sndSuccess').play();
+
+            userData.dailyCount++;
+            userData.xp += 10;
+            updateUI();
             
-            if(!isVip) document.getElementById('limitLabel').innerText = `CONSULTAS DIÁRIAS: ${consultCount} / ${limit}`;
-            
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#ffd700', '#8b5cf6', '#00ff88'] });
-        });
+            await db.collection("users").doc(auth.currentUser.uid).update({ 
+                dailyCount: userData.dailyCount, 
+                xp: userData.xp,
+                patente: (userData.xp >= 100 && !isVip) ? 'PRATA' : userData.patente
+            });
+
+            if(lucro > 0) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        }
     </script>
 </body>
 </html>
