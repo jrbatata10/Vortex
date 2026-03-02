@@ -77,7 +77,7 @@
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <div><span class="label-app">CUSTO R$</span><input type="number" id="supplier" placeholder="0.00"></div>
+                <div><span class="label-app">CUSTO R$</span><input type="number" id="supplier" placeholder="0.00" oninput="sugerirVenda()"></div>
                 <div><span class="label-app">FRETE R$</span><input type="number" id="shipping" placeholder="0.00" readonly></div>
             </div>
 
@@ -125,27 +125,26 @@
             }
         });
 
-        // FUNÇÃO DE VENDA AUTOMÁTICA
+        // --- LÓGICA DE VENDA SUGERIDA (33%) ---
         function sugerirVenda() {
             const custo = parseFloat(document.getElementById('supplier').value) || 0;
             const frete = parseFloat(document.getElementById('shipping').value) || 0;
             if(custo > 0) {
-                // Cálculo: (Custo + Frete) + R$ 20,00 de margem média fixa
-                const sugestao = custo + frete + 20;
+                const base = custo + frete;
+                const margem = base * 0.33; // Ajustado para 33%
+                const sugestao = base + margem;
                 document.getElementById('sale').value = sugestao.toFixed(2);
             }
         }
 
-        // CAPTURAR PREÇO
         document.getElementById('btnCapture').addEventListener('click', () => { 
             document.getElementById('sndScanner').play(); 
             setTimeout(() => { 
                 document.getElementById('supplier').value = 18.88; 
-                sugerirVenda(); // Sugere venda após capturar custo
+                sugerirVenda(); 
             }, 800); 
         });
 
-        // BUSCA DE CEP
         document.getElementById('destCep').addEventListener('input', async (e) => {
             const cep = e.target.value.replace(/\D/g, '');
             if(cep.length === 8) {
@@ -157,9 +156,9 @@
                         document.getElementById('locDisplay').innerText = `📍 ${d.localidade} - ${d.uf}`;
                         const frete = d.uf === 'SP' ? 12.90 : 21.50;
                         document.getElementById('shipping').value = frete.toFixed(2);
-                        sugerirVenda(); // Sugere venda após calcular frete
-                    } else { document.getElementById('locDisplay').innerText = "CEP NÃO ENCONTRADO"; }
-                } catch(err) { document.getElementById('locDisplay').innerText = "ERRO AO BUSCAR"; }
+                        sugerirVenda(); 
+                    }
+                } catch(err) {}
             }
         });
 
@@ -170,7 +169,6 @@
             const venda = parseFloat(document.getElementById('sale').value) || 0;
             const custo = parseFloat(document.getElementById('supplier').value) || 0;
             const frete = parseFloat(document.getElementById('shipping').value) || 0;
-            
             const lucro = venda - custo - frete - (venda * 0.12);
             document.getElementById('resProfit').innerText = "R$ " + lucro.toFixed(2);
             document.getElementById('resultCard').classList.remove('hidden');
