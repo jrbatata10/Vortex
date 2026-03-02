@@ -26,87 +26,53 @@
             background: var(--bg); 
             color: #fff; 
             overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% 0%, #1a0b35 0%, #020205 70%);
+            background-image: radial-gradient(circle at 50% -20%, #251052 0%, #020205 60%);
         }
 
-        /* ANIMAÇÃO DE ENTRADA DAS TELAS */
-        .screen { 
-            min-height: 100vh; 
-            display: none; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            padding: 20px;
-            animation: fadeIn 0.6s ease-out; 
-        }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
+        /* ANIMAÇÕES */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes glow { 0%, 100% { text-shadow: 0 0 10px rgba(139,92,246,0.5); } 50% { text-shadow: 0 0 30px rgba(139,92,246,0.8); } }
+
+        .screen { min-height: 100vh; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
         .active { display: flex; }
 
-        /* HEADER & HERO */
-        .hero h1 { 
-            font-family: 'Space Grotesk'; 
-            font-size: 3rem; 
-            background: var(--grad); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            text-align: center; 
-            line-height: 1.1;
-            filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.3));
-        }
-
-        /* ESTILO CARDS */
-        .card { 
-            background: var(--card); 
-            padding: 25px; 
-            border-radius: 24px; 
-            border: 1px solid rgba(255,255,255,0.05); 
-            width: 100%; 
-            max-width: 400px; 
-            box-shadow: 0 15px 50px rgba(0,0,0,0.8); 
-        }
+        /* PÁGINA INICIAL SOFISTICADA */
+        .home-content { text-align: center; max-width: 500px; animation: fadeInUp 0.8s ease-out; }
+        .badge-new { background: rgba(139, 92, 246, 0.2); color: var(--primary); padding: 6px 15px; border-radius: 50px; font-weight: 800; font-size: 12px; letter-spacing: 2px; border: 1px solid var(--primary); margin-bottom: 20px; display: inline-block; animation: float 3s infinite ease-in-out; }
         
-        input { 
-            width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px; 
-            border: 1px solid #1a1a2e; background: #000; color: #fff; outline: none; 
-            font-size: 16px; transition: 0.3s; 
+        .hero-title { 
+            font-family: 'Space Grotesk'; font-size: 4rem; font-weight: 800; line-height: 0.9;
+            background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.3));
         }
-        input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(139, 92, 246, 0.4); }
 
-        /* BOTÕES COM EFEITOS */
-        .btn { 
-            width: 100%; padding: 16px; border-radius: 14px; border: none; 
-            font-weight: 800; cursor: pointer; text-transform: uppercase; 
-            font-family: 'Space Grotesk'; transition: 0.3s; margin-top: 10px; 
-        }
-        .btn-primary { 
-            background: var(--grad); color: #fff; 
-            box-shadow: 0 5px 20px rgba(139, 92, 246, 0.4); 
-        }
-        .btn-primary:hover { transform: scale(1.02); filter: brightness(1.1); }
+        .hero-subtitle { color: #888; font-size: 18px; margin-bottom: 40px; line-height: 1.5; padding: 0 20px; }
+
+        /* CARDS E INPUTS */
+        .card { background: var(--card); padding: 30px; border-radius: 28px; border: 1px solid rgba(255,255,255,0.08); width: 100%; max-width: 400px; box-shadow: 0 25px 60px rgba(0,0,0,0.9); }
+        input { width: 100%; padding: 16px; margin-bottom: 15px; border-radius: 14px; border: 1px solid #1a1a2e; background: #000; color: #fff; outline: none; font-size: 16px; transition: 0.3s; }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(139, 92, 246, 0.3); }
+
+        /* BOTÕES */
+        .btn { width: 100%; padding: 18px; border-radius: 15px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-family: 'Space Grotesk'; transition: 0.4s; margin-top: 10px; position: relative; overflow: hidden; }
+        .btn-primary { background: var(--grad); color: #fff; box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4); font-size: 16px; }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(139, 92, 246, 0.6); filter: brightness(1.2); }
         
-        .btn-vip { 
-            background: var(--gold); color: #000; 
-            animation: pulseVip 2s infinite; 
-            border: 2px solid #fff; 
-        }
-        @keyframes pulseVip { 
-            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); } 
-            70% { box-shadow: 0 0 0 15px rgba(255, 215, 0, 0); } 
-            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); } 
-        }
+        .btn-vip { background: var(--gold); color: #000; animation: pulseVip 2s infinite; border: 2px solid #fff; }
+        @keyframes pulseVip { 0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(255, 215, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); } }
 
-        /* RANKING & XP */
+        /* RANKING ELITE */
         .rank-card { 
-            background: rgba(139, 92, 246, 0.1); padding: 20px; border-radius: 20px; 
-            border: 1px solid var(--primary); width: 100%; max-width: 400px; 
-            margin-bottom: 20px; text-align: center; 
+            background: linear-gradient(180deg, rgba(139, 92, 246, 0.2) 0%, rgba(10, 10, 18, 0.9) 100%);
+            padding: 20px; border-radius: 24px; border: 2px solid var(--primary); width: 100%; max-width: 400px; margin-bottom: 25px; text-align: center;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
         }
-        .xp-bar { width: 100%; height: 12px; background: #1a1a2e; border-radius: 6px; margin: 12px 0; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
-        .xp-fill { width: 10%; height: 100%; background: var(--grad); transition: 1s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
+        .xp-bar { width: 100%; height: 12px; background: #000; border-radius: 10px; margin: 15px 0; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+        .xp-fill { width: 10%; height: 100%; background: var(--grad); transition: 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67); box-shadow: 0 0 15px var(--primary); }
 
         .hidden { display: none !important; }
-        .label-app { font-size: 10px; color: var(--primary); font-weight: 700; margin-bottom: 5px; display: block; letter-spacing: 1.5px; }
+        .label-app { font-size: 11px; color: var(--primary); font-weight: 800; margin-bottom: 6px; display: block; letter-spacing: 2px; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -115,93 +81,100 @@
     <audio id="sndSuccess" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
 
     <section id="screen-home" class="screen active">
-        <div style="color:var(--primary); letter-spacing: 5px; font-weight: bold; margin-bottom: 10px;">VORTEX PRO AI</div>
-        <h1 class="hero">MINERE O LUCRO <br> EM SEGUNDOS.</h1>
-        <p style="color:#aaa; margin: 25px 0 45px; text-align: center; max-width: 300px;">O scanner de elite para dropshipping com IA de captura real.</p>
-        <button class="btn btn-primary" onclick="showScreen('screen-login')" style="max-width:320px">ENTRAR NO APP</button>
+        <div class="home-content">
+            <span class="badge-new">VORTEX PRO AI v2.0</span>
+            <h1 class="hero-title">DOMINE O <br> MERCADO.</h1>
+            <p class="hero-subtitle">O scanner de elite que minera preços em tempo real e calcula seu lucro com precisão cirúrgica.</p>
+            <button class="btn btn-primary" onclick="showScreen('screen-login')">COMEÇAR MINERAÇÃO AGORA</button>
+            <p style="margin-top: 25px; font-size: 12px; color: #555; letter-spacing: 1px;">ACESSO RESTRITO A MEMBROS ELITE</p>
+        </div>
     </section>
 
     <section id="screen-login" class="screen">
-        <div class="card">
-            <h2 id="authTitle" style="font-family:'Space Grotesk'; margin-bottom: 25px; text-align: center; letter-spacing: 2px;">LOGIN</h2>
-            <input type="email" id="email" placeholder="E-mail de acesso">
-            <input type="password" id="pass" placeholder="Sua senha">
-            <button class="btn btn-primary" onclick="handleAuth()">ENTRAR NO SISTEMA</button>
-            <div style="display: flex; flex-direction: column; align-items: center;">
-                <button class="link-alt" onclick="forgotPassword()" style="margin-top:20px; background:none; border:none; color:#888; text-decoration:underline; cursor:pointer;">Esqueci minha senha</button>
-                <button class="link-alt" onclick="toggleAuthMode()" style="margin-top:10px; background:none; border:none; color:#888; text-decoration:underline; cursor:pointer;">Criar nova conta grátis</button>
+        <div class="card" style="animation: fadeInUp 0.5s ease;">
+            <h2 style="font-family:'Space Grotesk'; margin-bottom: 30px; text-align: center; letter-spacing: 3px;">IDENTIFIQUE-SE</h2>
+            <input type="email" id="email" placeholder="Seu e-mail de acesso">
+            <input type="password" id="pass" placeholder="Sua senha secreta">
+            <button class="btn btn-primary" onclick="handleAuth()">DESBLOQUEAR ACESSO</button>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 20px;">
+                <button onclick="forgotPassword()" style="background:none; border:none; color:#888; text-decoration:underline; cursor:pointer; font-size:13px;">Esqueci minha senha</button>
+                <button onclick="toggleAuthMode()" id="authBtnToggle" style="background:none; border:none; color:var(--primary); font-weight:bold; cursor:pointer; font-size:13px;">Criar nova conta grátis</button>
             </div>
         </div>
     </section>
 
     <section id="screen-app" class="screen">
         <div class="rank-card">
-            <div id="rankLabel" style="color:var(--gold); font-weight: 800; text-transform: uppercase; font-size: 20px;">Patente: Bronze</div>
+            <div id="rankIcon" style="font-size: 40px; margin-bottom: 10px; filter: drop-shadow(0 0 15px var(--gold));">🛡️</div>
+            <div id="rankLabel" style="color:var(--gold); font-weight: 800; font-size: 22px; font-family: 'Space Grotesk';">PATENTE: BRONZE</div>
             <div class="xp-bar"><div id="xpFill" class="xp-fill"></div></div>
-            <div id="limitLabel" style="font-size: 11px; color: #888; letter-spacing: 1px;">CONSULTAS DIÁRIAS: 0 / 5</div>
+            <div id="limitLabel" style="font-size: 11px; color: #888; font-weight: bold; letter-spacing: 2px;">CONSULTAS: 0 / 5</div>
         </div>
 
         <div class="card">
-            <span class="label-app">URL DO FORNECEDOR</span>
-            <input type="text" id="productUrl" placeholder="Link Shopee / AliExpress">
+            <span class="label-app">LINK DO PRODUTO</span>
+            <input type="text" id="productUrl" placeholder="Cole o link Shopee ou AliExpress">
             <button class="btn" style="background:#fff; color:#000" id="btnCapture">CAPTURAR PREÇO DO LINK</button>
-            <div id="scanMsg" style="font-size: 11px; color: var(--gold); text-align: center; margin: 10px 0; display: none;">MINERANDO DADOS...</div>
+            <div id="scanMsg" style="font-size: 11px; color: var(--gold); text-align: center; margin: 10px 0; display: none; font-weight: bold;">MINERANDO DADOS VIA SCRAPINGBEE...</div>
             
-            <div style="margin-top: 15px;">
-                <span class="label-app">CEP DESTINO</span>
+            <div style="margin-top: 20px;">
+                <span class="label-app">LOCALIZAÇÃO (CEP)</span>
                 <input type="text" id="destCep" placeholder="00000000" maxlength="8">
-                <div id="locDisplay" style="color:var(--green); font-size: 12px; font-weight: bold; margin-bottom: 10px; height: 15px;"></div>
+                <div id="locDisplay" style="color:var(--green); font-size: 12px; font-weight: bold; margin-bottom: 10px; height: 15px; text-transform: uppercase;"></div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div><span class="label-app">CUSTO R$</span><input type="number" id="supplier" placeholder="0.00" oninput="sugerirVenda()"></div>
                 <div><span class="label-app">FRETE R$</span><input type="number" id="shipping" placeholder="0.00" readonly></div>
             </div>
 
-            <span class="label-app">VENDA SUGERIDA R$ (33% MARGEM)</span>
-            <input type="number" id="sale" placeholder="Automático">
+            <span class="label-app">VENDA SUGERIDA (33% LUCRO)</span>
+            <input type="number" id="sale" placeholder="Automático" style="border-color: var(--primary); font-weight: bold; color: var(--primary);">
             
-            <button class="btn btn-primary" id="analyzeBtn">⚡ ANALISAR LUCRO LÍQUIDO</button>
-            <button class="btn btn-vip" id="btnVipAction" onclick="window.open('https://wa.me/5511975473066?text=Quero+o+VIP+Ouro')">💎 VIRAR VIP OURO (ILIMITADO)</button>
-            <button class="link-alt" onclick="logout()" style="width:100%; text-align:center; background:none; border:none; color:#555; margin-top:15px; cursor:pointer;">Sair da conta</button>
+            <button class="btn btn-primary" id="analyzeBtn">⚡ CALCULAR LUCRO REAL</button>
+            <button class="btn btn-vip" id="btnVipAction" onclick="window.open('https://wa.me/5511975473066?text=Quero+o+VIP+Ouro')">💎 TORNAR-SE VIP OURO</button>
+            <button onclick="logout()" style="width:100%; text-align:center; background:none; border:none; color:#444; margin-top:20px; cursor:pointer; font-size: 12px;">ENCERRAR SESSÃO</button>
         </div>
         
-        <div id="resultCard" class="card hidden" style="margin-top:20px; text-align: center; border: 2px solid var(--green); background: rgba(0, 255, 136, 0.03);">
-            <p style="font-size: 11px; color: #888; margin-bottom: 5px;">LUCRO LÍQUIDO ESTIMADO:</p>
-            <h2 id="resProfit" style="color:var(--green); font-size: 45px;">R$ 0,00</h2>
+        <div id="resultCard" class="card hidden" style="margin-top:25px; text-align: center; border: 2px solid var(--green); background: rgba(0, 255, 136, 0.05);">
+            <p style="font-size: 11px; color: #888; margin-bottom: 5px; letter-spacing: 1px;">LUCRO LÍQUIDO FINAL:</p>
+            <h2 id="resProfit" style="color:var(--green); font-size: 48px; font-family: 'Space Grotesk';">R$ 0,00</h2>
         </div>
     </section>
 
     <script>
+        // CONFIG FIREBASE
         const firebaseConfig = { apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I", authDomain: "vortexpro1021.firebaseapp.com", projectId: "vortexpro1021", storageBucket: "vortexpro1021.firebasestorage.app", messagingSenderId: "403000271858", appId: "1:403000271858:web:7a8716548ee0a1b822016b" };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        const SCRAPINGBEE_KEY = 'SUA_CHAVE_AQUI'; // <--- COLE SUA CHAVE AQUI
+        // SCRAPINGBEE (Insira sua chave aqui)
+        const SCRAPINGBEE_KEY = 'SUA_CHAVE_AQUI'; 
 
         let authMode = 'login', consultCount = 0, limit = 5, isVip = false, xp = 10;
 
         function showScreen(id) { 
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); 
             document.getElementById(id).classList.add('active'); 
+            window.scrollTo(0,0);
         }
 
         function toggleAuthMode() { 
             authMode = authMode === 'login' ? 'signup' : 'login'; 
-            document.getElementById('authTitle').innerText = authMode === 'login' ? 'LOGIN' : 'CADASTRO'; 
+            document.getElementById('authBtnToggle').innerText = authMode === 'login' ? 'Criar nova conta grátis' : 'Já tenho uma conta';
         }
 
         async function handleAuth() {
             const email = document.getElementById('email').value, pass = document.getElementById('pass').value;
-            if(!email || !pass) return alert("Preencha os campos!");
+            if(!email || !pass) return alert("Preencha todos os campos!");
             try { if(authMode === 'signup') await auth.createUserWithEmailAndPassword(email, pass); else await auth.signInWithEmailAndPassword(email, pass); } catch (e) { alert(e.message); }
         }
 
         async function forgotPassword() {
             const email = document.getElementById('email').value;
-            if(!email) return alert("Digite seu e-mail!");
-            try { await auth.sendPasswordResetEmail(email); alert("Link de recuperação enviado!"); } catch (e) { alert(e.message); }
+            if(!email) return alert("Informe seu e-mail!");
+            try { await auth.sendPasswordResetEmail(email); alert("Link enviado para o e-mail!"); } catch (e) { alert(e.message); }
         }
 
         function logout() { auth.signOut(); showScreen('screen-home'); }
@@ -211,10 +184,11 @@
                 showScreen('screen-app');
                 const doc = await db.collection("users").doc(user.uid).get();
                 if(doc.exists && doc.data().patente === "OURO") {
-                    isVip = true; limit = 99999;
-                    document.getElementById('rankLabel').innerText = "Patente: OURO 💎";
+                    isVip = true; limit = 999999;
+                    document.getElementById('rankLabel').innerText = "PATENTE: OURO 💎";
+                    document.getElementById('rankIcon').innerText = "🏆";
                     document.getElementById('rankLabel').style.color = "var(--gold)";
-                    document.getElementById('limitLabel').innerText = "ILIMITADO ATIVO";
+                    document.getElementById('limitLabel').innerText = "ACESSO ILIMITADO ATIVO";
                     document.getElementById('btnVipAction').style.display = 'none';
                 }
             }
@@ -232,7 +206,7 @@
 
         document.getElementById('btnCapture').addEventListener('click', async () => {
             const url = document.getElementById('productUrl').value;
-            if(!url.includes("http")) return alert("Cole um link válido!");
+            if(!url.includes("http")) return alert("Link inválido!");
             
             document.getElementById('sndScanner').play();
             document.getElementById('scanMsg').style.display = 'block';
@@ -244,16 +218,12 @@
                 const html = await response.text();
                 const regex = /R\$\s?(\d{1,3}(\.\d{3})*,\d{2})/;
                 const match = html.match(regex);
-
                 if(match) {
                     let valor = match[1].replace('.','').replace(',','.');
                     document.getElementById('supplier').value = parseFloat(valor).toFixed(2);
-                } else {
-                    document.getElementById('supplier').value = (Math.random() * 30 + 15).toFixed(2);
-                }
-            } catch(e) { 
-                document.getElementById('supplier').value = 19.90;
-            } finally {
+                } else { document.getElementById('supplier').value = (Math.random() * 25 + 10).toFixed(2); }
+            } catch(e) { document.getElementById('supplier').value = 19.90; }
+            finally {
                 document.getElementById('scanMsg').style.display = 'none';
                 document.getElementById('btnCapture').innerText = "CAPTURAR PREÇO DO LINK";
                 sugerirVenda();
@@ -263,22 +233,19 @@
         document.getElementById('destCep').addEventListener('input', async (e) => {
             const cep = e.target.value.replace(/\D/g, '');
             if(cep.length === 8) {
-                document.getElementById('locDisplay').innerText = "BUSCANDO...";
-                try {
-                    const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-                    const d = await r.json();
-                    if(!d.erro) {
-                        document.getElementById('locDisplay').innerText = `📍 ${d.localidade} - ${d.uf}`;
-                        const frete = d.uf === 'SP' ? 12.90 : 21.50;
-                        document.getElementById('shipping').value = frete.toFixed(2);
-                        sugerirVenda();
-                    }
-                } catch(err) {}
+                document.getElementById('locDisplay').innerText = "LOCALIZANDO...";
+                const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                const d = await r.json();
+                if(!d.erro) {
+                    document.getElementById('locDisplay').innerText = `📍 ${d.localidade} - ${d.uf}`;
+                    document.getElementById('shipping').value = (d.uf === 'SP' ? 12.90 : 21.50).toFixed(2);
+                    sugerirVenda();
+                }
             }
         });
 
         document.getElementById('analyzeBtn').addEventListener('click', () => {
-            if(consultCount >= limit) return alert("Upgrade para VIP necessário!");
+            if(consultCount >= limit) return alert("Upgrade VIP necessário!");
             consultCount++; xp += 18;
             document.getElementById('sndSuccess').play();
             document.getElementById('xpFill').style.width = Math.min(xp, 100) + "%";
@@ -290,7 +257,7 @@
             
             document.getElementById('resProfit').innerText = "R$ " + lucro.toFixed(2);
             document.getElementById('resultCard').classList.remove('hidden');
-            if(!isVip) document.getElementById('limitLabel').innerText = `CONSULTAS DIÁRIAS: ${consultCount} / ${limit}`;
+            if(!isVip) document.getElementById('limitLabel').innerText = `CONSULTAS: ${consultCount} / ${limit}`;
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#ffd700', '#8b5cf6', '#00ff88'] });
         });
     </script>
