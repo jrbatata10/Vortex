@@ -2,55 +2,139 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Vortex Pro | Elite</title>
-                <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-                    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-                        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
-                            <style>
-                                    :root { --bg: #060608; --card: #111116; --primary: #8b5cf6; --accent: #f43f5e; --money: #10b981; }
-                                            body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #fff; margin: 0; overflow-x: hidden; }
-                                                    .container { max-width: 450px; margin: 0 auto; padding: 20px; }
-                                                            .card { background: var(--card); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-                                                                    .btn-main { background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; border: none; padding: 18px; border-radius: 16px; font-weight: 800; width: 100%; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-                                                                            input { width: 100%; padding: 16px; background: #000; border: 2px solid #222; color: #fff; border-radius: 16px; box-sizing: border-box; margin: 10px 0; font-weight: 600; }
-                                                                                    #app, #register-screen { display: none; }
-                                                                                            .link-toggle { color: var(--primary); font-size: 12px; cursor: pointer; text-decoration: underline; display: block; margin-top: 15px; text-align: center; }
-                                                                                                </style>
-                                                                                                </head>
-                                                                                                <body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vortex Pro | Dashboard Oficial</title>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #060608; --card: #111116; --primary: #8b5cf6; --accent: #f43f5e; --money: #10b981; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #fff; margin: 0; overflow-x: hidden; }
+        .container { max-width: 450px; margin: 0 auto; padding: 20px; }
+        .card { background: var(--card); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .btn-main { background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; border: none; padding: 18px; border-radius: 16px; font-weight: 800; width: 100%; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        input { width: 100%; padding: 16px; background: #000; border: 2px solid #222; color: #fff; border-radius: 16px; box-sizing: border-box; margin: 10px 0; font-weight: 600; }
+        #app, #register-screen { display: none; }
+        .link-toggle { color: var(--primary); font-size: 12px; cursor: pointer; text-decoration: underline; display: block; margin-top: 15px; text-align: center; }
+        .value-money { color: var(--money); font-size: 24px; font-weight: 800; }
+    </style>
+</head>
+<body>
 
-                                                                                                    <div id="auth-container" class="container" style="padding-top: 60px;">
-                                                                                                            <div style="text-align: center; margin-bottom: 30px;">
-                                                                                                                        <h1 style="font-size: 38px; margin: 0; letter-spacing: -2px;">VORTEX<span style="color:var(--primary)"> PRO</span></h1>
-                                                                                                                                </div>
+    <div id="auth-container" class="container" style="padding-top: 60px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="font-size: 38px; margin: 0; letter-spacing: -2px;">VORTEX<span style="color:var(--primary)"> PRO</span></h1>
+            <p style="color: #666; font-weight: 700; font-size: 10px; letter-spacing: 2px;">AUTOMATION SYSTEM</p>
+        </div>
 
-                                                                                                                                        <div id="login-screen" class="card">
-                                                                                                                                                    <h3 style="text-align: center;">Entrar</h3>
-                                                                                                                                                                <input type="email" id="loginEmail" placeholder="E-mail">
-                                                                                                                                                                            <input type="password" id="loginPass" placeholder="Senha">
-                                                                                                                                                                                        <button class="btn-main" onclick="fazerLogin()">Acessar Painel</button>
-                                                                                                                                                                                                    <span class="link-toggle" onclick="toggleAuth()">Criar conta de afiliado</span>
-                                                                                                                                                                                                            </div>
+        <div id="login-screen" class="card">
+            <h3 style="text-align: center; margin-top: 0;">Entrar</h3>
+            <input type="email" id="loginEmail" placeholder="Seu E-mail">
+            <input type="password" id="loginPass" placeholder="Sua Senha">
+            <button class="btn-main" onclick="fazerLogin()">Acessar Painel</button>
+            <span class="link-toggle" onclick="toggleAuth()">Criar nova conta de afiliado</span>
+        </div>
 
-                                                                                                                                                                                                                    <div id="register-screen" class="card">
-                                                                                                                                                                                                                                <h3 style="text-align: center;">Cadastro Elite</h3>
-                                                                                                                                                                                                                                            <input type="email" id="regEmail" placeholder="E-mail">
-                                                                                                                                                                                                                                                        <input type="password" id="regPass" placeholder="Senha">
-                                                                                                                                                                                                                                                                    <button class="btn-main" style="background: var(--money); color: #111;" onclick="fazerCadastro()">Ativar Licença</button>
-                                                                                                                                                                                                                                                                                <span class="link-toggle" onclick="toggleAuth()">Já tenho conta. Logar</span>
-                                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                            </div>
+        <div id="register-screen" class="card">
+            <h3 style="text-align: center; margin-top: 0;">Cadastro Elite</h3>
+            <input type="email" id="regEmail" placeholder="Seu melhor e-mail">
+            <input type="password" id="regPass" placeholder="Crie uma senha">
+            <button class="btn-main" style="background: var(--money); color: #111;" onclick="fazerCadastro()">Ativar Sistema</button>
+            <span class="link-toggle" onclick="toggleAuth()">Já tenho conta. Logar</span>
+        </div>
+    </div>
 
-                                                                                                                                                                                                                                                                                                <div id="app" class="container">
-                                                                                                                                                                                                                                                                                                        <div class="card" style="border-left: 4px solid var(--primary);">
-                                                                                                                                                                                                                                                                                                                    <h2 id="userName">Carregando...</h2>
-                                                                                                                                                                                                                                                                                                                                <p id="userLevel" style="font-size: 12px; font-weight: 800; color: var(--money);">LEVEL BRONZE</p>
-                                                                                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                                                                                <button class="btn-main" style="background: #222;" onclick="firebase.auth().signOut().then(() => location.reload())">SAIR</button>
-                                                                                                                                                                                                                                                                                                                                                    </div>
+    <div id="app" class="container">
+        <div class="card" style="border-left: 4px solid var(--primary);">
+            <div style="display: flex; justify-content: space-between;">
+                <span id="userLevel" style="background: #cd7f32; color: #000; padding: 4px 10px; border-radius: 8px; font-weight: 900; font-size: 10px;">LEVEL BRONZE</span>
+                <span style="color: var(--money); font-weight: 800; font-size: 11px;">CONECTADO ●</span>
+            </div>
+            <h2 id="userName" style="margin: 15px 0 5px 0;">Olá!</h2>
+            <p id="userStatus" style="font-size: 11px; color: #888;">ID: #VORTEX-USER</p>
+        </div>
 
-                                                                                                                                                                                                                                                                                                                                                        <script>
+        <div class="card">
+            <h4 style="color: var(--primary); margin: 0 0 10px 0;">⚡ EXECUTOR VORTEX PRO</h4>
+            <input type="text" id="prodLink" placeholder="Link do Produto (Shopee/Amazon)">
+            <button class="btn-main" onclick="processarLink()">GERAR LUCRO AGORA</button>
+            
+            <div id="result" style="display: none; margin-top: 20px; border-top: 1px solid #222; padding-top: 20px; text-align: center;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                    <div><p style="font-size: 9px; color: #888; margin: 0;">VALOR VENDA</p><div class="value-money" id="resVenda">R$ 0,00</div></div>
+                    <div><p style="font-size: 9px; color: #888; margin: 0;">LUCRO LÍQUIDO</p><div class="value-money" id="resLucro" style="color:var(--primary)">R$ 0,00</div></div>
+                </div>
+                <button class="btn-main" style="background: #25d366; color: #fff;" id="whatsappBtn">VALIDAR NO WHATSAPP</button>
+            </div>
+        </div>
+
+        <button class="btn-main" style="background: #222; margin-top: 30px; font-size: 12px;" onclick="firebase.auth().signOut().then(() => location.reload())">SAIR DA CONTA</button>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-10bN_I",
+            authDomain: "vortexpro1021.firebaseapp.com",
+            projectId: "vortexpro1021",
+            storageBucket: "vortexpro1021.firebasestorage.app",
+            messagingSenderId: "403000271858",
+            appId: "1:403000271858:web:7a8716548ee0a1b8764f69"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        const ADMIN_EMAIL = "jrbatata2017@gmail.com";
+        const MY_PHONE = "5511975473066";
+
+        function toggleAuth() {
+            const login = document.getElementById('login-screen');
+            const register = document.getElementById('register-screen');
+            login.style.display = login.style.display === 'none' ? 'block' : 'none';
+            register.style.display = register.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function fazerCadastro() {
+            const email = document.getElementById('regEmail').value;
+            const pass = document.getElementById('regPass').value;
+            firebase.auth().createUserWithEmailAndPassword(email, pass)
+                .then(() => { alert("Sistema Ativado! Faça login agora."); location.reload(); })
+                .catch(err => alert("Erro: " + err.message));
+        }
+
+        function fazerLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const pass = document.getElementById('loginPass').value;
+            firebase.auth().signInWithEmailAndPassword(email, pass)
+                .catch(err => alert("Erro ao entrar: " + err.message));
+        }
+
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                document.getElementById('auth-container').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+                if(user.email === ADMIN_EMAIL) {
+                    document.getElementById('userName').innerText = "Olá, Junior Sabino!";
+                    document.getElementById('userLevel').innerText = "GOLD ADMIN";
+                    document.getElementById('userLevel').style.background = "#ffd700";
+                    document.getElementById('userStatus').innerText = "ID: #001-MASTER";
+                } else {
+                    document.getElementById('userName').innerText = "Olá, Afiliado!";
+                }
+            }
+        });
+
+        function processarLink() {
+            const link = document.getElementById('prodLink').value;
+            if(!link) return alert("Cole o link!");
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('resVenda').innerText = "R$ 185,00"; // Exemplo
+            document.getElementById('resLucro').innerText = "R$ 72,05"; // Exemplo
+            const msg = encodeURIComponent("Olá Junior! Quero validar este produto no Vortex Pro: " + link);
+            document.getElementById('whatsappBtn').onclick = () => window.open("https://wa.me/" + MY_PHONE + "?text=" + msg);
+        }
+    </script>
+</body>
+</html>
+<script>
                                                                                                                                                                                                                                                                                                                                                                 // CONFIGURAÇÕES REAIS DO SEU PRINT
                                                                                                                                                                                                                                                                                                                                                                         const firebaseConfig = {
                                                                                                                                                                                                                                                                                                                                                                                     apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-10bN_I",
