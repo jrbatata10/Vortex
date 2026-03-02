@@ -81,8 +81,8 @@
                 <div><span class="label-app">FRETE R$</span><input type="number" id="shipping" placeholder="0.00" readonly></div>
             </div>
 
-            <span class="label-app">VENDA R$</span>
-            <input type="number" id="sale" placeholder="Preço final">
+            <span class="label-app">VENDA SUGERIDA R$</span>
+            <input type="number" id="sale" placeholder="Preço Automático">
             
             <button class="btn btn-primary" id="analyzeBtn">⚡ CALCULAR LUCRO</button>
             <button class="btn btn-vip" id="btnVipAction" onclick="window.open('https://wa.me/5511975473066?text=Quero+o+VIP+Ouro')">💎 VIRAR VIP OURO</button>
@@ -125,7 +125,27 @@
             }
         });
 
-        // BUSCA DE CEP (CIDADE)
+        // FUNÇÃO DE VENDA AUTOMÁTICA
+        function sugerirVenda() {
+            const custo = parseFloat(document.getElementById('supplier').value) || 0;
+            const frete = parseFloat(document.getElementById('shipping').value) || 0;
+            if(custo > 0) {
+                // Cálculo: (Custo + Frete) + R$ 20,00 de margem média fixa
+                const sugestao = custo + frete + 20;
+                document.getElementById('sale').value = sugestao.toFixed(2);
+            }
+        }
+
+        // CAPTURAR PREÇO
+        document.getElementById('btnCapture').addEventListener('click', () => { 
+            document.getElementById('sndScanner').play(); 
+            setTimeout(() => { 
+                document.getElementById('supplier').value = 18.88; 
+                sugerirVenda(); // Sugere venda após capturar custo
+            }, 800); 
+        });
+
+        // BUSCA DE CEP
         document.getElementById('destCep').addEventListener('input', async (e) => {
             const cep = e.target.value.replace(/\D/g, '');
             if(cep.length === 8) {
@@ -135,19 +155,23 @@
                     const d = await r.json();
                     if(!d.erro) {
                         document.getElementById('locDisplay').innerText = `📍 ${d.localidade} - ${d.uf}`;
-                        document.getElementById('shipping').value = (d.uf === 'SP' ? 12.90 : 21.50).toFixed(2);
+                        const frete = d.uf === 'SP' ? 12.90 : 21.50;
+                        document.getElementById('shipping').value = frete.toFixed(2);
+                        sugerirVenda(); // Sugere venda após calcular frete
                     } else { document.getElementById('locDisplay').innerText = "CEP NÃO ENCONTRADO"; }
                 } catch(err) { document.getElementById('locDisplay').innerText = "ERRO AO BUSCAR"; }
             }
         });
 
-        document.getElementById('btnCapture').addEventListener('click', () => { document.getElementById('sndScanner').play(); setTimeout(() => { document.getElementById('supplier').value = 18.88; }, 800); });
-
         document.getElementById('analyzeBtn').addEventListener('click', () => {
             if(consultCount >= limit) return alert("Limite atingido!");
             consultCount++;
             document.getElementById('sndSuccess').play();
-            const lucro = (parseFloat(document.getElementById('sale').value) || 0) - (parseFloat(document.getElementById('supplier').value) || 0) - (parseFloat(document.getElementById('shipping').value) || 0) - (parseFloat(document.getElementById('sale').value) * 0.12);
+            const venda = parseFloat(document.getElementById('sale').value) || 0;
+            const custo = parseFloat(document.getElementById('supplier').value) || 0;
+            const frete = parseFloat(document.getElementById('shipping').value) || 0;
+            
+            const lucro = venda - custo - frete - (venda * 0.12);
             document.getElementById('resProfit').innerText = "R$ " + lucro.toFixed(2);
             document.getElementById('resultCard').classList.remove('hidden');
             if(!isVip) document.getElementById('limitLabel').innerText = `BUSCAS HOJE: ${consultCount} / ${limit}`;
