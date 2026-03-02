@@ -3,26 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VORTEX PRO | Full Automation</title>
+    <title>VORTEX PRO | Gamer Edition</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/686/686589.png">
+    
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
     <style>
-        :root { --bg: #050508; --surface: #0f0f16; --primary: #8b5cf6; --gradient: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #f43f5e 100%); --money: #10b981; }
+        :root { 
+            --bg: #020205; 
+            --card-bg: #0a0a12; 
+            --primary: #8b5cf6; 
+            --secondary: #ec4899;
+            --neon-green: #00ff88;
+            --neon-purple: #a855f7;
+            --text: #e2e8f0;
+            --gradient: linear-gradient(90deg, #8b5cf6 0%, #ec4899 100%);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; padding: 20px; display: flex; justify-content: center; }
-        .container { width: 100%; max-width: 420px; }
-        .card { background: var(--surface); padding: 25px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; position: relative; }
-        h1 { font-family: 'Space Grotesk'; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; margin-bottom: 20px; font-size: 24px; }
-        .label-tag { font-size: 10px; color: var(--primary); font-weight: bold; margin-bottom: 5px; display: block; text-transform: uppercase; }
-        input { width: 100%; padding: 16px; margin-bottom: 12px; border-radius: 12px; border: 1px solid #222; background: #000; color: #fff; font-size: 14px; outline: none; }
-        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.3s; margin-bottom: 10px; }
-        .btn-primary { background: var(--gradient); color: #fff; }
-        .btn-capture { background: #fff; color: #000; }
-        .history-item { background: #000; padding: 15px; border-radius: 16px; margin-top: 10px; border-left: 4px solid var(--primary); font-size: 11px; }
+        
+        body { 
+            font-family: 'Rajdhani', sans-serif; 
+            background: var(--bg); 
+            background-image: radial-gradient(circle at 50% -20%, #25104a 0%, #020205 80%);
+            color: var(--text); 
+            padding: 20px; 
+            display: flex; 
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container { width: 100%; max-width: 400px; }
+
+        h1 { 
+            font-family: 'Space Grotesk'; 
+            font-weight: 800;
+            background: var(--gradient); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            text-align: center; 
+            font-size: 32px;
+            letter-spacing: -1px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.5));
+        }
+
+        .card { 
+            background: var(--card-bg); 
+            padding: 22px; 
+            border-radius: 20px; 
+            border: 1px solid rgba(139, 92, 246, 0.2); 
+            margin-bottom: 18px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .label-tag { 
+            font-size: 11px; 
+            color: var(--neon-purple); 
+            font-weight: 700; 
+            margin-bottom: 8px; 
+            display: block; 
+            text-transform: uppercase; 
+            letter-spacing: 2px;
+        }
+
+        input { 
+            width: 100%; 
+            padding: 14px; 
+            margin-bottom: 15px; 
+            border-radius: 10px; 
+            border: 1px solid #1a1a2e; 
+            background: #05050a; 
+            color: #fff; 
+            font-size: 15px; 
+            outline: none; 
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(139, 92, 246, 0.3); }
+
+        .btn { 
+            width: 100%; 
+            padding: 16px; 
+            border-radius: 12px; 
+            border: none; 
+            font-weight: 800; 
+            font-family: 'Space Grotesk';
+            cursor: pointer; 
+            text-transform: uppercase; 
+            transition: 0.4s; 
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary { 
+            background: var(--gradient); 
+            color: #fff; 
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+        }
+
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6); }
+
+        .btn-capture { 
+            background: transparent; 
+            border: 2px solid var(--primary); 
+            color: var(--primary);
+        }
+
+        .btn-capture:hover { background: var(--primary); color: #fff; }
+
+        #locationBadge { 
+            font-size: 12px; 
+            color: var(--neon-green); 
+            margin-top: -10px; 
+            margin-bottom: 15px; 
+            display: block; 
+            font-weight: 600;
+            text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
+        }
+
+        .history-item { 
+            background: rgba(255,255,255,0.03); 
+            padding: 14px; 
+            border-radius: 12px; 
+            margin-top: 10px; 
+            border-right: 3px solid var(--secondary);
+            font-size: 13px;
+        }
+
+        #resProfit { 
+            font-family: 'Space Grotesk';
+            color: var(--neon-green); 
+            font-size: 42px; 
+            margin: 15px 0;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+        }
+
         .hidden { display: none !important; }
-        #locationBadge { font-size: 11px; color: var(--money); margin-top: -8px; margin-bottom: 10px; display: block; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -30,30 +152,30 @@
         <div class="card">
             <h1>VORTEX PRO</h1>
             
-            <span class="label-tag">1. Inteligência de Preço (ScrapingBee)</span>
-            <input type="text" id="productUrl" placeholder="Link Shopee/AliExpress">
-            <button class="btn btn-capture" id="btnCapture">🔍 CAPTURAR PREÇO REAL</button>
+            <span class="label-tag">📡 Radar de Fornecedor</span>
+            <input type="text" id="productUrl" placeholder="Link da Oferta (Shopee/Ali)">
+            <button class="btn btn-capture" id="btnCapture">SCANNER DE PREÇO</button>
 
-            <span class="label-tag">2. Localização do Cliente</span>
+            <span class="label-tag">📍 Destino da Carga</span>
             <input type="text" id="destCep" placeholder="Digite o CEP" maxlength="8">
-            <span id="locationBadge">Aguardando CEP...</span>
+            <span id="locationBadge">SISTEMA OFFLINE</span>
             
-            <span class="label-tag">3. Resumo da Operação</span>
-            <input type="number" id="supplier" placeholder="Custo Produto (R$)">
-            <input type="number" id="shipping" placeholder="Frete Calculado (R$)" readonly>
-            <input type="number" id="sale" placeholder="Venda Sugerida (R$)">
+            <span class="label-tag">💎 Painel de Lucro</span>
+            <input type="number" id="supplier" placeholder="Custo de Entrada (R$)">
+            <input type="number" id="shipping" placeholder="Frete Logístico (R$)" readonly>
+            <input type="number" id="sale" placeholder="Preço de Venda Final (R$)">
             
-            <button class="btn btn-primary" id="analyzeBtn">⚡ ANALISAR LUCRO LÍQUIDO</button>
+            <button class="btn btn-primary" id="analyzeBtn">⚡ EXECUTAR ANÁLISE</button>
         </div>
 
-        <div id="resultCard" class="card hidden" style="text-align: center; border: 2px solid var(--money);">
-            <p style="color:#888;">Lucro por Venda:</p>
-            <h2 id="resProfit" style="color:var(--money); font-size: 32px; margin: 10px 0;">R$ 0,00</h2>
-            <button class="btn btn-primary" id="saveHistoryBtn" style="font-size: 12px;">💾 SALVAR NO HISTÓRICO</button>
+        <div id="resultCard" class="card hidden" style="text-align: center;">
+            <p style="color:rgba(255,255,255,0.5); font-size: 13px; text-transform: uppercase;">Retorno Líquido:</p>
+            <h2 id="resProfit">R$ 0,00</h2>
+            <button class="btn btn-primary" id="saveHistoryBtn" style="font-size: 12px;">💾 SALVAR NO BANCO DE DADOS</button>
         </div>
 
         <div class="card">
-            <h4 style="font-size: 14px; margin-bottom: 15px; color: #666;">📦 ÚLTIMAS MINERAÇÕES</h4>
+            <h4 style="font-size: 14px; color: var(--primary); text-transform: uppercase; margin-bottom: 15px;">📂 Histórico de Mineração</h4>
             <div id="historyList"></div>
         </div>
     </div>
@@ -70,44 +192,31 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // 1. CAPTURA DE PREÇO
+        // CAPTURA
         document.getElementById('btnCapture').addEventListener('click', () => {
             const url = document.getElementById('productUrl').value;
-            if(!url) return alert("Insira o link!");
-            document.getElementById('btnCapture').innerText = "BUSCANDO...";
-            
+            if(!url) return alert("Insira o Link Gamer!");
+            document.getElementById('btnCapture').innerText = "SCANNING...";
             setTimeout(() => {
-                let precoReal = 18.88; // Simulação da API ScrapingBee
+                let precoReal = 18.88; 
                 document.getElementById('supplier').value = precoReal;
-                document.getElementById('btnCapture').innerText = "CAPTURADO R$ " + precoReal;
+                document.getElementById('btnCapture').innerText = "SCAN COMPLETO ✅";
                 atualizarSugestao();
             }, 1200);
         });
 
-        // 2. BUSCA DE CEP + LOCALIZAÇÃO (ViaCEP)
+        // CEP & LOCAL
         document.getElementById('destCep').addEventListener('input', async (e) => {
             const cep = e.target.value.replace(/\D/g, '');
             if(cep.length === 8) {
-                document.getElementById('locationBadge').innerText = "Localizando...";
-                try {
-                    const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-                    const data = await response.json();
-                    
-                    if(!data.erro) {
-                        document.getElementById('locationBadge').innerText = `📍 ${data.localidade}, ${data.uf}`;
-                        
-                        // Lógica de Frete Automático
-                        let freteEstimado = 15.90;
-                        if(data.uf === 'SP') freteEstimado = 12.90;
-                        if(['AM', 'PA', 'CE', 'BA'].includes(data.uf)) freteEstimado = 24.50;
-                        
-                        document.getElementById('shipping').value = freteEstimado.toFixed(2);
-                        atualizarSugestao();
-                    } else {
-                        document.getElementById('locationBadge').innerText = "CEP não encontrado ❌";
-                    }
-                } catch (err) {
-                    document.getElementById('locationBadge').innerText = "Erro ao buscar local.";
+                document.getElementById('locationBadge').innerText = "Sincronizando Local...";
+                const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                const data = await response.json();
+                if(!data.erro) {
+                    document.getElementById('locationBadge').innerText = `CONNECTED: ${data.localidade} (${data.uf})`;
+                    let frete = data.uf === 'SP' ? 12.90 : 21.50;
+                    document.getElementById('shipping').value = frete.toFixed(2);
+                    atualizarSugestao();
                 }
             }
         });
@@ -115,34 +224,30 @@
         function atualizarSugestao() {
             const custo = parseFloat(document.getElementById('supplier').value) || 0;
             const frete = parseFloat(document.getElementById('shipping').value) || 0;
-            if(custo > 0) {
-                document.getElementById('sale').value = (custo + frete + 20).toFixed(2);
-            }
+            if(custo > 0) document.getElementById('sale').value = (custo + frete + 20).toFixed(2);
         }
 
-        // 3. ANÁLISE DE LUCRO
+        // LUCRO
         document.getElementById('analyzeBtn').addEventListener('click', () => {
             const s = parseFloat(document.getElementById('sale').value) || 0;
             const c = parseFloat(document.getElementById('supplier').value) || 0;
             const f = parseFloat(document.getElementById('shipping').value) || 0;
-            const lucroVal = s - c - f - (s * 0.12);
-            
-            document.getElementById('resProfit').innerText = "R$ " + lucroVal.toFixed(2);
+            const lucro = s - c - f - (s * 0.12);
+            document.getElementById('resProfit').innerText = "R$ " + lucro.toFixed(2);
             document.getElementById('resultCard').classList.remove('hidden');
-            if(lucroVal > 0) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            if(lucro > 0) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#8b5cf6', '#ec4899', '#00ff88'] });
         });
 
-        // 4. HISTÓRICO
+        // HISTÓRICO
         document.getElementById('saveHistoryBtn').addEventListener('click', () => {
             const data = {
                 custo: document.getElementById('supplier').value,
-                local: document.getElementById('locationBadge').innerText,
                 venda: document.getElementById('sale').value,
                 lucro: document.getElementById('resProfit').innerText,
                 timestamp: Date.now()
             };
             db.collection("history").add(data).then(() => {
-                alert("Salvo no histórico!");
+                alert("OFERTA ARQUIVADA!");
                 carregarHistorico();
             });
         });
@@ -153,7 +258,7 @@
                 list.innerHTML = "";
                 snap.forEach(doc => {
                     const item = doc.data();
-                    list.innerHTML += `<div class="history-item"><strong>Lucro: ${item.lucro}</strong><br><small>${item.local} | Venda: R$ ${item.venda}</small></div>`;
+                    list.innerHTML += `<div class="history-item"><strong style="color:var(--neon-green)">LUCRO: ${item.lucro}</strong><br>Custo: R$ ${item.custo} | Venda: R$ ${item.venda}</div>`;
                 });
             });
         }
