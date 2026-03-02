@@ -17,235 +17,183 @@
         :root { 
             --bg: #020205; --card: #0a0a12; --primary: #8b5cf6; 
             --gold: #ffd700; --green: #00ff88; --red: #ff4444;
-            --silver: #C0C0C0;
             --grad: linear-gradient(90deg, #8b5cf6 0%, #ec4899 100%); 
         }
         
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body { 
             font-family: 'Rajdhani', sans-serif; 
             background: var(--bg); 
             color: #fff; 
-            overflow-x: hidden;
             background-image: radial-gradient(circle at 50% -20%, #251052 0%, #020205 60%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 50px;
         }
 
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes pulseVip { 0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(255, 215, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); } }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
-        .screen { min-height: 100vh; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; animation: fadeInUp 0.6s ease-out; }
+        .screen { width: 100%; display: none; flex-direction: column; align-items: center; padding: 20px; animation: fadeInUp 0.6s ease-out; }
         .active { display: flex; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .hero-title { font-family: 'Space Grotesk'; font-size: 3.5rem; font-weight: 800; line-height: 1; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; margin-bottom: 20px; filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.4)); }
+        .card { background: var(--card); padding: 25px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.08); width: 100%; max-width: 400px; margin-bottom: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
         
-        .card { background: var(--card); padding: 30px; border-radius: 28px; border: 1px solid rgba(255,255,255,0.08); width: 100%; max-width: 400px; box-shadow: 0 25px 60px rgba(0,0,0,0.9); }
-        input { width: 100%; padding: 16px; margin-bottom: 15px; border-radius: 14px; border: 1px solid #1a1a2e; background: #000; color: #fff; outline: none; font-size: 16px; transition: 0.3s; }
-        input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(139, 92, 246, 0.3); }
+        input { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px; border: 1px solid #1a1a2e; background: #000; color: #fff; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--primary); }
 
-        .btn { width: 100%; padding: 18px; border-radius: 15px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-family: 'Space Grotesk'; transition: 0.4s; margin-top: 10px; }
-        .btn-primary { background: var(--grad); color: #fff; box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4); }
-        .btn-vip { background: var(--gold); color: #000; animation: pulseVip 2s infinite; border: 2px solid #fff; }
+        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-family: 'Space Grotesk'; transition: 0.3s; margin-top: 5px; }
+        .btn-primary { background: var(--grad); color: #fff; }
+        
+        .rank-card { width: 100%; max-width: 400px; padding: 20px; border-radius: 20px; border: 2px solid var(--primary); text-align: center; margin-bottom: 20px; background: rgba(139, 92, 246, 0.1); }
+        .xp-bar { width: 100%; height: 8px; background: #000; border-radius: 10px; margin: 12px 0; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+        .xp-fill { width: 0%; height: 100%; background: var(--grad); transition: 1s; }
 
-        .rank-card { 
-            background: linear-gradient(180deg, rgba(139, 92, 246, 0.2) 0%, rgba(10, 10, 18, 0.9) 100%);
-            padding: 20px; border-radius: 24px; border: 2px solid var(--primary); width: 100%; max-width: 400px; margin-bottom: 25px; text-align: center;
+        /* ESTILO DOS ANÚNCIOS */
+        .ad-banner { 
+            width: 100%; max-width: 400px; padding: 15px; border-radius: 16px; 
+            background: linear-gradient(45deg, #121225, #0a0a12);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            cursor: pointer; display: flex; align-items: center; gap: 15px;
+            transition: 0.3s; margin-top: 10px;
         }
-        .rank-card.silver { border-color: var(--silver); background: linear-gradient(180deg, rgba(192, 192, 192, 0.2) 0%, rgba(10, 10, 18, 0.9) 100%); }
-        .rank-card.gold { border-color: var(--gold); background: linear-gradient(180deg, rgba(255, 215, 0, 0.2) 0%, rgba(10, 10, 18, 0.9) 100%); }
-        
-        .xp-bar { width: 100%; height: 12px; background: #000; border-radius: 10px; margin: 15px 0; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); position: relative; }
-        .xp-fill { width: 0%; height: 100%; background: var(--grad); transition: 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67); box-shadow: 0 0 15px var(--primary); }
+        .ad-banner:hover { transform: scale(1.02); border-color: var(--primary); }
 
-        .label-app { font-size: 11px; color: var(--primary); font-weight: 800; margin-bottom: 6px; display: block; letter-spacing: 2px; text-transform: uppercase; }
-        
-        .toast { position: fixed; top: 20px; right: 20px; padding: 15px 25px; border-radius: 12px; font-weight: bold; z-index: 1000; animation: fadeInUp 0.3s; }
-        .toast.error { background: var(--red); color: white; }
-        .toast.success { background: var(--green); color: black; }
-
-        /* MÓDULO DE AJUDA TAXAS */
-        .help-box { margin-top: 15px; padding: 15px; background: rgba(139, 92, 246, 0.1); border-radius: 12px; border: 1px dashed var(--primary); font-size: 13px; text-align: left; display: none; animation: fadeInUp 0.4s ease; }
-        .help-box h4 { color: var(--primary); margin-bottom: 8px; text-transform: uppercase; font-size: 11px; }
-        .btn-help { background: none; border: none; color: #888; cursor: pointer; font-size: 12px; text-decoration: underline; margin-top: 10px; }
         .hidden { display: none; }
+        .label-app { font-size: 10px; color: var(--primary); font-weight: 800; margin-bottom: 5px; display: block; letter-spacing: 1.5px; text-transform: uppercase; }
+
+        /* SEÇÃO ESTRATÉGIAS */
+        .strategy-item { margin-bottom: 15px; border-left: 2px solid var(--primary); padding-left: 10px; }
+        .strategy-title { color: var(--gold); font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px; }
+        .strategy-text { font-size: 12px; color: #888; line-height: 1.4; }
+
+        .legal-footer { margin-top: 30px; font-size: 11px; color: #444; text-align: center; }
+        .legal-footer a { color: #555; text-decoration: none; margin: 0 10px; }
     </style>
 </head>
 <body>
 
-    <div id="toastContainer"></div>
-
-    <audio id="sndScanner" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
-    <audio id="sndSuccess" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
-
-    <section id="screen-home" class="screen active">
-        <div style="text-align: center; max-width: 500px;">
-            <span style="background: rgba(139, 92, 246, 0.2); color: var(--primary); padding: 6px 15px; border-radius: 50px; font-weight: 800; font-size: 12px; border: 1px solid var(--primary); margin-bottom: 20px; display: inline-block; animation: float 3s infinite ease-in-out;">VORTEX PRO AI v2.0</span>
-            <h1 class="hero-title">DOMINE O <br> MERCADO.</h1>
-            <p style="color: #888; font-size: 18px; margin-bottom: 40px;">O scanner de elite que minera preços e calcula seu lucro líquido real.</p>
-            <button class="btn btn-primary" onclick="showScreen('screen-login')">COMEÇAR MINERAÇÃO</button>
-        </div>
-    </section>
-
-    <section id="screen-login" class="screen">
+    <section id="screen-login" class="screen active" style="margin-top: 10vh;">
+        <h1 style="font-family:'Space Grotesk'; margin-bottom: 30px; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 40px; text-align: center;">VORTEX PRO</h1>
         <div class="card">
-            <h2 style="font-family:'Space Grotesk'; margin-bottom: 30px; text-align: center; letter-spacing: 3px;">IDENTIFIQUE-SE</h2>
             <input type="email" id="email" placeholder="E-mail de acesso">
-            <input type="password" id="pass" placeholder="Sua senha">
-            <button class="btn btn-primary" id="authBtn" onclick="handleAuth()">DESBLOQUEAR ACESSO</button>
-            <div style="text-align: center; margin-top: 20px;">
-                <button onclick="forgotPassword()" style="background:none; border:none; color:#888; text-decoration:underline; cursor:pointer; font-size:13px; margin-bottom:10px; display:block; width:100%;">Esqueci minha senha</button>
-                <button onclick="toggleAuthMode()" id="authBtnToggle" style="background:none; border:none; color:var(--primary); font-weight:bold; cursor:pointer; font-size:13px;">Criar conta grátis</button>
-            </div>
+            <input type="password" id="pass" placeholder="Senha">
+            <button class="btn btn-primary" onclick="handleAuth()">IDENTIFICAR OPERADOR</button>
         </div>
     </section>
 
     <section id="screen-app" class="screen">
         <div class="rank-card" id="rankCard">
-            <div id="rankIcon" style="font-size: 40px; margin-bottom: 10px; filter: drop-shadow(0 0 15px var(--gold));">🛡️</div>
-            <div id="rankLabel" style="color:var(--gold); font-weight: 800; font-size: 22px; font-family: 'Space Grotesk';">PATENTE: BRONZE</div>
+            <div id="rankLabel" style="color:var(--primary); font-weight: 800; font-size: 18px;">PATENTE: BRONZE</div>
             <div class="xp-bar"><div id="xpFill" class="xp-fill"></div></div>
-            <div id="limitLabel" style="font-size: 11px; color: #888; font-weight: bold; letter-spacing: 2px;">CONSULTAS DIÁRIAS: 0 / 5</div>
+            <div id="limitLabel" style="font-size: 10px; color: #888;">CONSULTAS: 0 / 5</div>
         </div>
 
         <div class="card">
-            <span class="label-app">LINK DO PRODUTO (SHOPEE/ALI)</span>
-            <input type="url" id="productUrl" placeholder="Cole o link aqui">
-            <button class="btn" style="background:#fff; color:#000" id="btnCapture" onclick="capturePrice()">CAPTURAR PREÇO DO LINK</button>
-            <div id="scanMsg" style="font-size: 11px; color: var(--gold); text-align: center; margin: 10px 0; display: none; font-weight: bold;">MINERANDO DADOS EM TEMPO REAL...</div>
+            <span class="label-app">MINERAÇÃO DE LINK</span>
+            <input type="url" id="productUrl" placeholder="Link Shopee ou AliExpress">
+            <button class="btn" style="background:#fff; color:#000" onclick="capturePrice()">EXTRAIR DADOS</button>
             
-            <div style="margin-top: 20px;">
-                <span class="label-app">LOCALIZAÇÃO (CEP)</span>
-                <input type="text" id="destCep" placeholder="00000000" maxlength="8" oninput="checkCEP(this)">
-                <div id="locDisplay" style="color:var(--green); font-size: 12px; font-weight: bold; margin-bottom: 10px; height: 15px;"></div>
+            <div style="margin-top: 15px;">
+                <span class="label-app">LOGÍSTICA (CEP)</span>
+                <input type="text" id="destCep" placeholder="Digite o CEP" maxlength="8" oninput="checkCEP(this)">
+                <div id="locDisplay" style="color:var(--green); font-size: 11px; font-weight: bold; margin-bottom: 10px; height: 12px;"></div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <div><span class="label-app">CUSTO R$</span><input type="number" id="supplier" placeholder="0.00" oninput="sugerirVenda()"></div>
-                <div><span class="label-app">FRETE R$</span><input type="number" id="shipping" placeholder="0.00" readonly></div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div><span class="label-app">CUSTO FORN.</span><input type="number" id="supplier" oninput="sugerirVenda()"></div>
+                <div><span class="label-app">FRETE ESTIMADO</span><input type="number" id="shipping" readonly></div>
             </div>
 
-            <span class="label-app">VENDA SUGERIDA (33% MARGEM)</span>
-            <input type="number" id="sale" placeholder="Automático" style="border-color: var(--primary); color: var(--primary); font-weight: bold;">
+            <span class="label-app">VALOR DE REVENDA SUGERIDO</span>
+            <input type="number" id="sale" style="border-color: var(--primary); color: var(--primary); font-weight: bold;">
             
-            <button class="btn btn-primary" onclick="calculateProfit()">⚡ CALCULAR LUCRO LÍQUIDO</button>
-            <button class="btn btn-vip" id="btnVipAction" onclick="window.open('https://wa.me/5511975473066?text=Quero+o+VIP+Ouro')">💎 TORNAR-SE VIP OURO</button>
-            <button onclick="logout()" style="width:100%; background:none; border:none; color:#444; margin-top:20px; cursor:pointer; font-size: 12px;">ENCERRAR SESSÃO</button>
+            <button class="btn btn-primary" onclick="calculateProfit()">⚡ CALCULAR MARGEM REAL</button>
         </div>
-        
-        <div id="resultCard" class="card hidden" style="margin-top:25px; text-align: center; border: 2px solid var(--green);">
-            <div style="font-size: 14px; color: #888; margin-bottom: 5px;">LUCRO LÍQUIDO ESTIMADO:</div>
-            <h2 id="resProfit" style="color:var(--green); font-size: 48px; font-family: 'Space Grotesk';">R$ 0,00</h2>
+
+        <div id="resultCard" class="card hidden" style="border: 2px solid var(--green); text-align: center;">
+            <div style="font-size: 12px; color: #888;">LUCRO LÍQUIDO (DESCONTANDO TAXAS):</div>
+            <h2 id="resProfit" style="color:var(--green); font-size: 40px; font-family: 'Space Grotesk';">R$ 0,00</h2>
             
-            <button class="btn-help" onclick="toggleHelp()">❓ Entenda as taxas aplicadas</button>
-            <div id="helpBox" class="help-box">
-                <h4>🛡️ Proteção de Margem Vortex</h4>
-                <ul style="list-style: none; color: #bbb; line-height: 1.4;">
-                    <li>• <b>Taxa de Marketplace (12%):</b> Desconto automático da comissão base + taxa de transação.</li>
-                    <li>• <b>Logística Real:</b> Frete calculado pelo CEP da região para evitar prejuízos.</li>
-                    <li>• <b>Margem de Segurança:</b> Cálculo baseado em 33% de lucro real sobre o custo total.</li>
-                </ul>
+            <div class="ad-banner" onclick="window.open('https://www.nuvemshop.com.br/parceiros/associados')">
+                <div style="font-size: 24px;">🚀</div>
+                <div style="text-align: left;">
+                    <div style="color: var(--primary); font-size: 10px; font-weight: 800;">ESCALA PROFISSIONAL</div>
+                    <div style="font-size: 13px; font-weight: bold;">Crie sua loja Nuvemshop aqui</div>
+                </div>
             </div>
         </div>
+
+        <div class="card" style="border: 1px solid rgba(139, 92, 246, 0.2); text-align: left;">
+            <h3 style="color: var(--primary); font-size: 14px; margin-bottom: 15px; font-family: 'Space Grotesk'; text-transform: uppercase;">💎 Estratégias de Elite</h3>
+            
+            <div class="strategy-item">
+                <span class="strategy-title">01. CÁLCULO DE MARGEM</span>
+                <p class="strategy-text">O Vortex Pro desconta automaticamente 12% de taxas base. Mantenha sua margem acima de 25% para escala saudável.</p>
+            </div>
+
+            <div class="strategy-item">
+                <span class="strategy-title">02. SELEÇÃO DE VENDEDORES</span>
+                <p class="strategy-text">Priorize fornecedores com nota 4.8+ e tempo de resposta inferior a 24h para reduzir chargebacks.</p>
+            </div>
+
+            <div class="strategy-item">
+                <span class="strategy-title">03. FRETE POR REGIÃO</span>
+                <p class="strategy-text">O custo logístico varia até 40% no Brasil. Use sempre o scanner de CEP para precificação precisa.</p>
+            </div>
+        </div>
+
+        <div class="legal-footer">
+            <p>© 2026 VORTEX PRO AI - SOFTWARE DE PRECIFICAÇÃO</p>
+            <div style="margin-top: 10px;">
+                <a href="legal.html">Termos de Uso</a> | 
+                <a href="legal.html">Política de Privacidade</a> |
+                <a href="mailto:suporte@vortexpro.com">Contato</a>
+            </div>
+        </div>
+
+        <button onclick="logout()" style="background:none; border:none; color:#444; margin-top:20px; cursor:pointer; font-size: 11px; text-decoration: underline;">ENCERRAR SESSÃO</button>
     </section>
 
     <script>
-        // CONFIGURAÇÕES FIREBASE
+        // Use seu Firebase Config aqui
         const firebaseConfig = { apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I", authDomain: "vortexpro1021.firebaseapp.com", projectId: "vortexpro1021", storageBucket: "vortexpro1021.firebasestorage.app", messagingSenderId: "403000271858", appId: "1:403000271858:web:7a8716548ee0a1b822016b" };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // CHAVE SCRAPING (USO EM DESENVOLVIMENTO)
-        const SCRAPINGBEE_KEY = '7D22W6Q93Z8Z3X9P8Y6N5M4L3K2J1H0G'; 
+        let userData = { dailyCount: 0, xp: 0, patente: 'BRONZE' };
 
-        let authMode = 'login', userData = { dailyCount: 0, xp: 0, patente: 'BRONZE' }, isVip = false;
-
-        // UTILITÁRIOS UI
-        function showToast(msg, type='error') {
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.innerText = msg;
-            document.getElementById('toastContainer').appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
-
-        function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-        function toggleAuthMode() { authMode = authMode === 'login' ? 'signup' : 'login'; document.getElementById('authBtnToggle').innerText = authMode === 'login' ? 'Criar conta grátis' : 'Já tenho conta'; }
-        function toggleHelp() { const box = document.getElementById('helpBox'); box.style.display = box.style.display === 'none' ? 'block' : 'none'; }
-
-        // AUTENTICAÇÃO
         async function handleAuth() {
             const e = document.getElementById('email').value, p = document.getElementById('pass').value;
-            if(!e || !p) return showToast("Preencha todos os campos!");
-            try {
-                if(authMode === 'signup') {
-                    const res = await auth.createUserWithEmailAndPassword(e, p);
-                    await db.collection("users").doc(res.user.uid).set({ email: e, patente: 'BRONZE', xp: 0, dailyCount: 0, lastReset: new Date() });
-                } else await auth.signInWithEmailAndPassword(e, p);
-            } catch (err) { showToast(err.message); }
+            if(!e || !p) return alert("Preencha os campos!");
+            try { await auth.signInWithEmailAndPassword(e, p); } catch(err) { alert("Acesso negado."); }
         }
 
-        function logout() { auth.signOut(); showScreen('screen-home'); }
-
-        // MONITOR DE ESTADO DO USUÁRIO
         auth.onAuthStateChanged(async (user) => {
             if(user) {
                 const doc = await db.collection("users").doc(user.uid).get();
-                if(doc.exists) {
-                    userData = doc.data();
-                    const hoje = new Date().toDateString();
-                    const ultimo = userData.lastReset?.toDate().toDateString();
-                    if(hoje !== ultimo) {
-                        userData.dailyCount = 0;
-                        await db.collection("users").doc(user.uid).update({ dailyCount: 0, lastReset: new Date() });
-                    }
-                    isVip = userData.patente === "OURO";
-                }
-                showScreen('screen-app');
+                if(doc.exists) userData = doc.data();
+                document.getElementById('screen-login').style.display = 'none';
+                document.getElementById('screen-app').style.display = 'flex';
                 updateUI();
             }
         });
 
         function updateUI() {
-            const fill = document.getElementById('xpFill');
-            const label = document.getElementById('rankLabel');
-            const card = document.getElementById('rankCard');
-            const icon = document.getElementById('rankIcon');
-            
-            fill.style.width = Math.min(userData.xp, 100) + "%";
-            document.getElementById('limitLabel').innerText = isVip ? "ACESSO ILIMITADO" : `CONSULTAS: ${userData.dailyCount} / 5`;
-
-            if(isVip) {
-                label.innerText = "PATENTE: OURO 💎";
-                label.style.color = "var(--gold)";
-                icon.innerText = "🏆";
-                card.className = "rank-card gold";
-                document.getElementById('btnVipAction').style.display = 'none';
-            } else if(userData.xp >= 100) {
-                label.innerText = "PATENTE: PRATA 🛡️";
-                label.style.color = "var(--silver)";
-                card.className = "rank-card silver";
-                icon.innerText = "⚔️";
+            document.getElementById('xpFill').style.width = Math.min(userData.xp, 100) + "%";
+            document.getElementById('limitLabel').innerText = `CONSULTAS: ${userData.dailyCount} / 5`;
+            if(userData.patente === "OURO") {
+                document.getElementById('rankLabel').innerText = "PATENTE: OURO 💎";
+                document.getElementById('rankCard').style.borderColor = "var(--gold)";
             }
         }
 
-        // LÓGICA DE NEGÓCIO
-        async function capturePrice() {
-            const url = document.getElementById('productUrl').value;
-            if(!url.includes("http")) return showToast("Insira um link válido!");
-            
-            document.getElementById('sndScanner').play();
-            document.getElementById('scanMsg').style.display = 'block';
-            
-            try {
-                const r = await fetch(`https://app.scrapingbee.com/api/v1/?api_key=${SCRAPINGBEE_KEY}&url=${encodeURIComponent(url)}&render_js=true`);
-                const h = await r.text();
-                const m = h.match(/R\$\s?(\d{1,3}(\.\d{3})*,\d{2})/);
-                if(m) document.getElementById('supplier').value = m[1].replace('.','').replace(',','.');
-                else document.getElementById('supplier').value = (Math.random() * 25 + 10).toFixed(2);
-            } catch(e) { document.getElementById('supplier').value = 14.90; }
-            finally { document.getElementById('scanMsg').style.display = 'none'; sugerirVenda(); }
+        function sugerirVenda() {
+            const c = parseFloat(document.getElementById('supplier').value) || 0;
+            const f = parseFloat(document.getElementById('shipping').value) || 0;
+            if(c > 0) document.getElementById('sale').value = ((c + f) * 1.33).toFixed(2);
         }
 
         async function checkCEP(el) {
@@ -256,57 +204,25 @@
                     document.getElementById('locDisplay').innerText = `📍 ${d.localidade} - ${d.uf}`;
                     document.getElementById('shipping').value = (d.uf === 'SP' ? 12.90 : 22.50).toFixed(2);
                     sugerirVenda();
-                } else { showToast("CEP não encontrado!"); }
+                }
             }
         }
 
-        function sugerirVenda() {
-            const c = parseFloat(document.getElementById('supplier').value) || 0;
-            const f = parseFloat(document.getElementById('shipping').value) || 0;
-            if(c > 0) document.getElementById('sale').value = ((c + f) * 1.33).toFixed(2);
-        }
-
         async function calculateProfit() {
-            if(!isVip && userData.dailyCount >= 5) return showToast("Limite diário atingido! Upgrade para Ouro.");
-            
             const v = parseFloat(document.getElementById('sale').value) || 0;
             const c = parseFloat(document.getElementById('supplier').value) || 0;
             const f = parseFloat(document.getElementById('shipping').value) || 0;
             
-            if(v <= 0 || c <= 0) return showToast("Preencha os valores corretamente!");
-
-            const taxas = v * 0.12;
-            const lucro = v - c - f - taxas;
-
-            const resDiv = document.getElementById('resProfit');
-            resDiv.innerText = "R$ " + lucro.toFixed(2);
-            resDiv.style.color = lucro >= 0 ? 'var(--green)' : 'var(--red)';
-            
+            const lucro = v - c - f - (v * 0.12);
+            document.getElementById('resProfit').innerText = "R$ " + lucro.toFixed(2);
+            document.getElementById('resProfit').style.color = lucro >= 0 ? 'var(--green)' : 'var(--red)';
             document.getElementById('resultCard').classList.remove('hidden');
-            document.getElementById('sndSuccess').play();
-
-            // Persistência no Firebase
-            userData.dailyCount++;
-            userData.xp += 10;
-            updateUI();
             
-            await db.collection("users").doc(auth.currentUser.uid).update({ 
-                dailyCount: userData.dailyCount, 
-                xp: userData.xp,
-                patente: (userData.xp >= 100 && !isVip) ? 'PRATA' : userData.patente
-            });
-
-            // Histórico de cálculos
-            await db.collection("history").add({
-                userId: auth.currentUser.uid,
-                custo: c,
-                venda: v,
-                lucro: lucro,
-                data: new Date()
-            });
-
-            if(lucro > 0) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#8b5cf6', '#ffd700', '#00ff88'] });
+            if(lucro > 0) confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
         }
+
+        function logout() { auth.signOut(); window.location.reload(); }
+        async function capturePrice() { alert("Simulação de Captura: Dados extraídos com sucesso!"); document.getElementById('supplier').value = 19.90; sugerirVenda(); }
     </script>
 </body>
 </html>
