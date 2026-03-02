@@ -20,7 +20,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; }
 
-        /* Animação de Fundo */
+        /* FUNDO ANIMADO */
         .bg-glow {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
             background: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.15), transparent 70%);
@@ -39,22 +39,20 @@
         @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .logo-text { font-family: 'Space Grotesk'; font-weight: 800; font-size: 26px; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .card { background: rgba(15, 15, 22, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 24px; margin-bottom: 16px; transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .card { background: rgba(15, 15, 22, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 24px; margin-bottom: 16px; }
 
         .xp-bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; margin: 10px 0; }
         .xp-fill { height: 100%; background: var(--gradient); width: 0%; transition: width 0.8s ease; }
 
         input { width: 100%; padding: 18px; background: #000; border: 2px solid #222; color: #fff; border-radius: 16px; margin-bottom: 15px; font-weight: 600; }
-        input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
-
-        .btn { width: 100%; padding: 20px; border: none; border-radius: 16px; font-family: 'Space Grotesk'; font-weight: 700; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        .btn-primary { background: var(--gradient); color: #fff; box-shadow: 0 5px 20px rgba(139, 92, 246, 0.4); }
+        
+        .btn { width: 100%; padding: 18px; border: none; border-radius: 16px; font-family: 'Space Grotesk'; font-weight: 700; cursor: pointer; text-transform: uppercase; transition: 0.3s; margin-bottom: 10px; }
+        .btn-primary { background: var(--gradient); color: #fff; }
+        .btn-outline { background: transparent; border: 2px solid #222; color: #888; font-size: 12px; }
         .btn-money { background: linear-gradient(135deg, #10b981, #3b82f6); color: #fff; margin-top: 15px; }
         
-        #resultCard { display: none; text-align: center; border: 2px solid var(--money); }
         .hidden { display: none !important; }
-        .badge-pro { background: gold !important; color: #000 !important; }
+        #resultCard { display: none; margin-top: 20px; border: 2px solid var(--money); }
     </style>
 </head>
 <body>
@@ -67,10 +65,12 @@
                 <div class="logo-text">VORTEX PRO</div>
             </div>
             <div class="card">
-                <h3 style="text-align:center; margin-bottom:20px;">Acesso Elite</h3>
-                <input type="email" id="email" placeholder="E-mail">
-                <input type="password" id="password" placeholder="Senha">
-                <button class="btn btn-primary" onclick="login()">🚀 Entrar no Sistema</button>
+                <h3 style="text-align:center; margin-bottom:20px; font-family:'Space Grotesk';">Portal de Inteligência</h3>
+                <input type="email" id="email" placeholder="Seu e-mail">
+                <input type="password" id="password" placeholder="Sua senha">
+                
+                <button class="btn btn-primary" onclick="handleAuth('login')">🚀 Entrar</button>
+                <button class="btn btn-outline" onclick="handleAuth('signup')">Criar Nova Conta</button>
             </div>
         </div>
 
@@ -80,29 +80,30 @@
                     <span id="planInfo" style="background:var(--primary); padding:5px 12px; border-radius:8px; font-size:10px; font-weight:800;">FREE</span>
                     <span style="font-size:11px; color:#888;">LVL <span id="lvl">1</span></span>
                 </div>
-                <h2 id="userName" style="margin-top:10px; font-family:'Space Grotesk';">Olá!</h2>
+                <h2 id="userName" style="margin-top:10px; font-family:'Space Grotesk'; font-size:24px;">Olá!</h2>
                 <div class="xp-bar"><div class="xp-fill" id="xpBar"></div></div>
             </div>
 
             <div class="card">
-                <h4 style="color:var(--primary); margin-bottom:15px;">📊 CALCULADORA</h4>
-                <input type="number" id="sale" placeholder="Preço de Venda">
-                <input type="number" id="supplier" placeholder="Custo">
-                <input type="number" id="shipping" placeholder="Frete">
-                <button class="btn btn-primary" onclick="analyze()">⚡ ANALISAR LUCRO</button>
+                <h4 style="color:var(--primary); margin-bottom:15px; font-family:'Space Grotesk';">🔍 ANALISADOR DE MARGEM</h4>
+                <input type="number" id="sale" placeholder="Preço de Venda (R$)">
+                <input type="number" id="supplier" placeholder="Custo Produto (R$)">
+                <input type="number" id="shipping" placeholder="Frete Total (R$)">
+                
+                <button class="btn btn-primary" onclick="analyze()">⚡ CALCULAR LÍQUIDO</button>
 
-                <div id="resultCard" class="card">
+                <div id="resultCard" class="card" style="background: #000;">
                     <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                        <span>Lucro:</span><b id="resProfit" style="color:var(--money)">R$ 0,00</b>
+                        <span style="color:#888;">Lucro Real:</span><b id="resProfit" style="color:var(--money); font-size:20px;">R$ 0,00</b>
                     </div>
-                    <div style="background:var(--bg); padding:15px; border-radius:12px;">
-                        <div style="font-size:10px; color:#888;">PREÇO IDEAL (30%)</div>
-                        <div id="resSug" style="font-size:22px; font-weight:800; color:var(--money);">R$ 0,00</div>
+                    <div style="background:var(--surface); padding:15px; border-radius:12px; text-align:center;">
+                        <div style="font-size:10px; color:#555; margin-bottom:5px;">PREÇO SUGERIDO (30% LUCRO)</div>
+                        <div id="resSug" style="font-size:24px; font-weight:800; color:#fff;">R$ 0,00</div>
                     </div>
-                    <button class="btn btn-money" onclick="window.open('https://wa.me/5511975473066')">VALIDAR NO ZAP</button>
+                    <button class="btn btn-money" onclick="window.open('https://wa.me/5511975473066')">ESTRATÉGIA NO WHATSAPP</button>
                 </div>
             </div>
-            <button class="btn" style="background:#111; color:#555; font-size:10px;" onclick="auth.signOut().then(()=>location.reload())">SAIR</button>
+            <button class="btn btn-outline" style="border:none;" onclick="auth.signOut().then(()=>location.reload())">Sair da Conta</button>
         </div>
     </div>
 
@@ -120,14 +121,19 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        function login() {
+        function handleAuth(mode) {
             const e = document.getElementById('email').value;
             const p = document.getElementById('password').value;
-            auth.signInWithEmailAndPassword(e,p).catch(() => {
+            if(!e || !p) return alert("Preencha e-mail e senha!");
+
+            if(mode === 'login') {
+                auth.signInWithEmailAndPassword(e,p).catch(err => alert("Erro: " + err.message));
+            } else {
                 auth.createUserWithEmailAndPassword(e,p).then(u => {
                     db.collection("users").doc(u.user.uid).set({plan:"free", xp:0, level:1, usage:0});
-                });
-            });
+                    alert("Conta criada com sucesso!");
+                }).catch(err => alert("Erro ao cadastrar: " + err.message));
+            }
         }
 
         auth.onAuthStateChanged(user => {
@@ -140,19 +146,19 @@
 
         async function updateUI(user) {
             const doc = await db.collection("users").doc(user.uid).get();
-            const d = doc.data() || {};
-            document.getElementById('userName').innerText = user.email === "jrbatata2017@gmail.com" ? "Olá, Junior!" : "Olá, Parceiro!";
-            document.getElementById('lvl').innerText = d.level || 1;
+            const d = doc.data() || {level:1, xp:0};
+            document.getElementById('userName').innerText = user.email === "jrbatata2017@gmail.com" ? "Olá, Junior Sabino!" : "Olá, Parceiro!";
+            document.getElementById('lvl').innerText = d.level;
             document.getElementById('xpBar').style.width = (d.xp % 100) + "%";
-            if(d.plan === "pro") document.getElementById('planInfo').classList.add('badge-pro');
         }
 
         async function analyze() {
             const s = parseFloat(document.getElementById('sale').value) || 0;
             const c = parseFloat(document.getElementById('supplier').value) || 0;
             const f = parseFloat(document.getElementById('shipping').value) || 0;
+            if(s === 0) return alert("Insira o valor de venda!");
+
             const p = s - c - f - (s * 0.12);
-            
             document.getElementById('resProfit').innerText = "R$ " + p.toFixed(2);
             document.getElementById('resSug').innerText = "R$ " + ((c+f)/0.7).toFixed(2);
             document.getElementById('resultCard').style.display = "block";
@@ -161,11 +167,8 @@
 
             const user = auth.currentUser;
             const doc = await db.collection("users").doc(user.uid).get();
-            const data = doc.data();
-            await db.collection("users").doc(user.uid).update({
-                xp: (data.xp || 0) + 20,
-                usage: (data.usage || 0) + 1
-            });
+            const data = doc.data() || {xp:0};
+            await db.collection("users").doc(user.uid).update({ xp: data.xp + 20 });
             updateUI(user);
         }
     </script>
