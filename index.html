@@ -3,59 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VORTEX PRO | Gestão Completa</title>
+    <title>VORTEX PRO | Preço Justo</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --bg: #050508; --surface: #0f0f16; --primary: #8b5cf6; --gradient: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #f43f5e 100%); --money: #10b981; }
+        :root { --bg: #050508; --surface: #0f0f16; --primary: #8b5cf6; --gradient: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #f43f5e 100%); --money: #10b981; --error: #f43f5e; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; min-height: 100vh; display: flex; justify-content: center; padding: 20px; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; padding: 20px; display: flex; justify-content: center; }
         .container { width: 100%; max-width: 420px; }
         .card { background: var(--surface); padding: 25px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; }
-        h1 { font-family: 'Space Grotesk'; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; margin-bottom: 20px; }
-        input { width: 100%; padding: 16px; margin-bottom: 12px; border-radius: 12px; border: 1px solid #222; background: #000; color: #fff; font-size: 14px; }
-        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.3s; margin-top: 5px; }
+        h1 { font-family: 'Space Grotesk'; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; margin-bottom: 20px; font-size: 26px; }
+        .label-tag { font-size: 10px; color: var(--primary); font-weight: bold; margin-bottom: 5px; display: block; text-transform: uppercase; letter-spacing: 1px; }
+        input { width: 100%; padding: 16px; margin-bottom: 12px; border-radius: 12px; border: 1px solid #222; background: #000; color: #fff; font-size: 14px; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--primary); }
+        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.3s; margin-bottom: 10px; }
         .btn-primary { background: var(--gradient); color: #fff; }
-        .btn-outline { background: #fff; color: #000; margin-bottom: 15px; }
+        .btn-outline { background: transparent; border: 1px solid #333; color: #aaa; font-size: 12px; }
+        .history-item { background: #000; padding: 15px; border-radius: 16px; margin-top: 10px; border-left: 4px solid var(--money); }
         .hidden { display: none !important; }
-        .history-item { background: #000; padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 4px solid var(--money); font-size: 11px; }
-        .label-tag { font-size: 10px; color: var(--primary); font-weight: bold; margin-bottom: 5px; display: block; text-transform: uppercase; }
+        .profit-pos { color: var(--money); }
+        .profit-neg { color: var(--error); }
     </style>
 </head>
 <body>
     <div class="container">
-        <div id="appArea">
-            <div class="card">
-                <h1 style="font-size: 22px;">GESTOR VORTEX</h1>
-                <span class="label-tag">Passo 1: Produto</span>
-                <input type="text" id="productUrl" placeholder="Link do Produto">
-                <button class="btn btn-outline" id="captureBtn">🔍 CAPTURAR PREÇO</button>
-
-                <span class="label-tag">Passo 2: Logística</span>
-                <input type="text" id="destCep" placeholder="CEP de Destino">
-                <button class="btn btn-primary" id="btnFrete">CALCULAR FRETE REAL</button>
-            </div>
+        <div class="card">
+            <h1>VORTEX PRO</h1>
             
-            <div class="card">
-                <span class="label-tag">Valores Finais</span>
-                <input type="number" id="supplier" placeholder="Custo (R$)">
-                <input type="number" id="shipping" placeholder="Frete (R$)">
-                <input type="number" id="sale" placeholder="Venda Sugerida (R$)">
-                <button class="btn btn-primary" id="analyzeBtn">⚡ CALCULAR LUCRO</button>
-            </div>
+            <span class="label-tag">1. Link do Fornecedor</span>
+            <input type="text" id="productUrl" placeholder="Cole o link da Shopee/Ali">
+            <button class="btn btn-primary" id="captureBtn">🔍 SUGERIR PREÇO JUSTO</button>
 
-            <div id="resultCard" class="card hidden" style="border: 2px solid var(--money); text-align: center;">
-                <h2 id="resProfit" style="color:var(--money); font-size: 32px; margin: 10px 0;">R$ 0,00</h2>
-                <button class="btn btn-primary" id="saveHistoryBtn" style="background: #3b82f6">💾 SALVAR OFERTA</button>
-            </div>
+            <span class="label-tag">2. Dados da Operação</span>
+            <input type="number" id="supplier" placeholder="Custo do Produto (R$)">
+            <input type="number" id="shipping" placeholder="Custo do Frete (R$)" value="15.90">
+            <input type="number" id="sale" placeholder="Preço de Venda Sugerido (R$)">
+            
+            <button class="btn btn-primary" id="analyzeBtn" style="margin-top:10px;">⚡ ANALISAR LUCRO LÍQUIDO</button>
+        </div>
 
-            <div class="card">
-                <h4 style="margin-bottom: 12px; font-size: 13px;">📦 HISTÓRICO DE MINERAÇÃO</h4>
-                <div id="historyList"></div>
-            </div>
+        <div id="resultCard" class="card hidden" style="text-align: center;">
+            <p id="profitLabel" style="color:#888; font-size: 14px;">Seu Lucro por Venda:</p>
+            <h2 id="resProfit" style="font-size: 38px; margin: 10px 0;">R$ 0,00</h2>
+            <button class="btn btn-outline" id="saveHistoryBtn">💾 SALVAR NO HISTÓRICO</button>
+        </div>
+
+        <div class="card">
+            <h4 style="font-size: 14px; margin-bottom: 15px; color: #666;">📈 PRODUTOS MINERADOS</h4>
+            <div id="historyList">Carregando...</div>
         </div>
     </div>
 
@@ -71,57 +68,65 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // CAPTURA
+        // LÓGICA DE PREÇO COMPETITIVO
         document.getElementById('captureBtn').addEventListener('click', () => {
-            const custo = (Math.random() * (40 - 15) + 15).toFixed(2);
-            document.getElementById('supplier').value = custo;
-            document.getElementById('sale').value = (custo * 1.6).toFixed(2);
-            document.getElementById('captureBtn').innerText = "PREÇO SUGERIDO ✅";
+            let custo = parseFloat(document.getElementById('supplier').value) || 17.00;
+            let frete = parseFloat(document.getElementById('shipping').value) || 15.90;
+            
+            // Sugestão: Custo + Frete + R$ 20 de margem (Valor psicológico atraente)
+            let vendaSugerida = custo + frete + 20;
+            
+            // Arredondar para final .90 ou .99 que vende mais
+            vendaSugerida = Math.ceil(vendaSugerida) - 0.10;
+
+            document.getElementById('supplier').value = custo.toFixed(2);
+            document.getElementById('sale').value = vendaSugerida.toFixed(2);
+            document.getElementById('captureBtn').innerText = "PREÇO ATUALIZADO ✅";
         });
 
-        // FRETE REAL
-        document.getElementById('btnFrete').addEventListener('click', () => {
-            const cep = document.getElementById('destCep').value;
-            if(cep.length < 8) return alert("CEP Inválido");
-            document.getElementById('btnFrete').innerText = "CONSULTANDO API...";
-            setTimeout(() => {
-                document.getElementById('shipping').value = "15.90";
-                document.getElementById('btnFrete').innerText = "FRETE OK ✅";
-            }, 1200);
-        });
-
-        // LUCRO
+        // CALCULAR LUCRO REAL
         document.getElementById('analyzeBtn').addEventListener('click', () => {
             const s = parseFloat(document.getElementById('sale').value) || 0;
             const c = parseFloat(document.getElementById('supplier').value) || 0;
             const f = parseFloat(document.getElementById('shipping').value) || 0;
-            const lucro = s - c - f - (s * 0.12);
-            document.getElementById('resProfit').innerText = "R$ " + lucro.toFixed(2);
+            
+            // Lucro = Venda - Custo - Frete - 12% de taxas
+            const lucroVal = s - c - f - (s * 0.12);
+            const resElem = document.getElementById('resProfit');
+            
+            resElem.innerText = "R$ " + lucroVal.toFixed(2);
+            resElem.className = lucroVal > 0 ? "profit-pos" : "profit-neg";
+            
             document.getElementById('resultCard').classList.remove('hidden');
-            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            if(lucroVal > 0) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         });
 
-        // SALVAR
+        // SALVAR HISTÓRICO
         document.getElementById('saveHistoryBtn').addEventListener('click', () => {
             const data = {
                 custo: document.getElementById('supplier').value,
                 venda: document.getElementById('sale').value,
                 lucro: document.getElementById('resProfit').innerText,
-                date: new Date().toLocaleTimeString()
+                timestamp: Date.now()
             };
             db.collection("history").add(data).then(() => {
-                alert("Salvo!");
+                alert("Produto salvo!");
                 loadHistory();
             });
         });
 
         function loadHistory() {
-            db.collection("history").orderBy("date", "desc").limit(3).get().then((snap) => {
+            db.collection("history").orderBy("timestamp", "desc").limit(5).get().then((snap) => {
                 const list = document.getElementById('historyList');
                 list.innerHTML = "";
+                if (snap.empty) { list.innerHTML = "Nenhum item salvo."; return; }
                 snap.forEach(doc => {
                     const item = doc.data();
-                    list.innerHTML += `<div class="history-item"><strong>Lucro: ${item.lucro}</strong><br>Custo: R$ ${item.custo} | Venda: R$ ${item.venda}</div>`;
+                    list.innerHTML += `
+                        <div class="history-item">
+                            <strong style="color:var(--money)">${item.lucro} LÍQUIDO</strong><br>
+                            <span style="font-size:10px; color:#666;">Custo: R$ ${item.custo} | Venda: R$ ${item.venda}</span>
+                        </div>`;
                 });
             });
         }
