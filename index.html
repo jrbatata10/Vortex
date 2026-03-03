@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1.0, user-scalable=no">
-    <title>VORTEX PRO AI | ELITE OPERATIONS</title>
+    <title>VORTEX PRO AI | SaaS Elite v30.0</title>
     
     <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
@@ -17,165 +17,138 @@
             --bg: #050508; --card: rgba(10, 10, 20, 0.75); --primary: #8b5cf6;
             --gold: #fbbf24; --green: #34d399; --cyan: #22d3ee;
         }
-        
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
         body { font-family: 'Rajdhani', sans-serif; background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; position: relative; }
 
-        /* === DESIGN SUPREMO: AURORA E PARTICULAS === */
-        .aurora {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
-            background: radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
-                        radial-gradient(ellipse at 80% 80%, rgba(236, 72, 153, 0.2) 0%, transparent 50%);
-            animation: auroraMove 20s ease-in-out infinite;
-        }
-        @keyframes auroraMove { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(25px, -25px) scale(1.05); } }
-
-        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
-        .particle { position: absolute; width: 3px; height: 3px; background: var(--primary); border-radius: 50%; opacity: 0.4; animation: float 12s infinite linear; }
-        @keyframes float { 0% { transform: translateY(100vh); opacity: 0; } 100% { transform: translateY(-100vh); opacity: 0; } }
+        /* VISUAL SUPREMO */
+        .aurora { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.3) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(236, 72, 153, 0.2) 0%, transparent 50%); animation: auroraMove 20s infinite; }
+        @keyframes auroraMove { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(20px, -20px); } }
 
         .container { max-width: 420px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
-        .logo { font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 800; text-align: center; background: linear-gradient(135deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 25px; letter-spacing: 2px; }
+        .logo { font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 800; text-align: center; background: linear-gradient(135deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 30px; }
 
-        /* === GLASSMORPHISM CARDS === */
-        .card { 
-            background: var(--card); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 22px; 
-            margin-bottom: 20px; box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5); 
-        }
-
+        .card { background: var(--card); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 24px; margin-bottom: 20px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5); }
         .label { font-size: 11px; color: var(--cyan); font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; display: block; }
-        input { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.5); color: #fff; font-size: 16px; font-family: 'Space Grotesk'; }
+        input { width: 100%; padding: 16px; margin-bottom: 16px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.5); color: #fff; font-size: 16px; }
 
-        .btn { width: 100%; padding: 18px; border-radius: 16px; border: none; font-weight: 800; cursor: pointer; font-family: 'Space Grotesk'; text-transform: uppercase; transition: 0.3s; }
-        .btn-primary { background: var(--primary); color: white; }
+        .btn { width: 100%; padding: 18px; border-radius: 16px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), #7c3aed); color: white; }
         .btn-gold { background: linear-gradient(135deg, var(--gold), #f59e0b); color: #000; margin-top: 10px; }
-        .scanner-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--primary); color: white; margin-bottom: 15px; }
-
-        /* === STATUS DE LOCALIZAÇÃO VERDADEIRA === */
-        #locDisplay { font-size: 13px; color: var(--green); font-weight: 700; margin-top: -10px; margin-bottom: 20px; padding: 12px; background: rgba(52, 211, 153, 0.1); border-radius: 12px; border-left: 4px solid var(--green); }
-        .result-value { font-family: 'Space Grotesk'; font-size: 46px; font-weight: 800; color: var(--green); text-shadow: 0 0 30px rgba(52, 211, 153, 0.5); text-align: center; }
+        .btn-whatsapp { background: #25d366; color: #fff; margin-top: 10px; font-size: 14px; }
         
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        #locDisplay { font-size: 13px; color: var(--green); font-weight: 700; margin-top: -10px; margin-bottom: 20px; padding: 12px; background: rgba(52, 211, 153, 0.1); border-radius: 12px; border-left: 4px solid var(--green); }
+        .result-value { font-family: 'Space Grotesk'; font-size: 48px; font-weight: 800; color: var(--green); text-align: center; }
         .hidden { display: none !important; }
-        .nuvem-banner { background: linear-gradient(90deg, #0046ff, #001a4d); padding: 15px; border-radius: 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; margin-top: 15px; border: 1px solid rgba(255,255,255,0.1); }
+
+        /* FOOTER ANTI-REJEIÇÃO */
+        .footer-compliance { font-size: 10px; color: rgba(255,255,255,0.3); text-align: center; margin-top: 20px; line-height: 1.6; }
     </style>
 </head>
 <body>
     <div class="aurora"></div>
-    <div class="particles" id="particles"></div>
-
     <div class="container">
         <div class="logo">VORTEX PRO AI</div>
 
-        <section id="screen-app">
+        <section id="screen-login">
+            <div class="card">
+                <span class="label">Acesso de Operador</span>
+                <input type="email" id="email" placeholder="E-mail profissional">
+                <input type="password" id="pass" placeholder="Senha de acesso">
+                <button class="btn btn-primary" onclick="handleAuth()">🔐 ENTRAR NO TERMINAL</button>
+            </div>
+            <div class="footer-compliance">
+                © 2026 Vortex Pro AI - Todos os direitos reservados.<br>
+                Política de Privacidade • Termos de Uso SaaS
+            </div>
+        </section>
+
+        <section id="screen-app" class="hidden">
             <div class="card" style="text-align: center; border-color: var(--gold);">
-                <div style="font-size: 22px; font-weight: 800; color: var(--gold);">ELITE OURO 💎</div>
+                <div style="font-size: 22px; font-weight: 800; color: var(--gold);">OURO 💎</div>
             </div>
 
             <div class="card">
                 <span class="label">🔍 Scanner Neural (Universal)</span>
                 <input type="url" id="productUrl" placeholder="Link de qualquer loja">
-                <button class="btn scanner-btn" id="btnExtract" onclick="capturePrice()">⚡ INICIAR MINERAÇÃO</button>
+                <button class="btn btn-primary" style="background: rgba(255,255,255,0.05); border: 1px solid var(--primary);" id="btnExtract" onclick="capturePrice()">⚡ INICIAR MINERAÇÃO</button>
                 
-                <span class="label">📍 Inteligência Logística</span>
+                <span class="label" style="margin-top: 15px;">📍 Inteligência Logística</span>
                 <input type="text" id="destCep" placeholder="00000-000" maxlength="8" oninput="validarCEP(this)">
                 <div id="locDisplay">Aguardando CEP...</div>
 
-                <div class="grid-2">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                     <div><span class="label">💰 Custo</span><input type="text" id="supplier" placeholder="0,00" oninput="atualizarSugestao()"></div>
-                    <div><span class="label">🚚 Frete Real</span><input type="text" id="shipping" value="0,00" readonly style="opacity: 0.7;"></div>
+                    <div><span class="label">🚚 Frete</span><input type="text" id="shipping" value="0,00" readonly style="opacity: 0.7;"></div>
                 </div>
-
-                <span class="label">💎 Preço Elite Sugerido</span>
-                <input type="text" id="sale" style="border-color: var(--gold); color: var(--gold);">
-                
                 <button class="btn btn-gold" onclick="calcular()">🚀 CALCULAR LUCRO REAL</button>
             </div>
 
             <div id="resultCard" class="card hidden">
-                <div style="font-size: 12px; color: var(--green); text-align: center;">LUCRO LÍQUIDO ESTIMADO</div>
                 <div id="resProfit" class="result-value">R$ 0,00</div>
-                <div class="nuvem-banner" onclick="window.open('https://www.nuvemshop.com.br/partners/vrtex-pro')">
-                    <span style="font-size: 22px;">🏢</span>
-                    <div style="text-align: left; font-size: 12px;"><b>NUVEMSHOP</b><br>Escalar Operação</div>
-                </div>
+                <button class="btn btn-whatsapp" onclick="window.open('https://wa.me/5511999999999')">
+                    💬 SUPORTE VIP WHATSAPP
+                </button>
             </div>
+
+            <button onclick="logout()" style="background:none; border:none; color:rgba(255,255,255,0.2); width:100%; cursor:pointer; font-size:11px;">SAIR DO SISTEMA</button>
         </section>
     </div>
 
     <script>
-        // GERADOR DE PARTICULAS
-        function createParticles() {
-            const container = document.getElementById('particles');
-            for (let i = 0; i < 15; i++) {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                p.style.left = Math.random() * 100 + '%';
-                p.style.animationDelay = Math.random() * 10 + 's';
-                container.appendChild(p);
-            }
-        }
-        createParticles();
-
         const firebaseConfig = { apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I", authDomain: "vortexpro1021.firebaseapp.com", projectId: "vortexpro1021", storageBucket: "vortexpro1021.firebasestorage.app", messagingSenderId: "403000271858", appId: "1:403000271858:web:7a8716548ee0a1b822016b" };
         firebase.initializeApp(firebaseConfig);
 
-        // MOTOR DE CEP (O QUE FUNCIONOU NO PRINT 1000113189)
+        async function handleAuth() {
+            const e = document.getElementById('email').value, p = document.getElementById('pass').value;
+            try { await firebase.auth().signInWithEmailAndPassword(e, p); } catch(err) { alert("Credenciais Inválidas."); }
+        }
+
+        firebase.auth().onAuthStateChanged(user => {
+            if(user) {
+                document.getElementById('screen-login').classList.add('hidden');
+                document.getElementById('screen-app').classList.remove('hidden');
+            }
+        });
+
         async function validarCEP(el) {
             const display = document.getElementById('locDisplay');
             const cep = el.value.replace(/\D/g, '');
             if(cep.length === 8) {
-                display.innerText = "🔍 Sincronizando rota...";
+                display.innerText = "🔍 Sincronizando Mogi...";
                 try {
-                    const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(`https://viacep.com.br/ws/${cep}/json/`)}`);
-                    const data = await response.json();
+                    const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(`https://viacep.com.br/ws/${cep}/json/`)}`);
+                    const data = await res.json();
                     const json = JSON.parse(data.contents);
                     if(!json.erro) {
                         display.innerHTML = `📍 ${json.localidade}, ${json.uf} ✅`;
                         document.getElementById('shipping').value = (json.uf === 'SP' ? "12,90" : "22,50");
-                        atualizarSugestao();
                     }
-                } catch(e) { display.innerText = "📍 Conexão Regional Ativa"; document.getElementById('shipping').value = "19,90"; }
+                } catch(e) { display.innerText = "📍 Rota Regional Ativa"; }
             }
         }
 
-        // MOTOR DE MINERAÇÃO UNIVERSAL (PARA QUALQUER LINK)
         async function capturePrice() {
             const url = document.getElementById('productUrl').value;
             const btn = document.getElementById('btnExtract');
             if(!url) return;
             btn.innerText = "MINERANDO...";
             try {
-                // Configuração Universal com tempo de espera para qualquer loja (Shopee, Ali, Amazon)
                 const res = await fetch(`https://app.scrapingbee.com/api/v1/?api_key=DFAK7P4M6H3Z015E9RLG&url=${encodeURIComponent(url)}&render_js=true&premium_proxy=true&wait=6000`);
                 const html = await res.text();
-                // Regex universal que procura por valores em R$ ou padrões de preço em Reais
-                const regex = /R\$\s?(\d{1,3}(?:\.\d{3})*,\d{2})|(\d{1,3}(?:\.\d{3})*,\d{2})/g;
-                const matches = html.match(regex);
-                if(matches) {
-                    document.getElementById('supplier').value = matches[0].replace('R$', '').trim();
-                    atualizarSugestao();
-                } else { alert("Link protegido. Insira o custo manual."); }
-            } catch (e) { alert("Sinal de rede instável."); } finally { btn.innerText = "⚡ INICIAR MINERAÇÃO"; }
-        }
-
-        function n(v) { return parseFloat(v.toString().replace(/\./g, '').replace(',', '.')) || 0; }
-        function atualizarSugestao() {
-            const c = n(document.getElementById('supplier').value);
-            const f = n(document.getElementById('shipping').value);
-            if(c > 0) document.getElementById('sale').value = ((c + f) * 1.35).toFixed(2).replace('.', ',');
+                const match = html.match(/R\$\s?(\d{1,3}(?:\.\d{3})*,\d{2})|(\d{1,3}(?:\.\d{3})*,\d{2})/g);
+                if(match) { document.getElementById('supplier').value = match[0].replace('R$', '').trim(); }
+            } catch (e) { alert("Insira o custo manualmente."); } finally { btn.innerText = "⚡ INICIAR MINERAÇÃO"; }
         }
 
         function calcular() {
-            const v = n(document.getElementById('sale').value);
-            const c = n(document.getElementById('supplier').value);
-            const f = n(document.getElementById('shipping').value);
-            const lucro = v - c - f - (v * 0.12);
+            const s = parseFloat(document.getElementById('supplier').value.replace(',', '.')) || 0;
+            const f = parseFloat(document.getElementById('shipping').value.replace(',', '.')) || 0;
+            const lucro = (s * 1.35) - s - f - ((s * 1.35) * 0.12);
             document.getElementById('resProfit').innerText = "R$ " + lucro.toLocaleString('pt-BR', {minimumFractionDigits: 2});
             document.getElementById('resultCard').classList.remove('hidden');
-            if(lucro > 0) confetti({ particleCount: 150, spread: 70, origin: { y: 0.8 }, colors: ['#fbbf24', '#8b5cf6', '#34d399'] });
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.8 } });
         }
+        function logout() { firebase.auth().signOut().then(() => window.location.reload()); }
     </script>
 </body>
 </html>
