@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1.0, user-scalable=no">
-    <title>VORTEX PRO AI | PRECISÃO REAL</title>
+    <title>VORTEX PRO AI | ESTABILIDADE TOTAL</title>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
@@ -13,25 +13,25 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        :root { --bg: #050508; --card: rgba(10, 10, 20, 0.9); --primary: #7c3aed; --gold: #f59e0b; --green: #10b981; --cyan: #22d3ee; }
+        :root { --bg: #050508; --card: rgba(15, 15, 25, 0.95); --primary: #7c3aed; --gold: #f59e0b; --green: #10b981; --cyan: #22d3ee; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: 'Rajdhani', sans-serif; background: var(--bg); color: #fff;
             background-image: radial-gradient(circle at 50% 0%, #1a1a2e 0%, #050508 75%);
             min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px;
         }
-        .logo { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 25px 0; }
+        .logo { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 800; background: linear-gradient(135deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 20px 0; }
         .screen { width: 100%; display: none; flex-direction: column; max-width: 400px; }
         .active { display: flex; }
-        .card { background: var(--card); padding: 22px; border-radius: 20px; border: 1px solid rgba(124, 58, 237, 0.3); width: 100%; margin-bottom: 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); backdrop-filter: blur(10px); }
-        .label { font-size: 10px; color: var(--cyan); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; display: block; }
-        input { width: 100%; padding: 14px; margin-bottom: 14px; border-radius: 12px; border: 1px solid #1e1e30; background: #000; color: #fff; font-size: 16px; font-family: 'Space Grotesk'; }
-        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; font-family: 'Space Grotesk'; text-transform: uppercase; }
-        .btn-primary { background: var(--primary); color: white; margin-top: 10px; }
-        .btn-miner { background: #fff; color: #000; margin-bottom: 15px; }
-        #locDisplay { font-size: 13px; color: #aaa; font-weight: 600; margin: -10px 0 15px; min-height: 18px; }
-        .loc-success { color: var(--green) !important; font-weight: 700 !important; }
-        .result-value { font-family: 'Space Grotesk'; font-size: 44px; font-weight: 800; color: var(--green); text-align: center; margin: 10px 0; }
+        .card { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid rgba(124, 58, 237, 0.3); width: 100%; margin-bottom: 15px; backdrop-filter: blur(10px); }
+        .label { font-size: 10px; color: var(--cyan); font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 6px; display: block; }
+        input { width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 10px; border: 1px solid #1e1e30; background: #000; color: #fff; font-size: 16px; font-family: 'Space Grotesk'; }
+        .btn { width: 100%; padding: 15px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; font-family: 'Space Grotesk'; text-transform: uppercase; transition: 0.2s; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-miner { background: #fff; color: #000; font-size: 12px; height: 45px; margin-bottom: 15px; }
+        #locDisplay { font-size: 13px; color: #888; margin: -10px 0 15px; min-height: 15px; font-weight: 600; }
+        .loc-on { color: var(--green) !important; }
+        .result-value { font-family: 'Space Grotesk'; font-size: 40px; font-weight: 800; color: var(--green); text-align: center; margin: 10px 0; }
         .hidden { display: none !important; }
     </style>
 </head>
@@ -41,40 +41,40 @@
 
     <section id="screen-login" class="screen active">
         <div class="card">
-            <span class="label">Autenticação de Segurança</span>
+            <span class="label">Operador de Elite</span>
             <input type="email" id="email" placeholder="E-mail">
             <input type="password" id="pass" placeholder="Senha">
-            <button class="btn btn-primary" onclick="handleAuth()">ACESSAR SISTEMA</button>
+            <button class="btn btn-primary" onclick="handleAuth()">ENTRAR NO TERMINAL</button>
         </div>
     </section>
 
     <section id="screen-app" class="screen">
-        <div class="card" style="text-align: center; border-color: var(--gold); padding: 15px;">
-            <div id="rankLabel" style="font-size: 20px; font-weight: 800; color: var(--gold); font-family: 'Space Grotesk';">PATENTE OURO 💎</div>
+        <div class="card" style="border-color: var(--gold); padding: 10px; text-align: center;">
+            <div id="rankLabel" style="font-size: 18px; font-weight: 800; color: var(--gold);">PATENTE OURO 💎</div>
         </div>
 
         <div class="card">
-            <span class="label">Mineração de Valor Real</span>
-            <input type="url" id="productUrl" placeholder="Link do produto (Shopee/Ali)">
-            <button class="btn btn-miner" id="btnExtract" onclick="capturePrice()">⚡ IDENTIFICAR PREÇO</button>
+            <span class="label">Link Fornecedor</span>
+            <input type="url" id="productUrl" placeholder="Cole o link Shopee/Ali">
+            <button class="btn btn-miner" id="btnExtract" onclick="capturePrice()">⚡ ANALISAR PRODUTO</button>
             
-            <span class="label">Localização de Destino</span>
-            <input type="text" id="destCep" placeholder="Digite o CEP para calcular" maxlength="8" oninput="validarCEP(this)">
-            <div id="locDisplay">Aguardando CEP válido...</div>
+            <span class="label">CEP de Destino</span>
+            <input type="text" id="destCep" placeholder="00000000" maxlength="8" oninput="validarCEP(this)">
+            <div id="locDisplay">Aguardando dados...</div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                <div><span class="label">Custo Fornec.</span><input type="text" id="supplier" placeholder="0,00" oninput="atualizarSugestao()"></div>
-                <div><span class="label">Frete Real</span><input type="text" id="shipping" value="0,00" readonly style="opacity: 0.7;"></div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div><span class="label">Custo (R$)</span><input type="text" id="supplier" placeholder="0,00" oninput="saveAndCalc()"></div>
+                <div><span class="label">Frete (R$)</span><input type="text" id="shipping" value="0,00" readonly style="opacity: 0.6;"></div>
             </div>
 
-            <span class="label">Sugestão de Venda</span>
-            <input type="text" id="sale" style="border-color: var(--primary); color: var(--primary); font-weight: 800;">
+            <span class="label">Preço Sugerido</span>
+            <input type="text" id="sale" style="border-color: var(--primary); color: var(--primary); font-weight: 800;" oninput="saveAndCalc()">
             
-            <button class="btn btn-primary" onclick="calcular()">CALCULAR LUCRO LÍQUIDO</button>
+            <button class="btn btn-primary" onclick="finalizarCalculo()">CALCULAR LUCRO</button>
         </div>
 
         <div id="resultCard" class="card hidden" style="border-color: var(--green); text-align: center;">
-            <span class="label" style="color: var(--green);">Margem de Lucro Confirmada</span>
+            <span class="label" style="color: var(--green);">Retorno da Operação</span>
             <div id="resProfit" class="result-value">R$ 0,00</div>
         </div>
     </section>
@@ -82,108 +82,99 @@
     <script>
         const firebaseConfig = { apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I", authDomain: "vortexpro1021.firebaseapp.com", projectId: "vortexpro1021", storageBucket: "vortexpro1021.firebasestorage.app", messagingSenderId: "403000271858", appId: "1:403000271858:web:7a8716548ee0a1b822016b" };
         firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        
+        // Memória Local: Carregar dados ao abrir
+        window.onload = () => {
+            if(localStorage.getItem('vortex_cep')) {
+                document.getElementById('destCep').value = localStorage.getItem('vortex_cep');
+                validarCEP(document.getElementById('destCep'));
+            }
+        };
 
         async function handleAuth() {
             const e = document.getElementById('email').value, p = document.getElementById('pass').value;
-            try { await firebase.auth().signInWithEmailAndPassword(e, p); } catch(err) { alert("Credenciais inválidas."); }
+            try { await firebase.auth().signInWithEmailAndPassword(e, p); } catch(err) { alert("Acesso negado."); }
         }
 
-        firebase.auth().onAuthStateChanged(async (user) => {
+        firebase.auth().onAuthStateChanged(user => {
             if(user) {
-                const doc = await db.collection("users").doc(user.uid).get();
-                document.getElementById('rankLabel').innerText = 'PATENTE ' + (doc.exists ? doc.data().patente : "OURO") + ' 💎';
                 document.getElementById('screen-login').style.display = 'none';
                 document.getElementById('screen-app').style.display = 'flex';
             }
         });
 
-        // NOVO MOTOR DE CEP SEM VALORES "CHUTADOS"
         async function validarCEP(el) {
-            const display = document.getElementById('locDisplay');
-            const shippingInput = document.getElementById('shipping');
             const cep = el.value.replace(/\D/g, '');
-            
+            const display = document.getElementById('locDisplay');
             if(cep.length === 8) {
-                display.innerText = "🔍 Sincronizando com base de dados...";
-                display.classList.remove('loc-success');
-                shippingInput.value = "0,00"; // Reseta o frete enquanto busca
-
+                display.innerText = "🔍 Localizando...";
+                localStorage.setItem('vortex_cep', cep);
+                
+                // Tentativa 1: Direta
                 try {
-                    // Tenta conexão direta primeiro (mais rápida)
                     const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
                     const d = await r.json();
-                    if(!d.erro) {
-                        sucessoCEP(d.localidade, d.uf);
-                    } else {
-                        display.innerText = "❌ CEP não localizado na base oficial.";
-                    }
+                    if(!d.erro) return showCity(d.localidade, d.uf);
+                } catch(e) {}
+
+                // Tentativa 2: Proxy Tunelado
+                try {
+                    const r = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(`https://viacep.com.br/ws/${cep}/json/`)}`);
+                    const d = await r.json();
+                    const j = JSON.parse(d.contents);
+                    if(j && !j.erro) return showCity(j.localidade, j.uf);
                 } catch(e) {
-                    // Se a conexão direta falhar, usa o túnel de emergência allorigins
-                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(`https://viacep.com.br/ws/${cep}/json/`)}`;
-                    const res = await fetch(proxyUrl);
-                    const data = await res.json();
-                    const j = JSON.parse(data.contents);
-                    
-                    if(j && !j.erro) {
-                        sucessoCEP(j.localidade, j.uf);
-                    } else {
-                        display.innerText = "⚠️ Erro de rede. Tente novamente em instantes.";
-                    }
+                    display.innerText = "⚠️ Erro de rede. Tente novamente.";
                 }
-            } else {
-                display.innerText = "Aguardando CEP válido...";
-                display.classList.remove('loc-success');
             }
         }
 
-        function sucessoCEP(cidade, estado) {
-            const display = document.getElementById('locDisplay');
-            const shippingInput = document.getElementById('shipping');
-            display.innerHTML = `📍 ${cidade}, ${estado}`;
-            display.classList.add('loc-success');
-            
-            // Tabela de frete baseada na verdade geográfica
-            const frete = (estado === 'SP') ? 12.90 : 23.40;
-            shippingInput.value = frete.toFixed(2).replace('.', ',');
-            atualizarSugestao();
+        function showCity(c, s) {
+            const d = document.getElementById('locDisplay');
+            d.innerText = `📍 ${c}, ${s}`;
+            d.classList.add('loc-on');
+            document.getElementById('shipping').value = (s === 'SP' ? "13,50" : "24,90");
+            saveAndCalc();
         }
 
         function n(v) { return parseFloat(v.toString().replace(/\./g, '').replace(',', '.')) || 0; }
-        
-        function atualizarSugestao() {
+
+        function saveAndCalc() {
             const c = n(document.getElementById('supplier').value);
             const f = n(document.getElementById('shipping').value);
-            if(c > 0) document.getElementById('sale').value = ((c + f) * 1.35).toFixed(2).replace('.', ',');
+            if(c > 0 && document.getElementById('sale').value === "") {
+                document.getElementById('sale').value = ((c + f) * 1.4).toFixed(2).replace('.', ',');
+            }
         }
 
         async function capturePrice() {
             const url = document.getElementById('productUrl').value;
             const btn = document.getElementById('btnExtract');
             if(!url) return;
-            btn.innerText = "IDENTIFICANDO...";
+            btn.innerText = "LENDO SITE...";
             try {
-                const res = await fetch(`https://app.scrapingbee.com/api/v1/?api_key=DFAK7P4M6H3Z015E9RLG&url=${encodeURIComponent(url)}&render_js=true&premium_proxy=true&wait=4000`);
+                // ScrapingBee focado em extração de corpo de página
+                const res = await fetch(`https://app.scrapingbee.com/api/v1/?api_key=DFAK7P4M6H3Z015E9RLG&url=${encodeURIComponent(url)}&render_js=true&premium_proxy=true&wait=5000`);
                 const html = await res.text();
                 const match = html.match(/R\$\s?(\d{1,3}(?:\.\d{3})*,\d{2})/);
                 if(match) {
                     document.getElementById('supplier').value = match[1];
-                    atualizarSugestao();
+                    saveAndCalc();
                 } else {
-                    alert("Informação protegida. Por favor, insira o custo manualmente.");
+                    alert("O site bloqueou a leitura automática. Digite o valor do custo para prosseguir.");
                 }
-            } catch (e) { console.error("Falha na extração remota."); } finally { btn.innerText = "⚡ IDENTIFICAR PREÇO"; }
+            } catch(e) { alert("Erro de conexão com o fornecedor."); }
+            finally { btn.innerText = "⚡ ANALISAR PRODUTO"; }
         }
 
-        function calcular() {
+        function finalizarCalculo() {
             const v = n(document.getElementById('sale').value);
             const c = n(document.getElementById('supplier').value);
             const f = n(document.getElementById('shipping').value);
-            if(f === 0) { alert("Aguarde a localização do CEP antes de calcular."); return; }
             const lucro = v - c - f - (v * 0.12);
             document.getElementById('resProfit').innerText = "R$ " + lucro.toLocaleString('pt-BR', {minimumFractionDigits: 2});
             document.getElementById('resultCard').classList.remove('hidden');
-            if(lucro > 0) confetti({ particleCount: 150, spread: 70, origin: { y: 0.8 } });
+            if(lucro > 0) confetti({ particleCount: 150, spread: 60, origin: { y: 0.7 } });
         }
     </script>
 </body>
