@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1.0, user-scalable=no">
-    <title>VORTEX PRO AI | SaaS Elite v32.0</title>
+    <title>VORTEX PRO AI | SaaS Elite v33.0</title>
     
     <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
@@ -49,14 +49,14 @@
 
         <section id="screen-login">
             <div class="card">
-                <span class="label">Operador de Elite</span>
+                <span class="label">Operador Autorizado</span>
                 <input type="email" id="email" placeholder="E-mail">
                 <input type="password" id="pass" placeholder="Senha">
                 <button class="btn btn-primary" onclick="handleAuth()">🔐 ENTRAR NO TERMINAL</button>
             </div>
             <div class="footer-compliance">
                 © 2026 Vortex Pro AI - Todos os direitos reservados.<br>
-                Política de Privacidade • Termos de Uso • Compliance Digify
+                Política de Privacidade • Termos de Uso • SaaS Compliance
             </div>
         </section>
 
@@ -66,18 +66,22 @@
             </div>
 
             <div class="card">
-                <span class="label">🔍 Scanner Neural (Qualquer Loja)</span>
+                <span class="label">🔍 Scanner Neural (Universal)</span>
                 <input type="url" id="productUrl" placeholder="Link do Fornecedor">
                 <button class="btn btn-primary" style="background: rgba(255,255,255,0.05); border: 1px solid var(--primary);" id="btnExtract" onclick="capturePrice()">⚡ INICIAR MINERAÇÃO</button>
                 
                 <span class="label" style="margin-top: 15px;">📍 Inteligência Logística (CEP)</span>
                 <input type="text" id="destCep" placeholder="00000-000" maxlength="8" oninput="validarCEP(this)">
-                <div id="locDisplay">Aguardando CEP de qualquer cidade...</div>
+                <div id="locDisplay">Aguardando CEP...</div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                     <div><span class="label">💰 Custo</span><input type="text" id="supplier" placeholder="0,00" oninput="atualizarSugestao()"></div>
                     <div><span class="label">🚚 Frete Real</span><input type="text" id="shipping" value="0,00" readonly style="opacity: 0.7;"></div>
                 </div>
+
+                <span class="label" style="margin-top: 10px;">💎 Preço Sugerido (45% Margem)</span>
+                <input type="text" id="sale" style="border-color: var(--gold); color: var(--gold); font-weight: 800;">
+
                 <button class="btn btn-gold" onclick="calcular()">🚀 CALCULAR LUCRO REAL</button>
             </div>
 
@@ -107,22 +111,21 @@
             }
         });
 
-        // LOCALIZADOR UNIVERSAL DE CEP (PARA QUALQUER CIDADE)
+        // CEP UNIVERSAL (TÚNEL ALLORIGINS)
         async function validarCEP(el) {
             const display = document.getElementById('locDisplay');
             const cep = el.value.replace(/\D/g, '');
             if(cep.length === 8) {
-                display.innerText = "🔍 Localizando cidade...";
+                display.innerText = "🔍 Sincronizando cidade...";
                 try {
-                    // Túnel AllOrigins para evitar erro de sinal em qualquer navegador
                     const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(`https://viacep.com.br/ws/${cep}/json/`)}`);
                     const data = await res.json();
                     const json = JSON.parse(data.contents);
                     if(!json.erro) {
                         display.innerHTML = `📍 ${json.localidade}, ${json.uf} ✅`;
-                        // Lógica de frete: SP é mais barato, o resto do Brasil tem valor regional
                         document.getElementById('shipping').value = (json.uf === 'SP' ? "12,90" : "23,80");
-                    } else { display.innerText = "❌ CEP não encontrado na base."; }
+                        atualizarSugestao();
+                    }
                 } catch(e) { display.innerText = "📍 Conexão Regional Ativa"; }
             }
         }
@@ -136,17 +139,30 @@
                 const res = await fetch(`https://app.scrapingbee.com/api/v1/?api_key=DFAK7P4M6H3Z015E9RLG&url=${encodeURIComponent(url)}&render_js=true&premium_proxy=true&wait=6000`);
                 const html = await res.text();
                 const match = html.match(/R\$\s?(\d{1,3}(?:\.\d{3})*,\d{2})|(\d{1,3}(?:\.\d{3})*,\d{2})/g);
-                if(match) { document.getElementById('supplier').value = match[0].replace('R$', '').trim(); }
+                if(match) { 
+                    document.getElementById('supplier').value = match[0].replace('R$', '').trim(); 
+                    atualizarSugestao();
+                }
             } catch (e) { alert("Insira o custo manualmente."); } finally { btn.innerText = "⚡ INICIAR MINERAÇÃO"; }
         }
 
         function n(v) { return parseFloat(v.toString().replace(/\./g, '').replace(',', '.')) || 0; }
         
-        function calcular() {
+        // CÁLCULO AUTOMÁTICO COM 45% DE MARGEM
+        function atualizarSugestao() {
             const s = n(document.getElementById('supplier').value);
             const f = n(document.getElementById('shipping').value);
-            const v = (s + f) * 1.35; // Sugestão Elite (35% margem)
-            const lucro = v - s - f - (v * 0.12);
+            if(s > 0) {
+                const sugerido = (s + f) * 1.45; // APLICAÇÃO DOS 45%
+                document.getElementById('sale').value = sugerido.toFixed(2).replace('.', ',');
+            }
+        }
+
+        function calcular() {
+            const venda = n(document.getElementById('sale').value);
+            const custo = n(document.getElementById('supplier').value);
+            const frete = n(document.getElementById('shipping').value);
+            const lucro = venda - custo - frete - (venda * 0.12);
             document.getElementById('resProfit').innerText = "R$ " + lucro.toLocaleString('pt-BR', {minimumFractionDigits: 2});
             document.getElementById('resultCard').classList.remove('hidden');
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.8 } });
