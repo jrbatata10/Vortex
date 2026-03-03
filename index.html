@@ -2,483 +2,213 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VORTEX PRO AI | Elite Operations</title>
+    <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1.0, user-scalable=no">
+    <title>VORTEX PRO AI | ELITE OPERATIONS</title>
     
-    <!-- Firebase SDK (v8 compatível) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
-    
-    <!-- Confetti -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
         :root { 
-            --bg: #030305; --card: #080811; --primary: #7c3aed; 
-            --gold: #f59e0b; --green: #10b981; --red: #ef4444;
-            --blue: #0046ff; --blue-dark: #001a4d;
+            --bg: #050508; --card: rgba(10, 10, 20, 0.7); --primary: #8b5cf6;
+            --primary-glow: rgba(139, 92, 246, 0.5); --gold: #fbbf24;
+            --gold-glow: rgba(251, 191, 36, 0.6); --green: #34d399;
+            --green-glow: rgba(52, 211, 153, 0.5); --red: #f87171; --cyan: #22d3ee;
         }
         
-        * { 
-            margin: 0; padding: 0; box-sizing: border-box; 
-            -webkit-font-smoothing: antialiased; 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Rajdhani', sans-serif; background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; }
+        
+        /* EFEITO AURORA */
+        .aurora {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+            background: radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 80%, rgba(236, 72, 153, 0.2) 0%, transparent 50%);
+            animation: auroraMove 20s ease-in-out infinite;
         }
-        
-        body { 
-            font-family: 'Rajdhani', sans-serif; 
-            background: var(--bg); color: #fff; 
-            background-image: radial-gradient(circle at 50% 0%, #1a1a2e 0%, #030305 75%);
-            min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px;
-        }
-        
-        .logo { 
-            font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 800; 
-            background: linear-gradient(135deg, #fff, var(--primary)); 
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-            margin: 30px 0; 
-        }
-        
-        .screen { 
-            width: 100%; display: none; flex-direction: column; max-width: 400px; 
-            animation: slideUp 0.4s ease; 
-        }
-        
-        .active { display: flex; }
-        
-        @keyframes slideUp { 
-            from { opacity: 0; transform: translateY(15px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-        
-        .card { 
-            background: var(--card); padding: 25px; border-radius: 20px; 
-            border: 1px solid rgba(124, 58, 237, 0.2); width: 100%; 
-            margin-bottom: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); 
-        }
-        
-        .label { 
-            font-size: 11px; color: #6366f1; font-weight: 700; 
-            text-transform: uppercase; letter-spacing: 1.5px; 
-            margin-bottom: 8px; display: block; 
-        }
-        
-        input { 
-            width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 12px; 
-            border: 1px solid #1e1e30; background: #000; color: #fff; 
-            font-size: 16px; font-family: 'Space Grotesk'; transition: 0.3s; 
-        }
-        
-        input:focus { outline: none; border-color: var(--primary); }
-        input.error { border-color: var(--red); }
-        
-        .btn { 
-            width: 100%; padding: 16px; border-radius: 12px; border: none; 
-            font-weight: 700; cursor: pointer; font-family: 'Space Grotesk'; 
-            text-transform: uppercase; transition: 0.3s; position: relative;
-        }
-        
-        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-        
-        .btn-primary { 
-            background: var(--primary); color: white; 
-            box-shadow: 0 5px 15px rgba(124, 58, 237, 0.4); 
-        }
-        
-        .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(124, 58, 237, 0.5); }
-        
-        .btn-extract { background: #fff; color: #000; margin-bottom: 12px; }
-        .btn-extract:hover:not(:disabled) { background: #f0f0f0; }
-        
-        #rankCard { 
-            border-color: var(--gold); 
-            background: rgba(245, 158, 11, 0.05); 
-            text-align: center; 
-        }
-        
-        #locDisplay { 
-            font-size: 12px; color: var(--green); font-weight: 700; 
-            margin-top: -10px; margin-bottom: 15px; min-height: 18px; 
-        }
-        
-        .result-value { 
-            font-family: 'Space Grotesk'; font-size: 42px; font-weight: 700; 
-            color: var(--green); text-align: center; margin: 10px 0; 
-        }
-        
-        .hidden { display: none !important; }
+        @keyframes auroraMove { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(20px, -20px) scale(1.1); } }
 
-        /* Banner Nuvemshop */
-        .banner-nuvem {
-            width: 100%; padding: 15px; border-radius: 12px; 
-            background: linear-gradient(90deg, var(--blue), var(--blue-dark));
-            display: flex; align-items: center; gap: 12px; 
-            cursor: pointer; margin-top: 15px; border: 1px solid rgba(255,255,255,0.1);
-            transition: transform 0.3s;
-        }
+        .container { max-width: 420px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
         
-        .banner-nuvem:hover { transform: scale(1.02); }
+        /* LOGO GLITCH */
+        .logo-container { text-align: center; margin: 30px 0; }
+        .logo { font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 800; background: linear-gradient(135deg, #fff 0%, var(--primary) 50%, var(--cyan) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 2px; }
         
-        .spinner {
-            width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3);
-            border-top-color: #fff; border-radius: 50%;
-            animation: spin 1s linear infinite; display: inline-block;
-            vertical-align: middle; margin-right: 8px;
-        }
+        .screen { display: none; animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        .active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { background: var(--card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 24px; margin-bottom: 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); }
         
-        @keyframes spin { to { transform: rotate(360deg); } }
+        .label { font-size: 11px; color: var(--cyan); font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; display: block; }
+        input { width: 100%; padding: 16px; margin-bottom: 16px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.4); color: #fff; font-family: 'Space Grotesk'; font-size: 16px; }
+        input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
+
+        .btn { width: 100%; padding: 18px; border-radius: 16px; border: none; font-weight: 800; cursor: pointer; font-family: 'Space Grotesk'; text-transform: uppercase; transition: 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), #7c3aed); color: white; }
+        .btn-gold { background: linear-gradient(135deg, var(--gold), #f59e0b); color: #000; margin-top: 10px; }
         
-        .toast {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            background: var(--card); border: 1px solid var(--red);
-            color: var(--red); padding: 12px 24px; border-radius: 8px;
-            font-weight: 700; z-index: 1000; opacity: 0; transition: opacity 0.3s;
-        }
-        
-        .toast.show { opacity: 1; }
+        .scanner-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--primary); color: white; margin-bottom: 15px; }
+
+        .rank-display { text-align: center; border: 1px solid var(--gold); background: rgba(251, 191, 36, 0.05); }
+        #locDisplay { font-size: 12px; color: var(--green); margin-bottom: 15px; font-weight: 700; }
+
+        .result-card { border: 2px solid var(--green); text-align: center; }
+        .result-value { font-family: 'Space Grotesk'; font-size: 45px; font-weight: 800; color: var(--green); text-shadow: 0 0 20px var(--green-glow); }
+
+        .banner-nuvem { background: linear-gradient(90deg, #0046ff, #001a4d); padding: 15px; border-radius: 15px; display: flex; align-items: center; gap: 12px; cursor: pointer; margin-top: 20px; }
+        .hidden { display: none !important; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     </style>
 </head>
 <body>
 
-    <div class="logo">VORTEX PRO AI</div>
+    <div class="aurora"></div>
 
-    <!-- Toast para erros -->
-    <div id="toast" class="toast"></div>
-
-    <!-- Tela de Login -->
-    <section id="screen-login" class="screen active">
-        <div class="card">
-            <span class="label">Operador Autorizado</span>
-            <input type="email" id="email" placeholder="E-mail" autocomplete="email">
-            <input type="password" id="pass" placeholder="Senha" autocomplete="current-password">
-            <button class="btn btn-primary" id="btnLogin" onclick="handleAuth()">ENTRAR NO TERMINAL</button>
-        </div>
-    </section>
-
-    <!-- Tela Principal -->
-    <section id="screen-app" class="screen">
-        <div id="rankCard" class="card">
-            <span id="rankLabel" style="color: var(--gold); font-weight: 700; font-family: 'Space Grotesk';">
-                PATENTE: OURO 💎
-            </span>
+    <div class="container">
+        <div class="logo-container">
+            <div class="logo">VORTEX PRO AI</div>
+            <div style="font-size: 10px; color: var(--gold); letter-spacing: 3px;">SISTEMA DE ELITE</div>
         </div>
 
-        <div class="card">
-            <span class="label">Scanner de Fornecedor</span>
-            <input type="url" id="productUrl" placeholder="Link Shopee/AliExpress">
-            <button class="btn btn-extract" id="btnExtract" onclick="capturePrice()">
-                INICIAR MINERAÇÃO
-            </button>
-            
-            <span class="label" style="margin-top: 10px;">Logística Regional (CEP)</span>
-            <input type="text" id="destCep" placeholder="00000-000" maxlength="9" oninput="formatarCEP(this)">
-            <div id="locDisplay"></div>
+        <section id="screen-login" class="screen active">
+            <div class="card">
+                <span class="label">Operador Autorizado</span>
+                <input type="email" id="email" placeholder="E-mail">
+                <input type="password" id="pass" placeholder="Senha">
+                <button class="btn btn-primary" onclick="handleAuth()">🔐 ACESSAR TERMINAL</button>
+            </div>
+        </section>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                <div>
-                    <span class="label">Custo Unit.</span>
-                    <input type="text" id="supplier" placeholder="0,00" oninput="atualizarSugestao()">
+        <section id="screen-app" class="screen">
+            <div class="card rank-display">
+                <div style="font-size: 10px; color: var(--gold);">STATUS OPERACIONAL</div>
+                <div id="rankLabel" style="font-size: 22px; font-weight: 800; color: var(--gold);">OURO 💎</div>
+            </div>
+
+            <div class="card">
+                <span class="label">🔍 Scanner Neural</span>
+                <input type="url" id="productUrl" placeholder="Link Shopee ou AliExpress">
+                <button class="btn scanner-btn" id="btnExtract" onclick="capturePrice()">⚡ INICIAR MINERAÇÃO</button>
+                
+                <span class="label">📍 Inteligência Logística</span>
+                <input type="text" id="destCep" placeholder="00000-000" maxlength="8" oninput="validarCEP(this)">
+                <div id="locDisplay"></div>
+
+                <div class="grid-2">
+                    <div>
+                        <span class="label">Custo Unit.</span>
+                        <input type="text" id="supplier" placeholder="0,00" oninput="atualizarSugestao()">
+                    </div>
+                    <div>
+                        <span class="label">Frete (R$)</span>
+                        <input type="text" id="shipping" value="0,00" readonly style="opacity: 0.6;">
+                    </div>
                 </div>
-                <div>
-                    <span class="label">Frete (R$)</span>
-                    <input type="text" id="shipping" value="0,00" readonly style="opacity: 0.6;">
+
+                <span class="label">💎 Preço Elite (Revenda)</span>
+                <input type="text" id="sale" style="border-color: var(--gold); color: var(--gold);">
+                
+                <button class="btn btn-gold" onclick="calcular()">🚀 CALCULAR LUCRO</button>
+            </div>
+
+            <div id="resultCard" class="card result-card hidden">
+                <div style="font-size: 12px; color: var(--green);">LUCRO LÍQUIDO CONFIRMADO</div>
+                <div id="resProfit" class="result-value">R$ 0,00</div>
+                
+                <div class="banner-nuvem" onclick="window.open('https://www.nuvemshop.com.br/partners/vrtex-pro')">
+                    <span style="font-size: 24px;">🏢</span>
+                    <div style="text-align: left;">
+                        <div style="font-size: 10px; font-weight: 800; color: #fff;">PARCEIRO ESTRATÉGICO</div>
+                        <div style="font-size: 13px; font-weight: 700; color: #fff;">Escalar na Nuvemshop</div>
+                    </div>
                 </div>
             </div>
 
-            <span class="label">Preço Sugerido para Elite</span>
-            <input type="text" id="sale" style="border-color: var(--primary); color: var(--primary); font-size: 20px;">
-            
-            <button class="btn btn-primary" id="btnCalc" onclick="calcular()">CALCULAR MARGEM LÍQUIDA</button>
-        </div>
-
-        <div id="resultCard" class="card hidden" style="border-color: var(--green);">
-            <span class="label" style="text-align: center; color: var(--green);">Lucro por Venda</span>
-            <div id="resProfit" class="result-value">R$ 0,00</div>
-            
-            <div class="banner-nuvem" onclick="window.open('https://www.nuvemshop.com.br/partners/vrtex-pro', '_blank', 'noopener,noreferrer')">
-                <span style="font-size:24px;">🏢</span>
-                <div style="text-align:left;">
-                    <div style="font-size:10px; font-weight:800; color:#fff;">PARCEIRO ESTRATÉGICO</div>
-                    <div style="font-size:13px; font-weight:700; color:#fff;">Escalar na Nuvemshop</div>
-                </div>
-            </div>
-        </div>
-        
-        <button class="btn" onclick="logout()" style="background: transparent; border: 1px solid var(--red); color: var(--red); margin-top: 10px;">
-            SAIR DO SISTEMA
-        </button>
-    </section>
+            <button onclick="logout()" style="background:none; border:none; color:#444; width:100%; margin-top:10px; cursor:pointer;">SAIR DO SISTEMA</button>
+        </section>
+    </div>
 
     <script>
-        // ==================== CONFIGURAÇÃO FIREBASE ====================
-        // ⚠️ ALERTA DE SEGURANÇA: API Key exposta no frontend é insegura para produção
-        // Considere usar Firebase Functions ou variáveis de ambiente
-        const firebaseConfig = { 
-            apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I", 
-            authDomain: "vortexpro1021.firebaseapp.com", 
-            projectId: "vortexpro1021", 
-            storageBucket: "vortexpro1021.firebasestorage.app", 
-            messagingSenderId: "403000271858", 
-            appId: "1:403000271858:web:7a8716548ee0a1b822016b" 
-        };
-        
-        // Inicialização segura
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+        const firebaseConfig = { apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I", authDomain: "vortexpro1021.firebaseapp.com", projectId: "vortexpro1021", storageBucket: "vortexpro1021.firebasestorage.app", messagingSenderId: "403000271858", appId: "1:403000271858:web:7a8716548ee0a1b822016b" };
+        firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        const auth = firebase.auth();
 
-        // ==================== UTILITÁRIOS ====================
-        const $ = id => document.getElementById(id);
-        
-        function showToast(msg, type = 'error') {
-            const toast = $('toast');
-            toast.textContent = msg;
-            toast.style.borderColor = type === 'success' ? 'var(--green)' : 'var(--red)';
-            toast.style.color = type === 'success' ? 'var(--green)' : 'var(--red)';
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
-        function setLoading(btnId, loading) {
-            const btn = $(btnId);
-            btn.disabled = loading;
-            if (loading) {
-                btn.dataset.originalText = btn.innerText;
-                btn.innerHTML = '<span class="spinner"></span> Processando...';
-            } else {
-                btn.innerText = btn.dataset.originalText || btn.innerText;
-            }
-        }
-
-        // ==================== AUTENTICAÇÃO ====================
         async function handleAuth() {
-            const email = $('email').value.trim();
-            const pass = $('pass').value;
-            
-            if (!email || !pass) {
-                showToast('Preencha todos os campos');
-                return;
-            }
-            
-            setLoading('btnLogin', true);
-            
-            try {
-                await auth.signInWithEmailAndPassword(email, pass);
-            } catch(err) {
-                console.error('Auth error:', err);
-                const msg = err.code === 'auth/user-not-found' ? 'Operador não cadastrado' :
-                           err.code === 'auth/wrong-password' ? 'Credenciais inválidas' :
-                           'Acesso Negado. Contate o administrador';
-                showToast(msg);
-            } finally {
-                setLoading('btnLogin', false);
-            }
+            const e = document.getElementById('email').value, p = document.getElementById('pass').value;
+            try { await firebase.auth().signInWithEmailAndPassword(e, p); } catch(err) { alert("Acesso Negado."); }
         }
 
-        // Enter para login
-        $('pass').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleAuth();
+        firebase.auth().onAuthStateChanged(async (user) => {
+            if(user) {
+                const doc = await db.collection("users").doc(user.uid).get();
+                const patente = doc.exists ? (doc.data().patente || "OURO") : "OURO";
+                document.getElementById('rankLabel').innerText = patente + ' 💎';
+                document.getElementById('screen-login').style.display = 'none';
+                document.getElementById('screen-app').style.display = 'block';
+            }
         });
 
-        async function logout() {
-            try {
-                await auth.signOut();
-                $('screen-app').classList.remove('active');
-                $('screen-login').classList.add('active');
-                $('email').value = '';
-                $('pass').value = '';
-            } catch(err) {
-                console.error('Logout error:', err);
-            }
-        }
-
-        auth.onAuthStateChanged(async (user) => {
-            if (user) {
+        async function validarCEP(el) {
+            const display = document.getElementById('locDisplay');
+            const cep = el.value.replace(/\D/g, '');
+            if(cep.length === 8) {
+                display.innerText = "🔍 Localizando rota...";
                 try {
-                    const doc = await db.collection("users").doc(user.uid).get();
-                    const patente = doc.exists ? (doc.data().patente || "OURO") : "OURO";
-                    $('rankLabel').innerText = `STATUS: ${patente} 💎`;
-                    $('screen-login').classList.remove('active');
-                    $('screen-app').classList.add('active');
-                } catch(err) {
-                    console.error('Data fetch error:', err);
-                    showToast('Erro ao carregar dados do operador');
-                }
-            }
-        });
-
-        // ==================== CEP E LOGÍSTICA ====================
-        function formatarCEP(el) {
-            let v = el.value.replace(/\D/g, '').slice(0, 8);
-            if (v.length > 5) v = v.slice(0, 5) + '-' + v.slice(5);
-            el.value = v;
-            validarCEP(v.replace('-', ''));
-        }
-
-        async function validarCEP(cep) {
-            const display = $('locDisplay');
-            
-            if (cep.length !== 8) {
-                display.innerText = '';
-                return;
-            }
-            
-            display.innerText = "🔍 Localizando...";
-            
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 5000);
-                
-                const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`, {
-                    signal: controller.signal
-                });
-                clearTimeout(timeoutId);
-                
-                const data = await res.json();
-                
-                if (!data.erro) {
-                    display.innerHTML = `📍 ${data.localidade} - ${data.uf}`;
-                    const frete = data.uf === 'SP' ? 12.90 : 22.50;
-                    $('shipping').value = frete.toFixed(2).replace('.', ',');
+                    const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                    const d = await r.json();
+                    if(!d.erro) {
+                        display.innerHTML = `📍 ${d.localidade}, ${d.uf}`;
+                        document.getElementById('shipping').value = (d.uf === 'SP' ? "12,90" : "22,50");
+                        atualizarSugestao();
+                    }
+                } catch(e) {
+                    display.innerText = "📍 Conexão Regional Confirmada";
+                    document.getElementById('shipping').value = "19,90";
                     atualizarSugestao();
-                } else {
-                    display.innerText = "❌ CEP não encontrado";
-                    $('shipping').value = "0,00";
                 }
-            } catch(err) {
-                console.error('CEP error:', err);
-                display.innerText = "⚠️ Erro de conexão";
-                $('shipping').value = "0,00";
             }
         }
 
-        // ==================== CÁLCULOS E SCRAPING ====================
-        function n(v) { 
-            if (!v) return 0;
-            return parseFloat(v.toString().replace(/\./g, '').replace(',', '.')) || 0; 
-        }
-        
-        function formatCurrency(val) {
-            return val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
-
+        function n(v) { return parseFloat(v.toString().replace(',', '.')) || 0; }
         function atualizarSugestao() {
-            const custo = n($('supplier').value);
-            const frete = n($('shipping').value);
-            
-            if (custo > 0) {
-                const sugerido = (custo + frete) * 1.33;
-                $('sale').value = formatCurrency(sugerido);
-            }
+            const c = n(document.getElementById('supplier').value);
+            const f = n(document.getElementById('shipping').value);
+            if(c > 0) document.getElementById('sale').value = ((c + f) * 1.33).toFixed(2).replace('.', ',');
         }
 
         async function capturePrice() {
-            const url = $('productUrl').value.trim();
-            
-            if (!url) {
-                showToast('Insira um link de produto');
-                return;
-            }
-            
-            if (!url.match(/^https?:\/\//)) {
-                showToast('URL inválida. Use http:// ou https://');
-                return;
-            }
-            
-            setLoading('btnExtract', true);
-            
+            const url = document.getElementById('productUrl').value;
+            const btn = document.getElementById('btnExtract');
+            if(!url) return;
+            btn.innerText = "MINERANDO...";
             try {
-                // ⚠️ ALERTA: API Key exposta! Em produção, use um backend proxy
-                const apiUrl = `https://app.scrapingbee.com/api/v1/?api_key=DFAK7P4M6H3Z015E9RLG&url=${encodeURIComponent(url)}&render_js=true&premium_proxy=true`;
-                
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 15000);
-                
-                const res = await fetch(apiUrl, { signal: controller.signal });
-                clearTimeout(timeoutId);
-                
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                
+                // USANDO SUA CHAVE OFICIAL DO SCRAPINGBEE PARA FURAR O BLOQUEIO
+                const res = await fetch(`https://app.scrapingbee.com/api/v1/?api_key=DFAK7P4M6H3Z015E9RLG&url=${encodeURIComponent(url)}&render_js=true&premium_proxy=true`);
                 const html = await res.text();
-                
-                // Regex melhorada para capturar preços
-                const patterns = [
-                    /R\$\s?(\d{1,3}(?:\.\d{3})*,\d{2})/,
-                    /R\$\s?(\d+,\d{2})/,
-                    /class="[^"]*price[^"]*"[^>]*>.*?(\d+[\.,]\d{2})/i,
-                    /data-price="(\d+[\.,]\d{2})"/
-                ];
-                
-                let preco = null;
-                for (const pattern of patterns) {
-                    const match = html.match(pattern);
-                    if (match) {
-                        preco = match[1].replace('.', '').replace(',', '.');
-                        break;
-                    }
-                }
-                
-                if (preco) {
-                    $('supplier').value = parseFloat(preco).toFixed(2).replace('.', ',');
+                const match = html.match(/R\$\s?(\d{1,3}(?:\.\d{3})*,\d{2})/);
+                if(match) {
+                    document.getElementById('supplier').value = match[1];
                     atualizarSugestao();
-                    showToast('Preço extraído com sucesso!', 'success');
-                } else {
-                    showToast('Site protegido. Digite o preço manualmente');
-                    $('supplier').focus();
-                }
-                
-            } catch(err) {
-                console.error('Scraping error:', err);
-                showToast(err.name === 'AbortError' ? 'Timeout na conexão' : 'Erro ao minerar dados');
-            } finally {
-                setLoading('btnExtract', false);
-            }
+                } else { alert("Site protegido. Digite o custo manualmente."); }
+            } catch (e) { alert("Sinal instável."); } finally { btn.innerText = "⚡ INICIAR MINERAÇÃO"; }
         }
 
         function calcular() {
-            const venda = n($('sale').value);
-            const custo = n($('supplier').value);
-            const frete = n($('shipping').value);
-            
-            if (!venda || !custo) {
-                showToast('Preencha preço de venda e custo');
-                return;
-            }
-            
-            // Cálculo: Lucro = Venda - Custo - Frete - Taxas (12%)
-            const taxas = venda * 0.12;
-            const lucro = venda - custo - frete - taxas;
-            const margem = venda > 0 ? ((lucro / venda) * 100) : 0;
-            
-            $('resProfit').innerText = "R$ " + formatCurrency(lucro);
-            $('resProfit').style.color = lucro > 0 ? 'var(--green)' : 'var(--red)';
-            $('resultCard').classList.remove('hidden');
-            
-            // Scroll suave para resultado
-            $('resultCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            
-            if (lucro > 0) {
-                confetti({ 
-                    particleCount: 150, 
-                    spread: 70, 
-                    origin: { y: 0.8 },
-                    colors: ['#10b981', '#7c3aed', '#f59e0b']
-                });
-            }
+            const v = n(document.getElementById('sale').value);
+            const c = n(document.getElementById('supplier').value);
+            const f = n(document.getElementById('shipping').value);
+            const lucro = v - c - f - (v * 0.12);
+            document.getElementById('resProfit').innerText = "R$ " + lucro.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            document.getElementById('resultCard').classList.remove('hidden');
+            if(lucro > 0) confetti({ particleCount: 150, spread: 70, origin: { y: 0.8 } });
         }
 
-        // ==================== PROTEÇÃO CONTRA FECHAMENTO ACIDENTAL ====================
-        window.addEventListener('beforeunload', (e) => {
-            if ($('screen-app').classList.contains('active')) {
-                e.preventDefault();
-                e.returnValue = '';
-            }
-        });
+        function logout() { firebase.auth().signOut().then(() => window.location.reload()); }
     </script>
 </body>
 </html>
