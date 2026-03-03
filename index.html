@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1.0, user-scalable=no">
-    <title>VORTEX PRO AI | ELITE OPERATIONS v2.0</title>
+    <title>VORTEX PRO AI | Elite Operations</title>
     
     <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
@@ -14,75 +14,37 @@
     
     <style>
         :root { 
-            --bg: #050508; --card: rgba(10, 10, 20, 0.8); --primary: #8b5cf6;
+            --bg: #050508; --card: rgba(10, 10, 20, 0.85); --primary: #8b5cf6;
             --gold: #fbbf24; --green: #34d399; --cyan: #22d3ee;
         }
-        
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-        body { font-family: 'Rajdhani', sans-serif; background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; position: relative; }
+        body { font-family: 'Rajdhani', sans-serif; background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; }
 
-        /* VISUAL AURORA */
-        .aurora {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
-            background: radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
-                        radial-gradient(ellipse at 80% 80%, rgba(236, 72, 153, 0.2) 0%, transparent 50%),
-                        radial-gradient(ellipse at 50% 50%, rgba(34, 211, 238, 0.1) 0%, transparent 70%);
-            animation: auroraMove 20s ease-in-out infinite;
-        }
-        @keyframes auroraMove { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(30px, -30px) scale(1.1); } }
-
-        /* PARTICULAS */
-        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
-        .particle { position: absolute; width: 4px; height: 4px; background: var(--primary); border-radius: 50%; opacity: 0.5; animation: float 15s infinite linear; box-shadow: 0 0 10px var(--primary); }
-        @keyframes float { 0% { transform: translateY(100vh); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-100vh); opacity: 0; } }
+        .aurora { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.3) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(236, 72, 153, 0.2) 0%, transparent 50%); animation: auroraMove 20s infinite; }
+        @keyframes auroraMove { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(20px, -20px); } }
 
         .container { max-width: 420px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
-        
-        /* LOGO GLITCH */
-        .logo-container { text-align: center; margin: 30px 0; position: relative; }
-        .logo { font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 800; background: linear-gradient(135deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 2px; position: relative; }
-        .logo::before { content: 'VORTEX PRO AI'; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: linear-gradient(135deg, var(--cyan) 0%, var(--primary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; opacity: 0; animation: glitch 3s infinite; }
-        @keyframes glitch { 0%, 90%, 100% { opacity: 0; } 92% { opacity: 1; transform: translate(-2px, 2px); } 96% { opacity: 1; transform: translate(2px, -2px); } }
+        .logo { font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 800; text-align: center; background: linear-gradient(135deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 30px; }
 
-        /* CARDS GLASS */
-        .card { 
-            background: var(--card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); 
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 24px; 
-            margin-bottom: 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); 
-            animation: slideUp 0.6s ease;
-        }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
+        .card { background: var(--card); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 24px; margin-bottom: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
         .label { font-size: 11px; color: var(--cyan); font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; display: block; }
-        input { width: 100%; padding: 16px; margin-bottom: 16px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.4); color: #fff; font-family: 'Space Grotesk'; font-size: 16px; }
-        input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 15px rgba(139, 92, 246, 0.4); }
-
-        .btn { width: 100%; padding: 18px; border-radius: 16px; border: none; font-weight: 800; cursor: pointer; font-family: 'Space Grotesk'; text-transform: uppercase; transition: all 0.3s; position: relative; overflow: hidden; }
-        .btn-primary { background: linear-gradient(135deg, var(--primary), #7c3aed); color: white; }
+        input { width: 100%; padding: 16px; margin-bottom: 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); color: #fff; font-size: 16px; }
+        
+        .btn { width: 100%; padding: 18px; border-radius: 16px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        .btn-primary { background: var(--primary); color: white; }
         .btn-gold { background: linear-gradient(135deg, var(--gold), #f59e0b); color: #000; margin-top: 10px; }
-        
-        .scanner-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--primary); color: white; }
-        .scanner-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.2), transparent); animation: scan 2s infinite; }
-        @keyframes scan { 0% { left: -100%; } 100% { left: 100%; } }
+        .scanner-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--primary); color: white; margin-bottom: 15px; }
 
-        #locDisplay { font-size: 13px; color: var(--green); font-weight: 700; margin: -10px 0 15px; padding: 10px; background: rgba(52, 211, 153, 0.1); border-radius: 12px; border-left: 3px solid var(--green); }
-        .result-value { font-family: 'Space Grotesk'; font-size: 48px; font-weight: 800; color: var(--green); text-shadow: 0 0 30px rgba(52, 211, 153, 0.5); text-align: center; }
-        
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        #locDisplay { font-size: 13px; color: var(--green); font-weight: 700; margin-top: -10px; margin-bottom: 20px; background: rgba(52, 211, 153, 0.1); padding: 10px; border-radius: 12px; }
+        .result-value { font-family: 'Space Grotesk'; font-size: 48px; font-weight: 800; color: var(--green); text-align: center; }
         .hidden { display: none !important; }
-        .nuvem-banner { background: linear-gradient(90deg, #0046ff, #001a4d); padding: 15px; border-radius: 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; margin-top: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .nuvem-banner { background: #0046ff; padding: 15px; border-radius: 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; margin-top: 20px; }
     </style>
 </head>
 <body>
-
     <div class="aurora"></div>
-    <div class="particles" id="particles"></div>
-
     <div class="container">
-        <div class="logo-container">
-            <div class="logo">VORTEX PRO AI</div>
-            <div style="font-size: 10px; color: var(--gold); letter-spacing: 3px; margin-top: 5px;">SISTEMA DE ELITE • v22.0</div>
-        </div>
+        <div class="logo">VORTEX PRO AI</div>
 
         <section id="screen-login">
             <div class="card">
@@ -94,8 +56,8 @@
         </section>
 
         <section id="screen-app" class="hidden">
-            <div class="card" style="text-align: center; border: 1px solid var(--gold); background: rgba(251, 191, 36, 0.05);">
-                <div id="rankLabel" style="font-size: 24px; font-weight: 800; color: var(--gold); margin-top: 5px;">OURO 💎</div>
+            <div class="card" style="text-align: center; border-color: var(--gold);">
+                <span style="color: var(--gold); font-weight: 800;">STATUS: OURO 💎</span>
             </div>
 
             <div class="card">
@@ -104,117 +66,87 @@
                 <button class="btn scanner-btn" id="btnExtract" onclick="capturePrice()">⚡ INICIAR MINERAÇÃO</button>
                 
                 <span class="label">📍 Inteligência Logística</span>
-                <input type="text" id="destCep" placeholder="00000-000" maxlength="8" oninput="validarCEP(this)">
-                <div id="locDisplay"></div>
+                <input type="text" id="destCep" placeholder="00000000" maxlength="8" oninput="validarCEP(this)">
+                <div id="locDisplay">Aguardando CEP...</div>
 
-                <div class="grid-2">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div><span class="label">💰 Custo</span><input type="text" id="supplier" placeholder="0,00" oninput="atualizarSugestao()"></div>
-                    <div><span class="label">🚚 Frete</span><input type="text" id="shipping" value="0,00" readonly style="opacity: 0.7;"></div>
+                    <div><span class="label">🚚 Frete</span><input type="text" id="shipping" value="0,00" readonly style="opacity: 0.6;"></div>
                 </div>
 
-                <span class="label">💎 Preço Elite Sugerido</span>
-                <input type="text" id="sale" style="border-color: var(--gold); color: var(--gold);">
-                
                 <button class="btn btn-gold" onclick="calcular()">🚀 CALCULAR LUCRO</button>
             </div>
 
             <div id="resultCard" class="card hidden">
-                <div style="font-size: 12px; color: var(--green); text-align: center;">LUCRO LÍQUIDO ESTIMADO</div>
                 <div id="resProfit" class="result-value">R$ 0,00</div>
                 <div class="nuvem-banner" onclick="window.open('https://www.nuvemshop.com.br/partners/vrtex-pro')">
-                    <span style="font-size: 24px;">🏢</span>
-                    <div style="text-align: left;">
-                        <div style="font-size: 10px; font-weight: 800; color: #fff;">PARCEIRO ESTRATÉGICO</div>
-                        <div style="font-size: 13px; font-weight: 700; color: #fff;">Escalar na Nuvemshop</div>
-                    </div>
+                    <span>🏢</span>
+                    <div style="text-align: left; font-size: 12px;"><b>NUVEMSHOP</b><br>Escalar Operação</div>
                 </div>
             </div>
         </section>
     </div>
 
     <script>
-        // GERADOR DE PARTICULAS
-        function createParticles() {
-            const container = document.getElementById('particles');
-            for (let i = 0; i < 20; i++) {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                p.style.left = Math.random() * 100 + '%';
-                p.style.animationDelay = Math.random() * 15 + 's';
-                container.appendChild(p);
-            }
-        }
-        createParticles();
-
         const firebaseConfig = { apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I", authDomain: "vortexpro1021.firebaseapp.com", projectId: "vortexpro1021", storageBucket: "vortexpro1021.firebasestorage.app", messagingSenderId: "403000271858", appId: "1:403000271858:web:7a8716548ee0a1b822016b" };
         firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
 
         async function handleAuth() {
             const e = document.getElementById('email').value, p = document.getElementById('pass').value;
             try { await firebase.auth().signInWithEmailAndPassword(e, p); } catch(err) { alert("Acesso Negado."); }
         }
 
-        firebase.auth().onAuthStateChanged(async (user) => {
+        firebase.auth().onAuthStateChanged(user => {
             if(user) {
-                const doc = await db.collection("users").doc(user.uid).get();
-                document.getElementById('rankLabel').innerText = (doc.exists ? doc.data().patente : "OURO") + ' 💎';
                 document.getElementById('screen-login').classList.add('hidden');
                 document.getElementById('screen-app').classList.remove('hidden');
             }
         });
 
-        // MOTOR DE CEP COM TÚNEL (SEM ERRO DE SINAL)
+        // SOLUÇÃO REAL PARA O CEP (FURA O BLOQUEIO DE SINAL)
         async function validarCEP(el) {
             const display = document.getElementById('locDisplay');
             const cep = el.value.replace(/\D/g, '');
             if(cep.length === 8) {
-                display.innerText = "🔍 Localizando rota...";
+                display.innerText = "🔍 Sincronizando rota...";
                 try {
-                    const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(`https://viacep.com.br/ws/${cep}/json/`)}`);
-                    const data = await response.json();
+                    // Usando o túnel AllOrigins para ignorar o bloqueio CORS do navegador
+                    const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(`https://viacep.com.br/ws/${cep}/json/`)}`);
+                    const data = await res.json();
                     const json = JSON.parse(data.contents);
                     if(!json.erro) {
                         display.innerHTML = `📍 ${json.localidade}, ${json.uf}`;
                         document.getElementById('shipping').value = (json.uf === 'SP' ? "12,90" : "22,50");
-                        atualizarSugestao();
                     }
                 } catch(e) { display.innerText = "📍 Conexão Regional Ativa"; document.getElementById('shipping').value = "19,90"; }
+                atualizarSugestao();
             }
         }
 
-        function n(v) { return parseFloat(v.toString().replace(/\./g, '').replace(',', '.')) || 0; }
-        function atualizarSugestao() {
-            const c = n(document.getElementById('supplier').value);
-            const f = n(document.getElementById('shipping').value);
-            if(c > 0) document.getElementById('sale').value = ((c + f) * 1.35).toFixed(2).replace('.', ',');
-        }
+        function n(v) { return parseFloat(v.toString().replace(',', '.')) || 0; }
+        function atualizarSugestao() { /* Lógica de sugestão opcional */ }
 
-        // MOTOR DE MINERAÇÃO REAL (SCRAPINGBEE)
         async function capturePrice() {
             const url = document.getElementById('productUrl').value;
             const btn = document.getElementById('btnExtract');
             if(!url) return;
             btn.innerText = "MINERANDO...";
             try {
+                // ScrapingBee com JS Render para "furar" a proteção da Shopee
                 const res = await fetch(`https://app.scrapingbee.com/api/v1/?api_key=DFAK7P4M6H3Z015E9RLG&url=${encodeURIComponent(url)}&render_js=true&premium_proxy=true`);
                 const html = await res.text();
                 const match = html.match(/R\$\s?(\d{1,3}(?:\.\d{3})*,\d{2})/);
-                if(match) {
-                    document.getElementById('supplier').value = match[1];
-                    atualizarSugestao();
-                } else { alert("Preço protegido. Digite manualmente."); }
-            } catch (e) { alert("Sinal de rede instável."); } finally { btn.innerText = "⚡ INICIAR MINERAÇÃO"; }
+                if(match) { document.getElementById('supplier').value = match[1]; }
+            } catch (e) { alert("Site protegido. Digite o valor manualmente."); } finally { btn.innerText = "⚡ INICIAR MINERAÇÃO"; }
         }
 
         function calcular() {
-            const v = n(document.getElementById('sale').value);
-            const c = n(document.getElementById('supplier').value);
+            const s = n(document.getElementById('supplier').value);
             const f = n(document.getElementById('shipping').value);
-            const lucro = v - c - f - (v * 0.12);
+            const lucro = (s * 1.35) - s - f - ((s * 1.35) * 0.12);
             document.getElementById('resProfit').innerText = "R$ " + lucro.toLocaleString('pt-BR', {minimumFractionDigits: 2});
             document.getElementById('resultCard').classList.remove('hidden');
-            if(lucro > 0) confetti({ particleCount: 150, spread: 70, origin: { y: 0.8 }, colors: ['#fbbf24', '#8b5cf6', '#34d399'] });
+            if(lucro > 0) confetti({ particleCount: 150, spread: 70, origin: { y: 0.8 } });
         }
     </script>
 </body>
