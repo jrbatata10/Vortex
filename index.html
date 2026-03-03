@@ -13,10 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        :root { 
-            --bg: #050508; --card: rgba(10, 10, 20, 0.7); --primary: #7c3aed; 
-            --gold: #f59e0b; --green: #10b981; --red: #ef4444;
-        }
+        :root { --bg: #050508; --card: rgba(10, 10, 20, 0.8); --primary: #7c3aed; --gold: #f59e0b; --green: #10b981; }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
         body { 
             font-family: 'Rajdhani', sans-serif; background: var(--bg); color: #fff;
@@ -27,16 +24,15 @@
         .screen { width: 100%; display: none; flex-direction: column; max-width: 400px; animation: slideUp 0.4s ease-out; }
         .active { display: flex; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .card { background: var(--card); padding: 25px; border-radius: 20px; border: 1px solid rgba(124, 58, 237, 0.2); width: 100%; margin-bottom: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); position: relative; }
+        .card { background: var(--card); padding: 25px; border-radius: 20px; border: 1px solid rgba(124, 58, 237, 0.2); width: 100%; margin-bottom: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
         .label { font-size: 11px; color: #6366f1; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; display: block; }
         input { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 12px; border: 1px solid #1e1e30; background: #000; color: #fff; font-size: 16px; font-family: 'Space Grotesk'; }
         .btn { width: 100%; padding: 18px; border-radius: 14px; border: none; font-weight: 700; cursor: pointer; font-family: 'Space Grotesk'; text-transform: uppercase; transition: 0.3s; }
-        .btn-primary { background: var(--primary); color: white; box-shadow: 0 10px 20px rgba(124, 58, 237, 0.4); }
-        .btn-white { background: #fff; color: #000; margin-bottom: 15px; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-miner { background: #fff; color: #000; margin-bottom: 15px; }
         #locDisplay { font-size: 13px; color: var(--green); font-weight: 700; margin-top: -10px; margin-bottom: 20px; }
         .result-value { font-family: 'Space Grotesk'; font-size: 48px; font-weight: 800; color: var(--green); text-align: center; margin: 15px 0; }
         .hidden { display: none !important; }
-        .nuvem-banner { background: #0046ff; padding: 15px; border-radius: 15px; display: flex; align-items: center; gap: 12px; cursor: pointer; margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -48,46 +44,38 @@
             <span class="label">Operador Autorizado</span>
             <input type="email" id="email" placeholder="E-mail">
             <input type="password" id="pass" placeholder="Senha">
-            <button class="btn btn-primary" onclick="handleAuth()">ACESSAR TERMINAL</button>
+            <button class="btn btn-primary" onclick="handleAuth()">ENTRAR NO TERMINAL</button>
         </div>
     </section>
 
     <section id="screen-app" class="screen">
         <div class="card" style="text-align: center; border-color: var(--gold);">
-            <div style="font-size: 12px; color: var(--gold); font-weight: 800;">STATUS OPERACIONAL</div>
-            <div id="rankLabel" style="font-size: 24px; font-weight: 800; color: var(--gold); font-family: 'Space Grotesk';">OURO 💎</div>
+            <div id="rankLabel" style="font-size: 22px; font-weight: 800; color: var(--gold); font-family: 'Space Grotesk';">PATENTE OURO 💎</div>
         </div>
 
         <div class="card">
-            <span class="label">Scanner de Fornecedor (URL)</span>
+            <span class="label">Scanner de Fornecedor</span>
             <input type="url" id="productUrl" placeholder="Link Shopee ou AliExpress">
-            <button class="btn btn-white" id="btnExtract" onclick="capturePrice()">INICIAR MINERAÇÃO</button>
+            <button class="btn btn-miner" id="btnExtract" onclick="capturePrice()">⚡ INICIAR MINERAÇÃO</button>
             
-            <span class="label" style="margin-top: 10px;">Destino (CEP)</span>
+            <span class="label" style="margin-top: 10px;">Logística (CEP)</span>
             <input type="text" id="destCep" placeholder="00000000" maxlength="8" oninput="validarCEP(this)">
             <div id="locDisplay"></div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <div><span class="label">Custo Unit.</span><input type="text" id="supplier" placeholder="0,00" oninput="atualizarSugestao()"></div>
-                <div><span class="label">Frete (R$)</span><input type="text" id="shipping" value="0,00" readonly style="opacity: 0.6;"></div>
+                <div><span class="label">Custo</span><input type="text" id="supplier" placeholder="0,00" oninput="atualizarSugestao()"></div>
+                <div><span class="label">Frete</span><input type="text" id="shipping" value="0,00" readonly style="opacity: 0.6;"></div>
             </div>
 
-            <span class="label">Sugestão de Elite</span>
+            <span class="label">Sugestão Elite</span>
             <input type="text" id="sale" style="border-color: var(--primary); color: var(--primary); font-size: 18px;">
             
-            <button class="btn btn-primary" onclick="calcular()">PROCESSAR LUCRO REAL</button>
+            <button class="btn btn-primary" onclick="calcular()">PROCESSAR LUCRO</button>
         </div>
 
-        <div id="resultCard" class="card hidden" style="border-color: var(--green);">
-            <span class="label" style="text-align: center; color: var(--green);">Lucro Líquido Confirmado</span>
+        <div id="resultCard" class="card hidden" style="border-color: var(--green); text-align: center;">
+            <span class="label" style="color: var(--green);">Lucro Confirmado</span>
             <div id="resProfit" class="result-value">R$ 0,00</div>
-            <div class="nuvem-banner" onclick="window.open('https://www.nuvemshop.com.br/partners/vrtex-pro')">
-                <span style="font-size: 24px;">🏢</span>
-                <div style="text-align: left;">
-                    <div style="font-size: 10px; font-weight: 800;">PARCEIRO ESTRATÉGICO</div>
-                    <div style="font-size: 13px; font-weight: 700;">Escalar na Nuvemshop</div>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -98,7 +86,7 @@
 
         async function handleAuth() {
             const e = document.getElementById('email').value, p = document.getElementById('pass').value;
-            try { await firebase.auth().signInWithEmailAndPassword(e, p); } catch(err) { alert("Acesso Negado."); }
+            try { await firebase.auth().signInWithEmailAndPassword(e, p); } catch(err) { alert("Dados incorretos."); }
         }
 
         firebase.auth().onAuthStateChanged(async (user) => {
@@ -111,23 +99,25 @@
             }
         });
 
-        // CEP SEM ERRO DE SINAL (Conexão Direta)
+        // SOLUÇÃO REAL PARA O CEP (USANDO PROXY TÚNEL)
         async function validarCEP(el) {
             const display = document.getElementById('locDisplay');
             const cep = el.value.replace(/\D/g, '');
             if(cep.length === 8) {
-                display.innerText = "🔍 Sincronizando...";
+                display.innerText = "🔍 Localizando cidade...";
                 try {
-                    // Chamada limpa para evitar bloqueio de CORS
-                    const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`, { mode: 'cors' });
-                    const d = await r.json();
-                    if(!d.erro) {
-                        display.innerHTML = `📍 ${d.localidade}, ${d.uf}`;
-                        document.getElementById('shipping').value = (d.uf === 'SP' ? "12,90" : "22,50");
+                    // O Proxy 'allorigins' fura o bloqueio do navegador (CORS)
+                    const r = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(`https://viacep.com.br/ws/${cep}/json/`)}`);
+                    const data = await r.json();
+                    const json = JSON.parse(data.contents);
+                    
+                    if(!json.erro) {
+                        display.innerHTML = `📍 ${json.localidade}, ${json.uf}`;
+                        document.getElementById('shipping').value = (json.uf === 'SP' ? "12,90" : "22,50");
                         atualizarSugestao();
                     }
                 } catch(e) { 
-                    display.innerText = "📍 Conexão Regional Ativa";
+                    display.innerText = "📍 Rota Regional Ativada";
                     document.getElementById('shipping').value = "19,90";
                 }
             }
@@ -146,15 +136,15 @@
             if(!url) return;
             btn.innerText = "MINERANDO...";
             try {
-                // Ativação Premium do ScrapingBee para evitar o erro de "preço não detectado"
+                // Seu ScrapingBee com renderização de tela ativada
                 const res = await fetch(`https://app.scrapingbee.com/api/v1/?api_key=DFAK7P4M6H3Z015E9RLG&url=${encodeURIComponent(url)}&render_js=true&premium_proxy=true`);
                 const html = await res.text();
                 const match = html.match(/R\$\s?(\d{1,3}(?:\.\d{3})*,\d{2})/);
                 if(match) {
                     document.getElementById('supplier').value = match[1];
                     atualizarSugestao();
-                }
-            } catch (e) { console.log("Erro evitado."); } finally { btn.innerText = "INICIAR MINERAÇÃO"; }
+                } else { alert("Site bloqueado. Digite manualmente."); }
+            } catch (e) { console.log("Erro oculto."); } finally { btn.innerText = "⚡ INICIAR MINERAÇÃO"; }
         }
 
         function calcular() {
@@ -163,7 +153,6 @@
             const f = n(document.getElementById('shipping').value);
             const lucro = v - c - f - (v * 0.12);
             document.getElementById('resProfit').innerText = "R$ " + lucro.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-            document.getElementById('resProfit').style.color = lucro > 0 ? 'var(--green)' : 'var(--red)';
             document.getElementById('resultCard').classList.remove('hidden');
             if(lucro > 0) confetti({ particleCount: 150, spread: 70, origin: { y: 0.8 } });
         }
