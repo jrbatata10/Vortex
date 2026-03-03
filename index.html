@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1.0, user-scalable=no">
-    <title>VORTEX PRO AI | SaaS Elite v33.0</title>
+    <title>VORTEX PRO AI | Elite SaaS v35.0</title>
     
     <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
@@ -14,17 +14,22 @@
     
     <style>
         :root { 
-            --bg: #050508; --card: rgba(10, 10, 20, 0.75); --primary: #8b5cf6;
+            --bg: #050508; --card: rgba(10, 10, 20, 0.7); --primary: #8b5cf6;
             --gold: #fbbf24; --green: #34d399; --cyan: #22d3ee;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-        body { font-family: 'Rajdhani', sans-serif; background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; position: relative; }
+        body { font-family: 'Rajdhani', sans-serif; background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; }
 
+        /* === DESIGN COMPLETO KIMI: AURORA, PARTICULAS E GLITCH === */
         .aurora { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.3) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(236, 72, 153, 0.2) 0%, transparent 50%); animation: auroraMove 20s infinite; }
         @keyframes auroraMove { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(20px, -20px); } }
 
+        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+        .particle { position: absolute; width: 3px; height: 3px; background: var(--primary); border-radius: 50%; opacity: 0.4; animation: float 15s infinite linear; }
+        @keyframes float { 0% { transform: translateY(100vh); } 100% { transform: translateY(-100vh); } }
+
         .container { max-width: 420px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
-        .logo { font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 800; text-align: center; background: linear-gradient(135deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 30px; }
+        .logo { font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 800; text-align: center; background: linear-gradient(135deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 30px; letter-spacing: 2px; }
 
         .card { background: var(--card); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 24px; margin-bottom: 20px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5); }
         .label { font-size: 11px; color: var(--cyan); font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; display: block; }
@@ -33,17 +38,18 @@
         .btn { width: 100%; padding: 18px; border-radius: 16px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; font-family: 'Space Grotesk'; }
         .btn-primary { background: linear-gradient(135deg, var(--primary), #7c3aed); color: white; }
         .btn-gold { background: linear-gradient(135deg, var(--gold), #f59e0b); color: #000; margin-top: 10px; }
-        .btn-whatsapp { background: #25d366; color: #fff; margin-top: 15px; font-size: 14px; }
-        
+        .scanner-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--primary); color: white; margin-bottom: 15px; }
+
         #locDisplay { font-size: 13px; color: var(--green); font-weight: 700; margin-top: -10px; margin-bottom: 20px; padding: 12px; background: rgba(52, 211, 153, 0.1); border-radius: 12px; border-left: 4px solid var(--green); }
         .result-value { font-family: 'Space Grotesk'; font-size: 48px; font-weight: 800; color: var(--green); text-align: center; margin-bottom: 15px; }
         .hidden { display: none !important; }
-
-        .footer-compliance { font-size: 10px; color: rgba(255,255,255,0.3); text-align: center; margin-top: 20px; line-height: 1.6; }
+        .footer-compliance { font-size: 10px; color: rgba(255,255,255,0.2); text-align: center; margin-top: 20px; }
     </style>
 </head>
 <body>
     <div class="aurora"></div>
+    <div class="particles" id="particles"></div>
+
     <div class="container">
         <div class="logo">VORTEX PRO AI</div>
 
@@ -52,27 +58,24 @@
                 <span class="label">Operador Autorizado</span>
                 <input type="email" id="email" placeholder="E-mail">
                 <input type="password" id="pass" placeholder="Senha">
-                <button class="btn btn-primary" onclick="handleAuth()">🔐 ENTRAR NO TERMINAL</button>
+                <button class="btn btn-primary" onclick="handleAuth()">🔐 ACESSAR TERMINAL</button>
             </div>
-            <div class="footer-compliance">
-                © 2026 Vortex Pro AI - Todos os direitos reservados.<br>
-                Política de Privacidade • Termos de Uso • SaaS Compliance
-            </div>
+            <div class="footer-compliance">© 2026 Vortex Pro AI - SaaS Compliance</div>
         </section>
 
         <section id="screen-app" class="hidden">
             <div class="card" style="text-align: center; border-color: var(--gold);">
-                <div style="font-size: 22px; font-weight: 800; color: var(--gold);">OURO 💎</div>
+                <div style="font-size: 22px; font-weight: 800; color: var(--gold);">ELITE OURO 💎</div>
             </div>
 
             <div class="card">
-                <span class="label">🔍 Scanner Neural (Universal)</span>
-                <input type="url" id="productUrl" placeholder="Link do Fornecedor">
-                <button class="btn btn-primary" style="background: rgba(255,255,255,0.05); border: 1px solid var(--primary);" id="btnExtract" onclick="capturePrice()">⚡ INICIAR MINERAÇÃO</button>
+                <span class="label">🔍 Scanner Neural (Ação Forçada)</span>
+                <input type="url" id="productUrl" placeholder="Cole o link do fornecedor">
+                <button class="btn scanner-btn" id="btnExtract" onclick="capturePrice()">⚡ INICIAR MINERAÇÃO</button>
                 
-                <span class="label" style="margin-top: 15px;">📍 Inteligência Logística (CEP)</span>
-                <input type="text" id="destCep" placeholder="00000-000" maxlength="8" oninput="validarCEP(this)">
-                <div id="locDisplay">Aguardando CEP...</div>
+                <span class="label" style="margin-top: 15px;">📍 Inteligência Logística (Qualquer CEP)</span>
+                <input type="text" id="destCep" placeholder="00000000" maxlength="8" oninput="validarCEP(this)">
+                <div id="locDisplay">Digite um CEP válido...</div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                     <div><span class="label">💰 Custo</span><input type="text" id="supplier" placeholder="0,00" oninput="atualizarSugestao()"></div>
@@ -87,21 +90,30 @@
 
             <div id="resultCard" class="card hidden">
                 <div id="resProfit" class="result-value">R$ 0,00</div>
-                <button class="btn btn-whatsapp" onclick="window.open('https://wa.me/5511982755510')">
-                    💬 SUPORTE VIP WHATSAPP
-                </button>
+                <button class="btn" style="background: #25d366;" onclick="window.open('https://wa.me/5511982755510')">💬 SUPORTE WHATSAPP</button>
             </div>
             <button onclick="logout()" style="background:none; border:none; color:rgba(255,255,255,0.2); width:100%; cursor:pointer; font-size:11px; margin-top:10px;">SAIR DO SISTEMA</button>
         </section>
     </div>
 
     <script>
+        // GERADOR DE PARTICULAS (LAYOUT KIMI)
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 15; i++) {
+                const p = document.createElement('div'); p.className = 'particle';
+                p.style.left = Math.random() * 100 + '%'; p.style.animationDelay = Math.random() * 10 + 's';
+                container.appendChild(p);
+            }
+        }
+        createParticles();
+
         const firebaseConfig = { apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I", authDomain: "vortexpro1021.firebaseapp.com", projectId: "vortexpro1021", storageBucket: "vortexpro1021.firebasestorage.app", messagingSenderId: "403000271858", appId: "1:403000271858:web:7a8716548ee0a1b822016b" };
         firebase.initializeApp(firebaseConfig);
 
         async function handleAuth() {
             const e = document.getElementById('email').value, p = document.getElementById('pass').value;
-            try { await firebase.auth().signInWithEmailAndPassword(e, p); } catch(err) { alert("Credenciais Inválidas."); }
+            try { await firebase.auth().signInWithEmailAndPassword(e, p); } catch(err) { alert("Acesso Negado."); }
         }
 
         firebase.auth().onAuthStateChanged(user => {
@@ -111,12 +123,12 @@
             }
         });
 
-        // CEP UNIVERSAL (TÚNEL ALLORIGINS)
+        // MOTOR DE CEP UNIVERSAL (IDENTIFICA QUALQUER CIDADE)
         async function validarCEP(el) {
             const display = document.getElementById('locDisplay');
             const cep = el.value.replace(/\D/g, '');
             if(cep.length === 8) {
-                display.innerText = "🔍 Sincronizando cidade...";
+                display.innerText = "🔍 Buscando rota...";
                 try {
                     const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(`https://viacep.com.br/ws/${cep}/json/`)}`);
                     const data = await res.json();
@@ -125,16 +137,17 @@
                         display.innerHTML = `📍 ${json.localidade}, ${json.uf} ✅`;
                         document.getElementById('shipping').value = (json.uf === 'SP' ? "12,90" : "23,80");
                         atualizarSugestao();
-                    }
-                } catch(e) { display.innerText = "📍 Conexão Regional Ativa"; }
+                    } else { display.innerText = "❌ CEP não localizado."; }
+                } catch(e) { display.innerText = "📍 Erro de Rede."; }
             }
         }
 
+        // MOTOR DE MINERAÇÃO (AÇÃO FORÇADA)
         async function capturePrice() {
             const url = document.getElementById('productUrl').value;
             const btn = document.getElementById('btnExtract');
             if(!url) return;
-            btn.innerText = "MINERANDO...";
+            btn.innerText = "ENTRANDO NO LINK...";
             try {
                 const res = await fetch(`https://app.scrapingbee.com/api/v1/?api_key=DFAK7P4M6H3Z015E9RLG&url=${encodeURIComponent(url)}&render_js=true&premium_proxy=true&wait=6000`);
                 const html = await res.text();
@@ -143,26 +156,25 @@
                     document.getElementById('supplier').value = match[0].replace('R$', '').trim(); 
                     atualizarSugestao();
                 }
-            } catch (e) { alert("Insira o custo manualmente."); } finally { btn.innerText = "⚡ INICIAR MINERAÇÃO"; }
+            } catch (e) { alert("Proteção de Link detectada. Insira o custo manualmente."); } finally { btn.innerText = "⚡ INICIAR MINERAÇÃO"; }
         }
 
         function n(v) { return parseFloat(v.toString().replace(/\./g, '').replace(',', '.')) || 0; }
         
-        // CÁLCULO AUTOMÁTICO COM 45% DE MARGEM
         function atualizarSugestao() {
             const s = n(document.getElementById('supplier').value);
             const f = n(document.getElementById('shipping').value);
             if(s > 0) {
-                const sugerido = (s + f) * 1.45; // APLICAÇÃO DOS 45%
+                const sugerido = (s + f) * 1.45; // MARGEM DE 45%
                 document.getElementById('sale').value = sugerido.toFixed(2).replace('.', ',');
             }
         }
 
         function calcular() {
-            const venda = n(document.getElementById('sale').value);
-            const custo = n(document.getElementById('supplier').value);
-            const frete = n(document.getElementById('shipping').value);
-            const lucro = venda - custo - frete - (venda * 0.12);
+            const v = n(document.getElementById('sale').value);
+            const c = n(document.getElementById('supplier').value);
+            const f = n(document.getElementById('shipping').value);
+            const lucro = v - c - f - (v * 0.12);
             document.getElementById('resProfit').innerText = "R$ " + lucro.toLocaleString('pt-BR', {minimumFractionDigits: 2});
             document.getElementById('resultCard').classList.remove('hidden');
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.8 } });
