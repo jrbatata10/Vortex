@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1.0, user-scalable=no">
-    <title>VORTEX PRO AI | ELITE OPERATIONS v26.0</title>
+    <title>VORTEX PRO AI | ELITE OPERATIONS</title>
     
     <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
@@ -14,14 +14,14 @@
     
     <style>
         :root { 
-            --bg: #050508; --card: rgba(10, 10, 20, 0.7); --primary: #8b5cf6;
+            --bg: #050508; --card: rgba(10, 10, 20, 0.75); --primary: #8b5cf6;
             --gold: #fbbf24; --green: #34d399; --cyan: #22d3ee;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
         body { font-family: 'Rajdhani', sans-serif; background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; position: relative; }
 
-        /* === DESIGN KIMI: AURORA E PARTICULAS === */
+        /* === DESIGN SUPREMO: AURORA E PARTICULAS === */
         .aurora {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
             background: radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
@@ -29,6 +29,7 @@
             animation: auroraMove 20s ease-in-out infinite;
         }
         @keyframes auroraMove { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(25px, -25px) scale(1.05); } }
+
         .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
         .particle { position: absolute; width: 3px; height: 3px; background: var(--primary); border-radius: 50%; opacity: 0.4; animation: float 12s infinite linear; }
         @keyframes float { 0% { transform: translateY(100vh); opacity: 0; } 100% { transform: translateY(-100vh); opacity: 0; } }
@@ -36,10 +37,11 @@
         .container { max-width: 420px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
         .logo { font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 800; text-align: center; background: linear-gradient(135deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 25px; letter-spacing: 2px; }
 
-        /* CARD GLASSMORPHISM */
+        /* === GLASSMORPHISM CARDS === */
         .card { 
-            background: var(--card); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); 
-            border-radius: 24px; padding: 22px; margin-bottom: 20px; box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5); 
+            background: var(--card); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 22px; 
+            margin-bottom: 20px; box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5); 
         }
 
         .label { font-size: 11px; color: var(--cyan); font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; display: block; }
@@ -50,7 +52,7 @@
         .btn-gold { background: linear-gradient(135deg, var(--gold), #f59e0b); color: #000; margin-top: 10px; }
         .scanner-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--primary); color: white; margin-bottom: 15px; }
 
-        /* LOGÍSTICA IDENTIFICADA */
+        /* === STATUS DE LOCALIZAÇÃO VERDADEIRA === */
         #locDisplay { font-size: 13px; color: var(--green); font-weight: 700; margin-top: -10px; margin-bottom: 20px; padding: 12px; background: rgba(52, 211, 153, 0.1); border-radius: 12px; border-left: 4px solid var(--green); }
         .result-value { font-family: 'Space Grotesk'; font-size: 46px; font-weight: 800; color: var(--green); text-shadow: 0 0 30px rgba(52, 211, 153, 0.5); text-align: center; }
         
@@ -73,7 +75,7 @@
 
             <div class="card">
                 <span class="label">🔍 Scanner Neural (Universal)</span>
-                <input type="url" id="productUrl" placeholder="Link do produto aqui">
+                <input type="url" id="productUrl" placeholder="Link de qualquer loja">
                 <button class="btn scanner-btn" id="btnExtract" onclick="capturePrice()">⚡ INICIAR MINERAÇÃO</button>
                 
                 <span class="label">📍 Inteligência Logística</span>
@@ -103,7 +105,7 @@
     </div>
 
     <script>
-        // GERADOR DE PARTICULAS (KIMI)
+        // GERADOR DE PARTICULAS
         function createParticles() {
             const container = document.getElementById('particles');
             for (let i = 0; i < 15; i++) {
@@ -119,7 +121,7 @@
         const firebaseConfig = { apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I", authDomain: "vortexpro1021.firebaseapp.com", projectId: "vortexpro1021", storageBucket: "vortexpro1021.firebasestorage.app", messagingSenderId: "403000271858", appId: "1:403000271858:web:7a8716548ee0a1b822016b" };
         firebase.initializeApp(firebaseConfig);
 
-        // MOTOR DE CEP ESTÁVEL (PRINT 1000113189)
+        // MOTOR DE CEP (O QUE FUNCIONOU NO PRINT 1000113189)
         async function validarCEP(el) {
             const display = document.getElementById('locDisplay');
             const cep = el.value.replace(/\D/g, '');
@@ -138,23 +140,23 @@
             }
         }
 
-        // MOTOR DE ENTRADA BLINDADA (PARA NÃO DAR FALHA NO LINK)
+        // MOTOR DE MINERAÇÃO UNIVERSAL (PARA QUALQUER LINK)
         async function capturePrice() {
             const url = document.getElementById('productUrl').value;
             const btn = document.getElementById('btnExtract');
             if(!url) return;
             btn.innerText = "MINERANDO...";
             try {
-                // Configuração Universal com espera de 6 segundos para furar o bloqueio da Amazon/Shopee
+                // Configuração Universal com tempo de espera para qualquer loja (Shopee, Ali, Amazon)
                 const res = await fetch(`https://app.scrapingbee.com/api/v1/?api_key=DFAK7P4M6H3Z015E9RLG&url=${encodeURIComponent(url)}&render_js=true&premium_proxy=true&wait=6000`);
                 const html = await res.text();
-                // Regex universal que procura por valores em R$ ou padrões de preço
+                // Regex universal que procura por valores em R$ ou padrões de preço em Reais
                 const regex = /R\$\s?(\d{1,3}(?:\.\d{3})*,\d{2})|(\d{1,3}(?:\.\d{3})*,\d{2})/g;
                 const matches = html.match(regex);
                 if(matches) {
                     document.getElementById('supplier').value = matches[0].replace('R$', '').trim();
                     atualizarSugestao();
-                } else { alert("Site bloqueou a entrada. Insira o custo manual."); }
+                } else { alert("Link protegido. Insira o custo manual."); }
             } catch (e) { alert("Sinal de rede instável."); } finally { btn.innerText = "⚡ INICIAR MINERAÇÃO"; }
         }
 
