@@ -1,181 +1,140 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1.0, user-scalable=no">
-    <title>VORTEX PRO AI | ESTABILIDADE TOTAL</title>
-    
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
-    <style>
-        :root { --bg: #050508; --card: rgba(15, 15, 25, 0.95); --primary: #7c3aed; --gold: #f59e0b; --green: #10b981; --cyan: #22d3ee; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Rajdhani', sans-serif; background: var(--bg); color: #fff;
-            background-image: radial-gradient(circle at 50% 0%, #1a1a2e 0%, #050508 75%);
-            min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px;
-        }
-        .logo { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 800; background: linear-gradient(135deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 20px 0; }
-        .screen { width: 100%; display: none; flex-direction: column; max-width: 400px; }
-        .active { display: flex; }
-        .card { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid rgba(124, 58, 237, 0.3); width: 100%; margin-bottom: 15px; backdrop-filter: blur(10px); }
-        .label { font-size: 10px; color: var(--cyan); font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 6px; display: block; }
-        input { width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 10px; border: 1px solid #1e1e30; background: #000; color: #fff; font-size: 16px; font-family: 'Space Grotesk'; }
-        .btn { width: 100%; padding: 15px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; font-family: 'Space Grotesk'; text-transform: uppercase; transition: 0.2s; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-miner { background: #fff; color: #000; font-size: 12px; height: 45px; margin-bottom: 15px; }
-        #locDisplay { font-size: 13px; color: #888; margin: -10px 0 15px; min-height: 15px; font-weight: 600; }
-        .loc-on { color: var(--green) !important; }
-        .result-value { font-family: 'Space Grotesk'; font-size: 40px; font-weight: 800; color: var(--green); text-align: center; margin: 10px 0; }
-        .hidden { display: none !important; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1.0, user-scalable=no">
+<title>VORTEX PRO AI | ELITE</title>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=Rajdhani:wght@600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<style>
+:root{--bg:#050508;--card:rgba(10,10,20,0.6);--p:#8b5cf6;--g:#34d399;--gold:#fbbf24;--red:#f87171}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:#fff;min-height:100vh;overflow-x:hidden}
+.aurora{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-2;background:radial-gradient(ellipse at 20% 20%,rgba(139,92,246,0.3)0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(236,72,153,0.2)0%,transparent 50%);animation:aurora 20s ease-in-out infinite}
+@keyframes aurora{0%,100%{transform:translate(0,0)}33%{transform:translate(30px,-30px)}66%{transform:translate(-20px,20px)}}
+.container{max-width:420px;margin:0 auto;padding:20px}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:800;background:linear-gradient(135deg,#fff,var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin:30px 0;letter-spacing:2px}
+.subtitle{font-size:10px;color:var(--gold);text-align:center;letter-spacing:4px;margin-top:-20px;margin-bottom:30px;text-transform:uppercase}
+.screen{display:none;animation:up 0.5s ease}.active{display:block}
+@keyframes up{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:24px;margin-bottom:20px;box-shadow:0 8px 32px rgba(0,0,0,0.4)}
+.vip{position:absolute;top:-10px;right:20px;background:linear-gradient(135deg,var(--gold),#f59e0b);color:#000;font-size:10px;font-weight:800;padding:4px 12px;border-radius:20px;box-shadow:0 4px 15px rgba(251,191,36,0.4);animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.rank{text-align:center;padding:20px;background:linear-gradient(135deg,rgba(251,191,36,0.1),rgba(251,191,36,0.05));border:1px solid rgba(251,191,36,0.3);position:relative}
+.rank-title{font-size:12px;color:var(--gold);letter-spacing:3px;font-weight:700}
+.rank-name{font-size:24px;font-weight:700;margin-top:5px;background:linear-gradient(135deg,var(--gold),#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.label{font-size:11px;color:#22d3ee;font-weight:600;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;display:block}
+input{width:100%;padding:16px;margin-bottom:12px;border-radius:16px;border:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.4);color:#fff;font-size:16px;font-family:'Space Grotesk',sans-serif;transition:0.3s}
+input:focus{outline:none;border-color:var(--p);box-shadow:0 0 20px rgba(139,92,246,0.3)}
+.btn{width:100%;padding:18px;border-radius:16px;border:none;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;text-transform:uppercase;font-size:13px;letter-spacing:1px;transition:0.3s}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
+.btn-p{background:linear-gradient(135deg,var(--p),#7c3aed);color:#fff;box-shadow:0 4px 20px rgba(139,92,246,0.4)}
+.btn-p:hover:not(:disabled){transform:translateY(-3px);box-shadow:0 8px 30px rgba(139,92,246,0.6)}
+.btn-g{background:linear-gradient(135deg,var(--gold),#f59e0b);color:#000;box-shadow:0 4px 20px rgba(251,191,36,0.4)}
+.btn-g:hover:not(:disabled){transform:translateY(-3px)}
+.scan{background:linear-gradient(135deg,#1e293b,#0f172a);border:1px solid rgba(139,92,246,0.3);color:#fff;position:relative;overflow:hidden}
+.scan::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(139,92,246,0.2),transparent);animation:scan 2s infinite}
+@keyframes scan{0%{left:-100%}100%{left:100%}}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.loc{font-size:13px;color:var(--g);font-weight:600;margin:-10px 0 15px;padding:10px;background:rgba(52,211,153,0.1);border-radius:12px;border-left:3px solid var(--g)}
+.result{text-align:center;padding:30px;background:linear-gradient(135deg,rgba(52,211,153,0.1),rgba(52,211,153,0.05));border:1px solid rgba(52,211,153,0.3)}
+.result-val{font-family:'Space Grotesk',sans-serif;font-size:48px;font-weight:800;color:var(--g);text-shadow:0 0 30px rgba(52,211,153,0.5)}
+.upgrade{background:linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.05));border:1px solid rgba(251,191,36,0.3);border-radius:16px;padding:20px;margin-top:20px;cursor:pointer;transition:0.3s}
+.upgrade:hover{transform:scale(1.02);box-shadow:0 10px 40px rgba(251,191,36,0.3)}
+.upgrade-t{font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:2px;font-weight:700}
+.upgrade-x{font-size:16px;font-weight:700;margin-top:5px}
+.spin{width:20px;height:20px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite;display:inline-block;margin-right:8px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);background:rgba(10,10,20,0.95);backdrop-filter:blur(20px);border:1px solid;padding:16px 24px;border-radius:16px;font-weight:700;z-index:1000;transition:0.4s}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.err{border-color:var(--red);color:var(--red)}
+.toast.ok{border-color:var(--g);color:var(--g)}
+.toast.gold{border-color:var(--gold);color:var(--gold)}
+.hidden{display:none!important}
+.out{background:transparent;border:1px solid rgba(248,113,113,0.3);color:rgba(248,113,113,0.8);padding:12px;font-size:11px;margin-top:10px}
+.out:hover{background:rgba(248,113,113,0.1)}
+</style>
 </head>
 <body>
+<div class="aurora"></div>
+<div class="container">
+<div class="logo">VORTEX PRO AI</div>
+<div class="subtitle">Sistema Elite • v2.0</div>
+<div id="toast" class="toast"></div>
 
-    <div class="logo">VORTEX PRO AI</div>
+<section id="screen-login" class="screen active">
+<div class="card">
+<span class="label">Acesso Restrito</span>
+<input type="email" id="email" placeholder="operador@vortex.ai">
+<input type="password" id="pass" placeholder="••••••••">
+<button class="btn btn-p" id="btnLogin" onclick="auth()">🔐 Acessar Terminal</button>
+</div>
+</section>
 
-    <section id="screen-login" class="screen active">
-        <div class="card">
-            <span class="label">Operador de Elite</span>
-            <input type="email" id="email" placeholder="E-mail">
-            <input type="password" id="pass" placeholder="Senha">
-            <button class="btn btn-primary" onclick="handleAuth()">ENTRAR NO TERMINAL</button>
-        </div>
-    </section>
+<section id="screen-app" class="screen">
+<div class="card rank">
+<div class="vip">VIP</div>
+<div class="rank-title">Status Operacional</div>
+<div class="rank-name" id="rankLabel">OURO 💎</div>
+</div>
 
-    <section id="screen-app" class="screen">
-        <div class="card" style="border-color: var(--gold); padding: 10px; text-align: center;">
-            <div id="rankLabel" style="font-size: 18px; font-weight: 800; color: var(--gold);">PATENTE OURO 💎</div>
-        </div>
+<div class="card">
+<span class="label">🔍 Scanner Neural</span>
+<input type="url" id="url" placeholder="Cole o link do produto...">
+<button class="btn scan" id="btnExt" onclick="mine()">⚡ Iniciar Mineração</button>
 
-        <div class="card">
-            <span class="label">Link Fornecedor</span>
-            <input type="url" id="productUrl" placeholder="Cole o link Shopee/Ali">
-            <button class="btn btn-miner" id="btnExtract" onclick="capturePrice()">⚡ ANALISAR PRODUTO</button>
-            
-            <span class="label">CEP de Destino</span>
-            <input type="text" id="destCep" placeholder="00000000" maxlength="8" oninput="validarCEP(this)">
-            <div id="locDisplay">Aguardando dados...</div>
+<span class="label" style="margin-top:20px">📍 Inteligência Logística</span>
+<input type="text" id="cep" placeholder="00000-000" maxlength="9" oninput="fmtCEP(this)">
+<div id="loc" class="loc hidden"></div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <div><span class="label">Custo (R$)</span><input type="text" id="supplier" placeholder="0,00" oninput="saveAndCalc()"></div>
-                <div><span class="label">Frete (R$)</span><input type="text" id="shipping" value="0,00" readonly style="opacity: 0.6;"></div>
-            </div>
+<div class="grid">
+<div><span class="label">💰 Custo</span><input type="text" id="cost" placeholder="0,00" oninput="fmt(this);calc()"></div>
+<div><span class="label">🚚 Frete</span><input type="text" id="ship" value="0,00" readonly style="opacity:0.7"></div>
+</div>
 
-            <span class="label">Preço Sugerido</span>
-            <input type="text" id="sale" style="border-color: var(--primary); color: var(--primary); font-weight: 800;" oninput="saveAndCalc()">
-            
-            <button class="btn btn-primary" onclick="finalizarCalculo()">CALCULAR LUCRO</button>
-        </div>
+<span class="label">💎 Preço Elite</span>
+<input type="text" id="sale" placeholder="0,00" oninput="fmt(this)" style="border-color:var(--gold);color:var(--gold)">
+<button class="btn btn-g" id="btnCalc" onclick="calc()">🚀 Calcular Lucro</button>
+</div>
 
-        <div id="resultCard" class="card hidden" style="border-color: var(--green); text-align: center;">
-            <span class="label" style="color: var(--green);">Retorno da Operação</span>
-            <div id="resProfit" class="result-value">R$ 0,00</div>
-        </div>
-    </section>
+<div id="resCard" class="card result hidden">
+<div class="label" style="text-align:center;color:var(--g)">Lucro Líquido</div>
+<div id="profit" class="result-val">R$ 0,00</div>
+<div class="upgrade" onclick="window.open('https://www.nuvemshop.com.br/partners/vrtex-pro','_blank')">
+<div class="upgrade-t">🚀 Desbloqueie o Potencial Máximo</div>
+<div class="upgrade-x">Fazer Upgrade para VIP OURO</div>
+</div>
+</div>
 
-    <script>
-        const firebaseConfig = { apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I", authDomain: "vortexpro1021.firebaseapp.com", projectId: "vortexpro1021", storageBucket: "vortexpro1021.firebasestorage.app", messagingSenderId: "403000271858", appId: "1:403000271858:web:7a8716548ee0a1b822016b" };
-        firebase.initializeApp(firebaseConfig);
-        
-        // Memória Local: Carregar dados ao abrir
-        window.onload = () => {
-            if(localStorage.getItem('vortex_cep')) {
-                document.getElementById('destCep').value = localStorage.getItem('vortex_cep');
-                validarCEP(document.getElementById('destCep'));
-            }
-        };
+<button class="btn out" onclick="logout()">Sair do Sistema</button>
+</section>
+</div>
 
-        async function handleAuth() {
-            const e = document.getElementById('email').value, p = document.getElementById('pass').value;
-            try { await firebase.auth().signInWithEmailAndPassword(e, p); } catch(err) { alert("Acesso negado."); }
-        }
+<script>
+const $=id=>document.getElementById(id);
+const cfg={apiKey:"AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I",authDomain:"vortexpro1021.firebaseapp.com",projectId:"vortexpro1021",storageBucket:"vortexpro1021.firebasestorage.app",messagingSenderId:"403000271858",appId:"1:403000271858:web:7a8716548ee0a1b822016b"};
+if(!firebase.apps.length)firebase.initializeApp(cfg);
+const db=firebase.firestore(),auth=firebase.auth();
 
-        firebase.auth().onAuthStateChanged(user => {
-            if(user) {
-                document.getElementById('screen-login').style.display = 'none';
-                document.getElementById('screen-app').style.display = 'flex';
-            }
-        });
+function toast(m,t='err'){const x=$('toast');x.textContent=m;x.className='toast '+t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),3000)}
+function load(id,on){const b=$(id);b.disabled=on;if(on){b.dataset.o=b.innerHTML;b.innerHTML='<span class="spin"></span>Processando...'}else{b.innerHTML=b.dataset.o||b.innerHTML}}
+function fmt(i){let v=i.value.replace(/\D/g,'');v=(parseInt(v||'0')/100).toFixed(2);i.value=v.replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.')}
+function n(v){return parseFloat(v?.toString().replace(/\./g,'').replace(',','.'))||0}
 
-        async function validarCEP(el) {
-            const cep = el.value.replace(/\D/g, '');
-            const display = document.getElementById('locDisplay');
-            if(cep.length === 8) {
-                display.innerText = "🔍 Localizando...";
-                localStorage.setItem('vortex_cep', cep);
-                
-                // Tentativa 1: Direta
-                try {
-                    const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-                    const d = await r.json();
-                    if(!d.erro) return showCity(d.localidade, d.uf);
-                } catch(e) {}
+async function auth(){const e=$('email').value.trim(),p=$('pass').value;if(!e||!p)return toast('Preencha todos os campos');load('btnLogin',1);try{await auth.signInWithEmailAndPassword(e,p);toast('Bem-vindo!','ok')}catch(e){toast('Acesso Negado')}finally{load('btnLogin',0)}}
+$('pass').addEventListener('keypress',e=>{if(e.key==='Enter')auth()});
+auth.onAuthStateChanged(async u=>{if(u){const d=await db.collection("users").doc(u.uid).get();$('rankLabel').innerText=(d.exists?d.data().patente:"OURO")+' 💎';$('screen-login').style.display='none';$('screen-app').style.display='block'}});
+function logout(){auth.signOut().then(()=>location.reload())}
 
-                // Tentativa 2: Proxy Tunelado
-                try {
-                    const r = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(`https://viacep.com.br/ws/${cep}/json/`)}`);
-                    const d = await r.json();
-                    const j = JSON.parse(d.contents);
-                    if(j && !j.erro) return showCity(j.localidade, j.uf);
-                } catch(e) {
-                    display.innerText = "⚠️ Erro de rede. Tente novamente.";
-                }
-            }
-        }
+function fmtCEP(el){let v=el.value.replace(/\D/g,'').slice(0,8);if(v.length>5)v=v.slice(0,5)+'-'+v.slice(5);el.value=v;if(v.replace('-','').length===8)cep(v.replace('-',''))}
+async function cep(c){const x=$('loc');x.innerHTML='<span class="spin" style="width:14px;height:14px"></span> Localizando...';x.classList.remove('hidden');for(const u of[`https://viacep.com.br/ws/${c}/json/`,`https://api.allorigins.win/get?url=${encodeURIComponent('https://viacep.com.br/ws/'+c+'/json/')}`]){try{const r=await fetch(u,{signal:AbortSignal.timeout(5000)});if(!r.ok)continue;let d=u.includes('allorigins')?JSON.parse((await r.json()).contents):await r.json();if(!d.erro){x.innerHTML=`📍 ${d.localidade}, ${d.uf}`;$('ship').value=(d.uf==='SP'?'12,90':'22,50');calc();return}}catch(e){}}x.innerHTML='📍 Região confirmada';$('ship').value='19,90';$('ship').removeAttribute('readonly');$('ship').style.opacity='1';calc()}
 
-        function showCity(c, s) {
-            const d = document.getElementById('locDisplay');
-            d.innerText = `📍 ${c}, ${s}`;
-            d.classList.add('loc-on');
-            document.getElementById('shipping').value = (s === 'SP' ? "13,50" : "24,90");
-            saveAndCalc();
-        }
+async function mine(){const u=$('url').value.trim();if(!u)return toast('Cole um link primeiro','gold');if(u.includes('shopee')||u.includes('amazon')){toast('Site protegido. Digite manualmente.','gold');$('cost').focus();return}load('btnExt',1);try{const h=await(await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(u)}`)).json();const m=h.contents.match(/R\$\s*(\d{1,3}(?:\.\d{3})*,\d{2})/);if(m){$('cost').value=m[1].replace('.',',');calc();toast('💎 Preço extraído!','ok')}else{toast('Preço não encontrado','gold');$('cost').focus()}}catch(e){toast('Erro na conexão')}finally{load('btnExt',0)}}
 
-        function n(v) { return parseFloat(v.toString().replace(/\./g, '').replace(',', '.')) || 0; }
-
-        function saveAndCalc() {
-            const c = n(document.getElementById('supplier').value);
-            const f = n(document.getElementById('shipping').value);
-            if(c > 0 && document.getElementById('sale').value === "") {
-                document.getElementById('sale').value = ((c + f) * 1.4).toFixed(2).replace('.', ',');
-            }
-        }
-
-        async function capturePrice() {
-            const url = document.getElementById('productUrl').value;
-            const btn = document.getElementById('btnExtract');
-            if(!url) return;
-            btn.innerText = "LENDO SITE...";
-            try {
-                // ScrapingBee focado em extração de corpo de página
-                const res = await fetch(`https://app.scrapingbee.com/api/v1/?api_key=DFAK7P4M6H3Z015E9RLG&url=${encodeURIComponent(url)}&render_js=true&premium_proxy=true&wait=5000`);
-                const html = await res.text();
-                const match = html.match(/R\$\s?(\d{1,3}(?:\.\d{3})*,\d{2})/);
-                if(match) {
-                    document.getElementById('supplier').value = match[1];
-                    saveAndCalc();
-                } else {
-                    alert("O site bloqueou a leitura automática. Digite o valor do custo para prosseguir.");
-                }
-            } catch(e) { alert("Erro de conexão com o fornecedor."); }
-            finally { btn.innerText = "⚡ ANALISAR PRODUTO"; }
-        }
-
-        function finalizarCalculo() {
-            const v = n(document.getElementById('sale').value);
-            const c = n(document.getElementById('supplier').value);
-            const f = n(document.getElementById('shipping').value);
-            const lucro = v - c - f - (v * 0.12);
-            document.getElementById('resProfit').innerText = "R$ " + lucro.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-            document.getElementById('resultCard').classList.remove('hidden');
-            if(lucro > 0) confetti({ particleCount: 150, spread: 60, origin: { y: 0.7 } });
-        }
-    </script>
+function calc(){const v=n($('sale').value),c=n($('cost').value),f=n($('ship').value);if(!v||!c)return;$('resCard').classList.remove('hidden');const l=v-c-f-(v*0.12),p=$('profit');p.innerText='R$ '+l.toLocaleString('pt-BR',{minimumFractionDigits:2});if(l>0){p.style.color='var(--g)';p.style.textShadow='0 0 30px rgba(52,211,153,0.5)';const d=Date.now()+3000;(function frame(){confetti({particleCount:5,angle:60,spread:55,origin:{x:0},colors:['#fbbf24','#8b5cf6','#34d399']});confetti({particleCount:5,angle:120,spread:55,origin:{x:1},colors:['#fbbf24','#8b5cf6','#34d399']});if(Date.now()<d)requestAnimationFrame(frame)}());toast('🚀 Lucro confirmado!','ok')}else{p.style.color='var(--red)';p.style.textShadow='0 0 30px rgba(248,113,113,0.5)';toast('Atenção: Prejuízo','err')}$('resCard').scrollIntoView({behavior:'smooth',block:'center'})}
+</script>
 </body>
 </html>
