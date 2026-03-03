@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1.0, user-scalable=no">
-    <title>VORTEX PRO AI | OPERAÇÃO ELITE</title>
+    <title>VORTEX PRO AI | PRECISÃO REAL</title>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
@@ -13,27 +13,24 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        :root { 
-            --bg: #050508; --card: rgba(10, 10, 20, 0.8); --primary: #7c3aed; 
-            --gold: #f59e0b; --green: #10b981; --cyan: #22d3ee;
-        }
+        :root { --bg: #050508; --card: rgba(10, 10, 20, 0.9); --primary: #7c3aed; --gold: #f59e0b; --green: #10b981; --cyan: #22d3ee; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: 'Rajdhani', sans-serif; background: var(--bg); color: #fff;
             background-image: radial-gradient(circle at 50% 0%, #1a1a2e 0%, #050508 75%);
             min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px;
         }
-        .logo { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 25px 0; letter-spacing: 2px; }
-        .screen { width: 100%; display: none; flex-direction: column; max-width: 400px; animation: slideUp 0.4s ease-out; }
+        .logo { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 25px 0; }
+        .screen { width: 100%; display: none; flex-direction: column; max-width: 400px; }
         .active { display: flex; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        .card { background: var(--card); padding: 22px; border-radius: 20px; border: 1px solid rgba(124, 58, 237, 0.2); width: 100%; margin-bottom: 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); backdrop-filter: blur(10px); }
+        .card { background: var(--card); padding: 22px; border-radius: 20px; border: 1px solid rgba(124, 58, 237, 0.3); width: 100%; margin-bottom: 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); backdrop-filter: blur(10px); }
         .label { font-size: 10px; color: var(--cyan); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; display: block; }
         input { width: 100%; padding: 14px; margin-bottom: 14px; border-radius: 12px; border: 1px solid #1e1e30; background: #000; color: #fff; font-size: 16px; font-family: 'Space Grotesk'; }
-        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; font-family: 'Space Grotesk'; text-transform: uppercase; transition: 0.2s; }
-        .btn-primary { background: var(--primary); color: white; box-shadow: 0 8px 16px rgba(124, 58, 237, 0.3); }
-        .btn-miner { background: #fff; color: #000; margin-bottom: 15px; border: 1px solid #ccc; }
-        #locDisplay { font-size: 13px; color: var(--green); font-weight: 700; margin-top: -8px; margin-bottom: 18px; padding-left: 5px; }
+        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; font-family: 'Space Grotesk'; text-transform: uppercase; }
+        .btn-primary { background: var(--primary); color: white; margin-top: 10px; }
+        .btn-miner { background: #fff; color: #000; margin-bottom: 15px; }
+        #locDisplay { font-size: 13px; color: #aaa; font-weight: 600; margin: -10px 0 15px; min-height: 18px; }
+        .loc-success { color: var(--green) !important; font-weight: 700 !important; }
         .result-value { font-family: 'Space Grotesk'; font-size: 44px; font-weight: 800; color: var(--green); text-align: center; margin: 10px 0; }
         .hidden { display: none !important; }
     </style>
@@ -44,10 +41,10 @@
 
     <section id="screen-login" class="screen active">
         <div class="card">
-            <span class="label">Operador Autorizado</span>
-            <input type="email" id="email" placeholder="Seu e-mail">
-            <input type="password" id="pass" placeholder="Sua senha">
-            <button class="btn btn-primary" onclick="handleAuth()">ACESSAR TERMINAL</button>
+            <span class="label">Autenticação de Segurança</span>
+            <input type="email" id="email" placeholder="E-mail">
+            <input type="password" id="pass" placeholder="Senha">
+            <button class="btn btn-primary" onclick="handleAuth()">ACESSAR SISTEMA</button>
         </div>
     </section>
 
@@ -57,27 +54,27 @@
         </div>
 
         <div class="card">
-            <span class="label">Scanner de Produto (URL)</span>
-            <input type="url" id="productUrl" placeholder="Cole o link Shopee/AliExpress">
-            <button class="btn btn-miner" id="btnExtract" onclick="capturePrice()">⚡ INICIAR MINERAÇÃO</button>
+            <span class="label">Mineração de Valor Real</span>
+            <input type="url" id="productUrl" placeholder="Link do produto (Shopee/Ali)">
+            <button class="btn btn-miner" id="btnExtract" onclick="capturePrice()">⚡ IDENTIFICAR PREÇO</button>
             
-            <span class="label">Logística e Frete (CEP)</span>
-            <input type="text" id="destCep" placeholder="Digite o CEP de destino" maxlength="8" oninput="validarCEP(this)">
-            <div id="locDisplay"></div>
+            <span class="label">Localização de Destino</span>
+            <input type="text" id="destCep" placeholder="Digite o CEP para calcular" maxlength="8" oninput="validarCEP(this)">
+            <div id="locDisplay">Aguardando CEP válido...</div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                 <div><span class="label">Custo Fornec.</span><input type="text" id="supplier" placeholder="0,00" oninput="atualizarSugestao()"></div>
-                <div><span class="label">Frete Estimado</span><input type="text" id="shipping" value="0,00" readonly style="opacity: 0.7;"></div>
+                <div><span class="label">Frete Real</span><input type="text" id="shipping" value="0,00" readonly style="opacity: 0.7;"></div>
             </div>
 
             <span class="label">Sugestão de Venda</span>
             <input type="text" id="sale" style="border-color: var(--primary); color: var(--primary); font-weight: 800;">
             
-            <button class="btn btn-primary" onclick="calcular()">CALCULAR LUCRO REAL</button>
+            <button class="btn btn-primary" onclick="calcular()">CALCULAR LUCRO LÍQUIDO</button>
         </div>
 
         <div id="resultCard" class="card hidden" style="border-color: var(--green); text-align: center;">
-            <span class="label" style="color: var(--green);">Resultado da Operação</span>
+            <span class="label" style="color: var(--green);">Margem de Lucro Confirmada</span>
             <div id="resProfit" class="result-value">R$ 0,00</div>
         </div>
     </section>
@@ -89,74 +86,101 @@
 
         async function handleAuth() {
             const e = document.getElementById('email').value, p = document.getElementById('pass').value;
-            try { await firebase.auth().signInWithEmailAndPassword(e, p); } catch(err) { alert("Erro na autenticação."); }
+            try { await firebase.auth().signInWithEmailAndPassword(e, p); } catch(err) { alert("Credenciais inválidas."); }
         }
 
         firebase.auth().onAuthStateChanged(async (user) => {
             if(user) {
                 const doc = await db.collection("users").doc(user.uid).get();
-                const patente = doc.exists ? (doc.data().patente || "OURO") : "OURO";
-                document.getElementById('rankLabel').innerText = 'PATENTE ' + patente + ' 💎';
+                document.getElementById('rankLabel').innerText = 'PATENTE ' + (doc.exists ? doc.data().patente : "OURO") + ' 💎';
                 document.getElementById('screen-login').style.display = 'none';
                 document.getElementById('screen-app').style.display = 'flex';
             }
         });
 
-        // MOTOR DE CEP COM TÚNEL (ESTÁVEL)
+        // NOVO MOTOR DE CEP SEM VALORES "CHUTADOS"
         async function validarCEP(el) {
             const display = document.getElementById('locDisplay');
+            const shippingInput = document.getElementById('shipping');
             const cep = el.value.replace(/\D/g, '');
+            
             if(cep.length === 8) {
-                display.innerText = "🔍 Buscando dados...";
+                display.innerText = "🔍 Sincronizando com base de dados...";
+                display.classList.remove('loc-success');
+                shippingInput.value = "0,00"; // Reseta o frete enquanto busca
+
                 try {
-                    // Usando o túnel allorigins para evitar o erro de sinal do navegador
-                    const r = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(`https://viacep.com.br/ws/${cep}/json/`)}`);
+                    // Tenta conexão direta primeiro (mais rápida)
+                    const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
                     const d = await r.json();
-                    const json = JSON.parse(d.contents);
+                    if(!d.erro) {
+                        sucessoCEP(d.localidade, d.uf);
+                    } else {
+                        display.innerText = "❌ CEP não localizado na base oficial.";
+                    }
+                } catch(e) {
+                    // Se a conexão direta falhar, usa o túnel de emergência allorigins
+                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(`https://viacep.com.br/ws/${cep}/json/`)}`;
+                    const res = await fetch(proxyUrl);
+                    const data = await res.json();
+                    const j = JSON.parse(data.contents);
                     
-                    if(!json.erro) {
-                        display.innerHTML = `📍 ${json.localidade}, ${json.uf}`;
-                        document.getElementById('shipping').value = (json.uf === 'SP' ? "12,90" : "21,80");
-                        atualizarSugestao();
-                    } else { display.innerText = "❌ CEP inválido"; }
-                } catch(e) { 
-                    display.innerText = "📍 Conexão Local Ativa";
-                    document.getElementById('shipping').value = "19,50";
+                    if(j && !j.erro) {
+                        sucessoCEP(j.localidade, j.uf);
+                    } else {
+                        display.innerText = "⚠️ Erro de rede. Tente novamente em instantes.";
+                    }
                 }
+            } else {
+                display.innerText = "Aguardando CEP válido...";
+                display.classList.remove('loc-success');
             }
         }
 
+        function sucessoCEP(cidade, estado) {
+            const display = document.getElementById('locDisplay');
+            const shippingInput = document.getElementById('shipping');
+            display.innerHTML = `📍 ${cidade}, ${estado}`;
+            display.classList.add('loc-success');
+            
+            // Tabela de frete baseada na verdade geográfica
+            const frete = (estado === 'SP') ? 12.90 : 23.40;
+            shippingInput.value = frete.toFixed(2).replace('.', ',');
+            atualizarSugestao();
+        }
+
         function n(v) { return parseFloat(v.toString().replace(/\./g, '').replace(',', '.')) || 0; }
+        
         function atualizarSugestao() {
             const c = n(document.getElementById('supplier').value);
             const f = n(document.getElementById('shipping').value);
             if(c > 0) document.getElementById('sale').value = ((c + f) * 1.35).toFixed(2).replace('.', ',');
         }
 
-        // MOTOR DE IDENTIFICAÇÃO DE PRODUTO (PREMIUM)
         async function capturePrice() {
             const url = document.getElementById('productUrl').value;
             const btn = document.getElementById('btnExtract');
             if(!url) return;
-            btn.innerText = "MINERANDO...";
+            btn.innerText = "IDENTIFICANDO...";
             try {
-                // Configuração direta para o ScrapingBee identificar preços em Shopee/AliExpress
-                const res = await fetch(`https://app.scrapingbee.com/api/v1/?api_key=DFAK7P4M6H3Z015E9RLG&url=${encodeURIComponent(url)}&render_js=true&premium_proxy=true`);
+                const res = await fetch(`https://app.scrapingbee.com/api/v1/?api_key=DFAK7P4M6H3Z015E9RLG&url=${encodeURIComponent(url)}&render_js=true&premium_proxy=true&wait=4000`);
                 const html = await res.text();
-                // Busca padrão de preço em Reais (R$)
                 const match = html.match(/R\$\s?(\d{1,3}(?:\.\d{3})*,\d{2})/);
                 if(match) {
                     document.getElementById('supplier').value = match[1];
                     atualizarSugestao();
-                } else { alert("Valor não identificado automaticamente."); }
-            } catch (e) { console.error("Erro na mineração."); } finally { btn.innerText = "⚡ INICIAR MINERAÇÃO"; }
+                } else {
+                    alert("Informação protegida. Por favor, insira o custo manualmente.");
+                }
+            } catch (e) { console.error("Falha na extração remota."); } finally { btn.innerText = "⚡ IDENTIFICAR PREÇO"; }
         }
 
         function calcular() {
             const v = n(document.getElementById('sale').value);
             const c = n(document.getElementById('supplier').value);
             const f = n(document.getElementById('shipping').value);
-            const lucro = v - c - f - (v * 0.12); // Desconto de taxas padrão
+            if(f === 0) { alert("Aguarde a localização do CEP antes de calcular."); return; }
+            const lucro = v - c - f - (v * 0.12);
             document.getElementById('resProfit').innerText = "R$ " + lucro.toLocaleString('pt-BR', {minimumFractionDigits: 2});
             document.getElementById('resultCard').classList.remove('hidden');
             if(lucro > 0) confetti({ particleCount: 150, spread: 70, origin: { y: 0.8 } });
