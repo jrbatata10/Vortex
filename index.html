@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
     <title>VORTEX PRO AI | SUPREME DASHBOARD</title>
     
-    <!-- SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
@@ -13,16 +12,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        :root { 
-            --bg: #020205; 
-            --card: rgba(10, 10, 25, .98); 
-            --primary: #7c3aed; 
-            --gold: #fbbf24; 
-            --green: #10b981; 
-            --cyan: #06b6d4; 
-        }
+        :root { --bg: #020205; --card: rgba(10, 10, 25, .98); --primary: #7c3aed; --gold: #fbbf24; --green: #10b981; --cyan: #06b6d4; }
         * { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; }
-        body { font-family:'Rajdhani', sans-serif; background:var(--bg); color:#fff; min-height:100vh; overflow-x:hidden; }
+        body { font-family:'Rajdhani', sans-serif; background:var(--bg); color:#fff; min-height:100vh; overflow-x:hidden; position: relative; }
 
         /* EFEITOS VISUAIS */
         .aurora { position:fixed; inset:0; z-index:-2; background:radial-gradient(circle at 20% 20%, rgba(124, 58, 237, .2) 0%, transparent 40%), radial-gradient(circle at 80% 80%, rgba(6, 182, 212, .15) 0%, transparent 40%); animation:auroraMove 20s infinite; }
@@ -34,26 +26,27 @@
         .logo span { color: var(--cyan); }
 
         .card { background:var(--card); border: 1px solid rgba(124, 58, 237, 0.3); border-radius: 15px; padding: 18px; margin-bottom: 15px; backdrop-filter: blur(10px); }
-        
         .label { font-size:10px; color:var(--cyan); font-weight:700; text-transform:uppercase; margin-bottom:8px; display:block; font-family:'Orbitron'; letter-spacing: 1px; }
+        
         input { width:100%; padding:14px; margin-bottom:12px; border-radius:10px; border: 1px solid #1e1e30; background:rgba(0,0,0,0.8); color:#fff; font-size:16px; outline: none; transition: 0.3s; }
         input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(124, 58, 237, 0.2); }
         
         .btn { width:100%; padding:16px; border-radius:12px; border:none; font-weight:800; cursor:pointer; text-transform:uppercase; font-family:'Orbitron'; display:flex; align-items:center; justify-content:center; gap:10px; transition: 0.2s; -webkit-tap-highlight-color: transparent; }
+        .btn:active { transform: scale(0.98); }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .btn-primary { background:var(--primary); color:#fff; }
         .btn-gold { background:var(--gold); color:#000; margin-top:10px; }
         
-        .ai-status { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 10px; font-weight: 900; margin-bottom: 15px; padding: 8px; border-radius: 50px; border: 1px solid currentColor; }
+        .ai-status { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 10px; font-weight: 900; margin-bottom: 15px; padding: 8px; border-radius: 50px; border: 1px solid currentColor; text-transform: uppercase; }
         .ai-online { color: var(--green); background: rgba(16, 185, 129, 0.1); }
         .ai-offline { color: #ef4444; background: rgba(239, 68, 68, 0.1); }
         
         #rankBadge { padding: 5px 15px; border-radius: 50px; font-size: 11px; font-weight: 900; margin-bottom: 10px; display: inline-block; font-family: 'Orbitron'; background: #cd7f32; color: #fff; }
-        
         .hidden { display:none !important; }
         #locDisplay { font-size: 12px; color: var(--green); margin:-8px 0 12px; font-weight: 700; padding: 10px; background: rgba(16, 185, 129, 0.1); border-radius: 8px; border-left: 3px solid var(--green); }
-        
         .result-value { font-size:32px; color:var(--green); font-family:'Orbitron'; font-weight: 900; text-shadow: 0 0 10px rgba(16, 185, 129, 0.3); }
+        
+        .footer-terms { margin-top: 20px; text-align: center; opacity: 0.5; font-size: 9px; letter-spacing: 1px; color: #fff; }
     </style>
 </head>
 <body>
@@ -63,7 +56,6 @@
     <div class="container">
         <div class="logo">VORTEX <span>PRO</span> AI</div>
 
-        <!-- TELA DE AUTENTICAÇÃO -->
         <section id="screen-auth">
             <div id="auth-box" class="card">
                 <span class="label" id="auth-title">Acesso Operador</span>
@@ -74,18 +66,13 @@
             </div>
         </section>
 
-        <!-- TELA DO APLICATIVO -->
         <section id="screen-app" class="hidden">
             <div id="aiIndicator" class="ai-status ai-offline"><span>IA Desconectada</span></div>
-            
-            <div class="card" style="text-align: center;">
-                <div id="rankBadge">BRONZE</div>
-                <div id="rankMsg" style="font-size: 10px; opacity: 0.6; margin-top: 5px;">FUNCIONALIDADES LIMITADAS</div>
-            </div>
+            <div class="card" style="text-align: center;"><div id="rankBadge">BRONZE</div></div>
             
             <div class="card">
                 <span class="label">Scanner Neural de Links</span>
-                <input type="url" id="productUrl" placeholder="Cole o link Shopee/AliExpress">
+                <input type="url" id="productUrl" placeholder="Link Shopee/AliExpress">
                 <button class="btn btn-primary" id="btnMiner" onclick="window.scanAI()">⚡ LER COM GEMINI AI</button>
                 
                 <span class="label" style="margin-top:15px">Inteligência Logística (Brasil Total)</span>
@@ -98,8 +85,7 @@
                 </div>
 
                 <span class="label">Sugestão de Venda (45% Margem)</span>
-                <input type="text" id="venda" style="color:var(--gold); font-weight:900; border-color: var(--gold);" readonly>
-                
+                <input type="text" id="venda" style="color:var(--gold); font-weight:900;" readonly>
                 <button class="btn btn-gold" onclick="window.finalLucro()">🚀 PROCESSAR LUCRO REAL</button>
             </div>
 
@@ -109,14 +95,19 @@
                 <button class="btn" style="background:#25d366; color:#fff; margin-top:15px;" onclick="window.open('https://wa.me/5511975473066')">💬 SUPORTE VIP JUNIOR</button>
             </div>
 
-            <button onclick="location.reload()" style="background:none; border:none; color:rgba(255,255,255,0.2); width:100%; font-size:10px; margin:20px 0; font-weight: 700; letter-spacing: 1px;">SAIR DO SISTEMA / RECARREGAR</button>
+            <button onclick="location.reload()" style="background:none; border:none; color:rgba(255,255,255,0.2); width:100%; font-size:10px; margin:20px 0; font-weight: 700;">SAIR / RECARREGAR</button>
         </section>
+
+        <div class="footer-terms">
+            <p>© 2026 VORTEX PRO AI - TODOS OS DIREITOS RESERVADOS</p>
+            <p style="text-decoration: underline; cursor: pointer; margin-top: 5px;" onclick="alert('Termos de Uso: Este software é uma ferramenta de auxílio comercial. Os cálculos de lucro e frete são estimativas baseadas em tabelas médias nacionais. A Vortex Pro AI não se responsabiliza por variações de preços em marketplaces ou decisões financeiras dos usuários.')">TERMOS DE USO & PRIVACIDADE</p>
+        </div>
     </div>
 
     <script type="module">
         import { GoogleGenerativeAI } from "https://esm.run/@google/genai";
 
-        // CONFIGURAÇÃO FIREBASE
+        // CONFIGURAÇÃO FIREBASE (Vortex Pro 1021)
         const firebaseConfig = { 
             apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I", 
             authDomain: "vortexpro1021.firebaseapp.com", 
@@ -126,138 +117,87 @@
             appId: "1:403000271858:web:7a8716548ee0a1b822016b" 
         };
         
-        // Inicialização
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth(), db = firebase.firestore();
         
-        // CHAVE GEMINI
+        // CHAVE GEMINI (Google AI Studio)
         const G_KEY = "AIzaSyD6j7gGPQAAJ9H7rI8ot1AAWkjloE4mp_M";
-        let isRegister = false;
-        let userRank = "BRONZE";
+        let isRegister = false, userRank = "BRONZE";
 
-        // --- FUNÇÕES GLOBAIS (Anexadas ao window para o HTML encontrar) ---
+        // Helpers de Cálculo
+        const parseNum = (v) => parseFloat(v.toString().replace(/\./g, '').replace(',', '.')) || 0;
+        const fmt = (v) => v.toLocaleString('pt-BR', {minimumFractionDigits: 2});
 
+        // Interface Auth
         window.toggleRegister = () => {
             isRegister = !isRegister;
             document.getElementById('auth-title').innerText = isRegister ? "Ativar Acesso Bronze" : "Acesso Operador";
-            document.getElementById('btn-main-auth').innerText = isRegister ? "💎 CADASTRAR E ATIVAR" : "🔐 ENTRAR NO TERMINAL";
-            document.getElementById('toggle-text').innerText = isRegister ? "JÁ É OPERADOR? LOGIN" : "NÃO TEM CONTA? CADASTRE-SE";
+            document.getElementById('btn-main-auth').innerText = isRegister ? "💎 CADASTRAR" : "🔐 ENTRAR";
+            document.getElementById('toggle-text').innerText = isRegister ? "VOLTAR AO LOGIN" : "NÃO TEM CONTA? CADASTRE-SE";
         };
 
         window.handleAuth = async () => {
-            const e = document.getElementById('email').value, p = document.getElementById('pass').value;
-            const btn = document.getElementById('btn-main-auth');
-            
+            const e = document.getElementById('email').value, p = document.getElementById('pass').value, btn = document.getElementById('btn-main-auth');
             if(!e || !p) return alert("Preencha todos os campos!");
-            
-            btn.disabled = true;
-            btn.innerText = "PROCESSANDO...";
-
+            btn.disabled = true; btn.innerText = "SINCRO...";
             try {
                 if(isRegister) {
                     const c = await auth.createUserWithEmailAndPassword(e, p);
                     await db.collection("users").doc(c.user.uid).set({ patente: "BRONZE" });
-                    alert("Conta BRONZE criada com sucesso!");
-                    location.reload();
-                } else {
-                    await auth.signInWithEmailAndPassword(e, p);
-                }
-            } catch(err) { 
-                alert("Erro: " + err.message); 
-            } finally {
-                btn.disabled = false;
-                btn.innerText = isRegister ? "💎 CADASTRAR E ATIVAR" : "🔐 ENTRAR NO TERMINAL";
-            }
+                    alert("Sucesso! Faça seu login."); location.reload();
+                } else await auth.signInWithEmailAndPassword(e, p);
+            } catch(err) { alert("Falha: Verifique E-mail/Senha."); } finally { btn.disabled = false; btn.innerText = isRegister ? "💎 CADASTRAR" : "🔐 ENTRAR"; }
         };
 
+        // Inteligência Artificial (Scanner)
         window.scanAI = async () => {
-            if(userRank === "BRONZE") return alert("❌ BLOQUEADO: Scanner Neural exclusivo para patentes OURO.");
-            const url = document.getElementById('productUrl').value;
-            const btn = document.getElementById('btnMiner');
-            if(!url) return alert("Cole o link!");
-            
-            btn.innerText = "⛏️ MINERANDO...";
-            btn.disabled = true;
-
+            if(userRank === "BRONZE") return alert("Scanner Neural Exclusivo OURO 💎");
+            const url = document.getElementById('productUrl').value, btn = document.getElementById('btnMiner');
+            if(!url) return alert("Insira um link válido!");
+            btn.innerText = "🧠 ANALISANDO LINK..."; btn.disabled = true;
             try {
-                const genAI = new GoogleGenerativeAI(G_KEY);
-                const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-                const proxy = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
-                const data = await proxy.json();
-                const prompt = `Extraia o preço numérico em R$ deste texto: ${data.contents.substring(0, 3000)}. Responda apenas o número.`;
-                const result = await model.generateContent(prompt);
-                const priceText = result.response.text().replace(/[^0-9.,]/g, '').replace(',', '.');
-                const price = parseFloat(priceText);
-                if(!isNaN(price)) {
-                    document.getElementById('custo').value = price.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-                    window.recalc();
-                }
-            } catch(e) { alert("IA ocupada. Insira manual."); }
-            finally { btn.innerText = "⚡ LER COM GEMINI AI"; btn.disabled = false; }
+                const genAI = new GoogleGenerativeAI(G_KEY), model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+                const proxy = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`), data = await proxy.json();
+                const result = await model.generateContent(`Extraia apenas o valor numérico em R$ deste texto (sem R$): ${data.contents.substring(0, 3000)}. Responda só o número.`);
+                const price = parseFloat(result.response.text().replace(/[^0-9.,]/g, '').replace(',', '.'));
+                if(!isNaN(price)) { document.getElementById('custo').value = fmt(price); window.recalc(); }
+            } catch(e) { alert("IA ocupada ou Site Protegido. Use custo manual."); } finally { btn.innerText = "⚡ LER COM GEMINI AI"; btn.disabled = false; }
         };
 
+        // Brasil Total (Tabela de Fretes Dinâmica)
         window.buscaCep = async (el) => {
             const cep = el.value.replace(/\D/g, '');
             if(cep.length === 8) {
-                document.getElementById('locDisplay').innerText = "📡 BUSCANDO...";
+                document.getElementById('locDisplay').innerText = "📡 LOCALIZANDO...";
                 try {
-                    const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-                    const j = await r.json();
+                    const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`), j = await r.json();
                     if(!j.erro) {
                         document.getElementById('locDisplay').innerText = `📍 ${j.localidade}/${j.uf} ✅`;
-                        const fretes = {
-                            SP: "12,90", RJ: "15,80", MG: "16,50", ES: "17,20",
-                            PR: "14,20", SC: "15,90", RS: "17,50",
-                            DF: "18,50", GO: "19,20", MT: "21,50", MS: "20,80",
-                            BA: "21,50", CE: "23,90", PE: "22,80", RN: "24,20", PB: "23,50", 
-                            AL: "24,80", SE: "24,50", MA: "26,20", PI: "25,80",
-                            AM: "32,50", PA: "29,80", AC: "34,20", RO: "31,50", 
-                            RR: "35,80", AP: "33,20", TO: "27,50"
+                        const fretes = { 
+                            SP: "12,90", RJ: "15,80", MG: "16,50", ES: "17,20", PR: "14,20", SC: "15,90", RS: "17,50", DF: "18,50", GO: "19,20", MT: "21,50", MS: "20,80", BA: "21,50", CE: "23,90", PE: "22,80", RN: "24,20", PB: "23,50", AL: "24,80", SE: "24,50", MA: "26,20", PI: "25,80", AM: "32,50", PA: "29,80", AC: "34,20", RO: "31,50", RR: "35,80", AP: "33,20", TO: "27,50" 
                         };
-                        const valorFrete = fretes[j.uf] || "25,00";
-                        document.getElementById('frete').value = valorFrete.replace('.',',');
-                        window.recalc();
-                    } else {
-                        document.getElementById('locDisplay').innerText = "❌ CEP INVÁLIDO";
+                        document.getElementById('frete').value = (fretes[j.uf] || "25,00").replace('.',','); window.recalc();
                     }
-                } catch(e) { 
-                    document.getElementById('locDisplay').innerText = "📍 ROTA PADRÃO";
-                    document.getElementById('frete').value = "22,00";
-                    window.recalc();
-                }
+                } catch(e) { document.getElementById('locDisplay').innerText = "📍 ROTA PADRÃO ATIVA"; }
             }
         };
 
+        // Cálculos Financeiros (Margem e Taxas)
         window.recalc = () => {
-            const cStr = document.getElementById('custo').value.replace(/\./g, '').replace(',', '.');
-            const fStr = document.getElementById('frete').value.replace(/\./g, '').replace(',', '.');
-            const c = parseFloat(cStr) || 0;
-            const f = parseFloat(fStr) || 0;
-            if(c > 0) {
-                const sugerido = (c + f) * 1.45;
-                document.getElementById('venda').value = sugerido.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-            }
+            const c = parseNum(document.getElementById('custo').value), f = parseNum(document.getElementById('frete').value);
+            if(c > 0) document.getElementById('venda').value = fmt((c + f) * 1.45);
         };
 
         window.finalLucro = () => {
-            const vStr = document.getElementById('venda').value.replace(/\./g, '').replace(',', '.');
-            const cStr = document.getElementById('custo').value.replace(/\./g, '').replace(',', '.');
-            const fStr = document.getElementById('frete').value.replace(/\./g, '').replace(',', '.');
-            const v = parseFloat(vStr) || 0;
-            const c = parseFloat(cStr) || 0;
-            const f = parseFloat(fStr) || 0;
-            
-            if(v === 0) return alert("Insira o custo!");
-            const lucro = v - c - f - (v * 0.12);
-            document.getElementById('lucroFinal').innerText = "R$ " + lucro.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            const v = parseNum(document.getElementById('venda').value), c = parseNum(document.getElementById('custo').value), f = parseNum(document.getElementById('frete').value);
+            if(v === 0) return alert("Inicie o cálculo primeiro!");
+            // Taxa plataforma: 12% fixo
+            document.getElementById('lucroFinal').innerText = "R$ " + fmt(v - c - f - (v * 0.12));
             document.getElementById('resCard').classList.remove('hidden');
-            if(lucro > 0) confetti({ particleCount: 150, spread: 60, origin: { y: 0.7 } });
+            if(v-c-f > 0) confetti({ particleCount: 150, spread: 70, origin: { y: 0.7 } });
         };
 
-        // Monitor de Estado de Autenticação
+        // Controle de Sessão
         auth.onAuthStateChanged(async u => {
             if(u) {
                 document.getElementById('screen-auth').classList.add('hidden');
@@ -266,17 +206,13 @@
                     const doc = await db.collection("users").doc(u.uid).get();
                     if(doc.exists) {
                         userRank = doc.data().patente || "BRONZE";
-                        const badge = document.getElementById('rankBadge');
-                        badge.innerText = userRank;
-                        badge.style.background = userRank === "OURO" ? "#fbbf24" : "#cd7f32";
-                        badge.style.color = userRank === "OURO" ? "#000" : "#fff";
+                        const b = document.getElementById('rankBadge'); b.innerText = userRank;
+                        b.style.background = userRank === "OURO" ? "#fbbf24" : "#cd7f32";
+                        b.style.color = userRank === "OURO" ? "#000" : "#fff";
                     }
-                } catch(e) { console.error("Erro ao buscar rank:", e); }
-                
-                if(G_KEY) {
-                    document.getElementById('aiIndicator').className = "ai-status ai-online";
-                    document.getElementById('aiIndicator').innerHTML = "<span>IA Conectada ✅</span>";
-                }
+                } catch(e) {}
+                document.getElementById('aiIndicator').className = "ai-status ai-online";
+                document.getElementById('aiIndicator').innerHTML = "<span>INTELIGÊNCIA ATIVA ✅</span>";
             }
         });
     </script>
