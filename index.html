@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-    <title>VORTEX PRO AI | BRASIL TOTAL</title>
+    <title>VORTEX PRO AI | SUPREME DASHBOARD</title>
     
-    <!-- Bibliotecas Externas -->
+    <!-- SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
@@ -22,35 +22,29 @@
             --cyan: #06b6d4; 
         }
         * { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; }
-        body { 
-            font-family:'Rajdhani', sans-serif; 
-            background:var(--bg); 
-            color:#fff; 
-            min-height:100vh; 
-            overflow-x:hidden; 
-            position: relative;
-        }
+        body { font-family:'Rajdhani', sans-serif; background:var(--bg); color:#fff; min-height:100vh; overflow-x:hidden; }
 
-        .aurora { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-2; background:radial-gradient(circle at 20% 20%, rgba(124, 58, 237, .2) 0%, transparent 40%), radial-gradient(circle at 80% 80%, rgba(6, 182, 212, .15) 0%, transparent 40%); animation:auroraMove 20s infinite; }
+        /* EFEITOS VISUAIS */
+        .aurora { position:fixed; inset:0; z-index:-2; background:radial-gradient(circle at 20% 20%, rgba(124, 58, 237, .2) 0%, transparent 40%), radial-gradient(circle at 80% 80%, rgba(6, 182, 212, .15) 0%, transparent 40%); animation:auroraMove 20s infinite; }
         @keyframes auroraMove { 0%,100% { transform:scale(1); opacity:.8; } 50% { transform:scale(1.1); opacity:1; } }
-        .grid-bg { position:fixed; top:0; left:0; width:100%; height:100%; background-image:linear-gradient(rgba(124, 58, 237, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(124, 58, 237, 0.05) 1px, transparent 1px); background-size:30px 30px; z-index:-1; }
+        .grid-bg { position:fixed; inset:0; z-index:-1; background-image:linear-gradient(rgba(124, 58, 237, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(124, 58, 237, 0.05) 1px, transparent 1px); background-size:30px 30px; }
 
         .container { max-width:420px; margin: 0 auto; padding:15px; position: relative; }
         .logo { font-family:'Orbitron', sans-serif; font-size:24px; font-weight:900; text-align:center; margin:20px 0; text-shadow:0 0 10px var(--primary); letter-spacing: 2px; }
         .logo span { color: var(--cyan); }
 
-        .card { background:var(--card); border: 1px solid rgba(124, 58, 237, 0.3); border-radius: 15px; padding: 18px; margin-bottom: 15px; backdrop-filter: blur(10px); position: relative; overflow: hidden; }
+        .card { background:var(--card); border: 1px solid rgba(124, 58, 237, 0.3); border-radius: 15px; padding: 18px; margin-bottom: 15px; backdrop-filter: blur(10px); }
         
         .label { font-size:10px; color:var(--cyan); font-weight:700; text-transform:uppercase; margin-bottom:8px; display:block; font-family:'Orbitron'; letter-spacing: 1px; }
         input { width:100%; padding:14px; margin-bottom:12px; border-radius:10px; border: 1px solid #1e1e30; background:rgba(0,0,0,0.8); color:#fff; font-size:16px; outline: none; transition: 0.3s; }
         input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(124, 58, 237, 0.2); }
         
         .btn { width:100%; padding:16px; border-radius:12px; border:none; font-weight:800; cursor:pointer; text-transform:uppercase; font-family:'Orbitron'; display:flex; align-items:center; justify-content:center; gap:10px; transition: 0.2s; -webkit-tap-highlight-color: transparent; }
-        .btn:active { transform: scale(0.98); }
-        .btn-primary { background:var(--primary); color:#fff; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
-        .btn-gold { background:var(--gold); color:#000; margin-top:10px; box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-primary { background:var(--primary); color:#fff; }
+        .btn-gold { background:var(--gold); color:#000; margin-top:10px; }
         
-        .ai-status { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 10px; font-weight: 900; margin-bottom: 15px; padding: 8px; border-radius: 50px; border: 1px solid currentColor; text-transform: uppercase; }
+        .ai-status { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 10px; font-weight: 900; margin-bottom: 15px; padding: 8px; border-radius: 50px; border: 1px solid currentColor; }
         .ai-online { color: var(--green); background: rgba(16, 185, 129, 0.1); }
         .ai-offline { color: #ef4444; background: rgba(239, 68, 68, 0.1); }
         
@@ -69,18 +63,18 @@
     <div class="container">
         <div class="logo">VORTEX <span>PRO</span> AI</div>
 
-        <!-- AUTH SCREEN -->
+        <!-- TELA DE AUTENTICAÇÃO -->
         <section id="screen-auth">
             <div id="auth-box" class="card">
                 <span class="label" id="auth-title">Acesso Operador</span>
                 <input type="email" id="email" placeholder="E-mail">
                 <input type="password" id="pass" placeholder="Senha">
-                <button class="btn btn-primary" id="btn-main-auth" onclick="handleAuth()">🔐 ENTRAR NO TERMINAL</button>
-                <div style="text-align:center; font-size:11px; margin-top:15px; color:var(--cyan); text-decoration:underline; font-weight: 700; cursor: pointer;" onclick="toggleRegister()" id="toggle-text">NÃO TEM CONTA? CADASTRE-SE</div>
+                <button class="btn btn-primary" id="btn-main-auth" onclick="window.handleAuth()">🔐 ENTRAR NO TERMINAL</button>
+                <div style="text-align:center; font-size:11px; margin-top:15px; color:var(--cyan); text-decoration:underline; font-weight: 700; cursor: pointer;" onclick="window.toggleRegister()" id="toggle-text">NÃO TEM CONTA? CADASTRE-SE</div>
             </div>
         </section>
 
-        <!-- APP SCREEN -->
+        <!-- TELA DO APLICATIVO -->
         <section id="screen-app" class="hidden">
             <div id="aiIndicator" class="ai-status ai-offline"><span>IA Desconectada</span></div>
             
@@ -92,21 +86,21 @@
             <div class="card">
                 <span class="label">Scanner Neural de Links</span>
                 <input type="url" id="productUrl" placeholder="Cole o link Shopee/AliExpress">
-                <button class="btn btn-primary" id="btnMiner" onclick="scanAI()">⚡ LER COM GEMINI AI</button>
+                <button class="btn btn-primary" id="btnMiner" onclick="window.scanAI()">⚡ LER COM GEMINI AI</button>
                 
                 <span class="label" style="margin-top:15px">Inteligência Logística (Brasil Total)</span>
-                <input type="text" id="destCep" placeholder="00000000" maxlength="8" oninput="buscaCep(this)">
+                <input type="text" id="destCep" placeholder="00000000" maxlength="8" oninput="window.buscaCep(this)">
                 <div id="locDisplay">Aguardando CEP...</div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <div><span class="label">Custo Unit.</span><input type="text" id="custo" placeholder="0,00" oninput="recalc()"></div>
+                    <div><span class="label">Custo Unit.</span><input type="text" id="custo" placeholder="0,00" oninput="window.recalc()"></div>
                     <div><span class="label">Frete Real</span><input type="text" id="frete" value="0,00" readonly style="color:var(--cyan); font-weight: 700;"></div>
                 </div>
 
                 <span class="label">Sugestão de Venda (45% Margem)</span>
                 <input type="text" id="venda" style="color:var(--gold); font-weight:900; border-color: var(--gold);" readonly>
                 
-                <button class="btn btn-gold" onclick="finalLucro()">🚀 PROCESSAR LUCRO REAL</button>
+                <button class="btn btn-gold" onclick="window.finalLucro()">🚀 PROCESSAR LUCRO REAL</button>
             </div>
 
             <div id="resCard" class="card hidden" style="text-align:center">
@@ -122,6 +116,7 @@
     <script type="module">
         import { GoogleGenerativeAI } from "https://esm.run/@google/genai";
 
+        // CONFIGURAÇÃO FIREBASE
         const firebaseConfig = { 
             apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I", 
             authDomain: "vortexpro1021.firebaseapp.com", 
@@ -130,13 +125,20 @@
             messagingSenderId: "403000271858", 
             appId: "1:403000271858:web:7a8716548ee0a1b822016b" 
         };
-        firebase.initializeApp(firebaseConfig);
+        
+        // Inicialização
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const auth = firebase.auth();
         const db = firebase.firestore();
         
+        // CHAVE GEMINI
         const G_KEY = "AIzaSyD6j7gGPQAAJ9H7rI8ot1AAWkjloE4mp_M";
         let isRegister = false;
         let userRank = "BRONZE";
+
+        // --- FUNÇÕES GLOBAIS (Anexadas ao window para o HTML encontrar) ---
 
         window.toggleRegister = () => {
             isRegister = !isRegister;
@@ -147,7 +149,13 @@
 
         window.handleAuth = async () => {
             const e = document.getElementById('email').value, p = document.getElementById('pass').value;
+            const btn = document.getElementById('btn-main-auth');
+            
             if(!e || !p) return alert("Preencha todos os campos!");
+            
+            btn.disabled = true;
+            btn.innerText = "PROCESSANDO...";
+
             try {
                 if(isRegister) {
                     const c = await auth.createUserWithEmailAndPassword(e, p);
@@ -157,27 +165,13 @@
                 } else {
                     await auth.signInWithEmailAndPassword(e, p);
                 }
-            } catch(err) { alert("Erro: Verifique os dados."); }
-        };
-
-        auth.onAuthStateChanged(async u => {
-            if(u) {
-                document.getElementById('screen-auth').classList.add('hidden');
-                document.getElementById('screen-app').classList.remove('hidden');
-                const doc = await db.collection("users").doc(u.uid).get();
-                if(doc.exists) {
-                    userRank = doc.data().patente || "BRONZE";
-                    const badge = document.getElementById('rankBadge');
-                    badge.innerText = userRank;
-                    badge.style.background = userRank === "OURO" ? "#fbbf24" : "#cd7f32";
-                    badge.style.color = userRank === "OURO" ? "#000" : "#fff";
-                }
-                if(G_KEY) {
-                    document.getElementById('aiIndicator').className = "ai-status ai-online";
-                    document.getElementById('aiIndicator').innerHTML = "<span>IA Conectada ✅</span>";
-                }
+            } catch(err) { 
+                alert("Erro: " + err.message); 
+            } finally {
+                btn.disabled = false;
+                btn.innerText = isRegister ? "💎 CADASTRAR E ATIVAR" : "🔐 ENTRAR NO TERMINAL";
             }
-        });
+        };
 
         window.scanAI = async () => {
             if(userRank === "BRONZE") return alert("❌ BLOQUEADO: Scanner Neural exclusivo para patentes OURO.");
@@ -193,18 +187,18 @@
                 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
                 const proxy = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
                 const data = await proxy.json();
-                const prompt = `Extraia o preço numérico em R$ deste texto: ${data.contents.substring(0, 3000)}`;
+                const prompt = `Extraia o preço numérico em R$ deste texto: ${data.contents.substring(0, 3000)}. Responda apenas o número.`;
                 const result = await model.generateContent(prompt);
-                const price = parseFloat(result.response.text().replace(/[^0-9.,]/g, '').replace(',', '.'));
+                const priceText = result.response.text().replace(/[^0-9.,]/g, '').replace(',', '.');
+                const price = parseFloat(priceText);
                 if(!isNaN(price)) {
                     document.getElementById('custo').value = price.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-                    recalc();
+                    window.recalc();
                 }
             } catch(e) { alert("IA ocupada. Insira manual."); }
             finally { btn.innerText = "⚡ LER COM GEMINI AI"; btn.disabled = false; }
         };
 
-        // LÓGICA DE FRETE BRASIL TOTAL
         window.buscaCep = async (el) => {
             const cep = el.value.replace(/\D/g, '');
             if(cep.length === 8) {
@@ -214,51 +208,77 @@
                     const j = await r.json();
                     if(!j.erro) {
                         document.getElementById('locDisplay').innerText = `📍 ${j.localidade}/${j.uf} ✅`;
-                        
-                        // TABELA DE FRETES BRASIL TOTAL (Estimativa por Estado)
                         const fretes = {
-                            // SUDESTE
                             SP: "12,90", RJ: "15,80", MG: "16,50", ES: "17,20",
-                            // SUL
                             PR: "14,20", SC: "15,90", RS: "17,50",
-                            // CENTRO-OESTE
                             DF: "18,50", GO: "19,20", MT: "21,50", MS: "20,80",
-                            // NORDESTE
                             BA: "21,50", CE: "23,90", PE: "22,80", RN: "24,20", PB: "23,50", 
                             AL: "24,80", SE: "24,50", MA: "26,20", PI: "25,80",
-                            // NORTE
                             AM: "32,50", PA: "29,80", AC: "34,20", RO: "31,50", 
                             RR: "35,80", AP: "33,20", TO: "27,50"
                         };
-
                         const valorFrete = fretes[j.uf] || "25,00";
                         document.getElementById('frete').value = valorFrete.replace('.',',');
-                        recalc();
+                        window.recalc();
                     } else {
                         document.getElementById('locDisplay').innerText = "❌ CEP INVÁLIDO";
                     }
                 } catch(e) { 
                     document.getElementById('locDisplay').innerText = "📍 ROTA PADRÃO";
                     document.getElementById('frete').value = "22,00";
-                    recalc();
+                    window.recalc();
                 }
             }
         };
 
-        const n = (v) => parseFloat(v.toString().replace(/\./g, '').replace(',', '.')) || 0;
         window.recalc = () => {
-            const c = n(document.getElementById('custo').value), f = n(document.getElementById('frete').value);
-            if(c > 0) document.getElementById('venda').value = ((c + f) * 1.45).toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            const cStr = document.getElementById('custo').value.replace(/\./g, '').replace(',', '.');
+            const fStr = document.getElementById('frete').value.replace(/\./g, '').replace(',', '.');
+            const c = parseFloat(cStr) || 0;
+            const f = parseFloat(fStr) || 0;
+            if(c > 0) {
+                const sugerido = (c + f) * 1.45;
+                document.getElementById('venda').value = sugerido.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            }
         };
 
         window.finalLucro = () => {
-            const v = n(document.getElementById('venda').value), c = n(document.getElementById('custo').value), f = n(document.getElementById('frete').value);
+            const vStr = document.getElementById('venda').value.replace(/\./g, '').replace(',', '.');
+            const cStr = document.getElementById('custo').value.replace(/\./g, '').replace(',', '.');
+            const fStr = document.getElementById('frete').value.replace(/\./g, '').replace(',', '.');
+            const v = parseFloat(vStr) || 0;
+            const c = parseFloat(cStr) || 0;
+            const f = parseFloat(fStr) || 0;
+            
             if(v === 0) return alert("Insira o custo!");
             const lucro = v - c - f - (v * 0.12);
             document.getElementById('lucroFinal').innerText = "R$ " + lucro.toLocaleString('pt-BR', {minimumFractionDigits: 2});
             document.getElementById('resCard').classList.remove('hidden');
             if(lucro > 0) confetti({ particleCount: 150, spread: 60, origin: { y: 0.7 } });
         };
+
+        // Monitor de Estado de Autenticação
+        auth.onAuthStateChanged(async u => {
+            if(u) {
+                document.getElementById('screen-auth').classList.add('hidden');
+                document.getElementById('screen-app').classList.remove('hidden');
+                try {
+                    const doc = await db.collection("users").doc(u.uid).get();
+                    if(doc.exists) {
+                        userRank = doc.data().patente || "BRONZE";
+                        const badge = document.getElementById('rankBadge');
+                        badge.innerText = userRank;
+                        badge.style.background = userRank === "OURO" ? "#fbbf24" : "#cd7f32";
+                        badge.style.color = userRank === "OURO" ? "#000" : "#fff";
+                    }
+                } catch(e) { console.error("Erro ao buscar rank:", e); }
+                
+                if(G_KEY) {
+                    document.getElementById('aiIndicator').className = "ai-status ai-online";
+                    document.getElementById('aiIndicator').innerHTML = "<span>IA Conectada ✅</span>";
+                }
+            }
+        });
     </script>
 </body>
 </html>
