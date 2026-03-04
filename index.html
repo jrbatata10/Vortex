@@ -22,7 +22,6 @@
         .logo span { color: var(--cyan); }
         .card { background:var(--card); border: 1px solid rgba(124, 58, 237, 0.3); border-radius: 15px; padding: 18px; margin-bottom: 15px; backdrop-filter: blur(10px); }
         
-        /* BANNER NUVEMSHOP */
         .nuvem-banner { background: linear-gradient(90deg, #0046ff, #001a4d); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); }
         .nuvem-logo { background:#fff; width:28px; height:28px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:900; color:#0046ff; font-size: 16px; }
 
@@ -58,7 +57,7 @@
                 <div class="nuvem-logo">N</div>
                 <div style="text-align: left;">
                     <div style="font-size: 10px; font-weight: 800; color: #fff; font-family:'Orbitron';">SINC. NUVEMSHOP</div>
-                    <div style="font-size: 12px; font-weight: 700; color: #fff; opacity: 0.9;">Parceiro Oficial v121.0</div>
+                    <div style="font-size: 12px; font-weight: 700; color: #fff; opacity: 0.9;">Parceiro Oficial v122.0</div>
                 </div>
             </div>
 
@@ -70,7 +69,7 @@
                 <input type="url" id="productUrl" placeholder="Link Shopee/AliExpress">
                 <button class="btn btn-primary" id="btnMiner" onclick="scanAI()">⚡ LER COM GEMINI AI</button>
                 
-                <span class="label" style="margin-top:15px">Logística Brasil (Alta Velocidade)</span>
+                <span class="label" style="margin-top:15px">Logística Brasil (Blindada)</span>
                 <input type="text" id="destCep" placeholder="00000000" maxlength="8" oninput="buscaCep(this)">
                 <div id="locDisplay">Aguardando CEP...</div>
 
@@ -137,46 +136,71 @@
                 const resJson = await geminiRes.json();
                 const price = resJson.candidates[0].content.parts[0].text.replace(/[^0-9.,]/g, '').replace(',', '.');
                 if(price) { document.getElementById('custo').value = parseFloat(price).toLocaleString('pt-BR', {minimumFractionDigits: 2}); recalc(); }
-            } catch(e) { alert("IA ocupada. Insira manual."); }
+            } catch(e) { alert("Link Protegido. Insira manualmente."); }
             finally { btn.innerText = "⚡ LER COM GEMINI AI"; btn.disabled = false; }
         }
 
+        // --- LÓGICA DE CEP COM TIMEOUT FORÇADO ---
         async function buscaCep(el) {
             const cep = el.value.replace(/\D/g, '');
             if(cep.length === 8) {
                 const display = document.getElementById('locDisplay');
-                display.innerText = "📡 BUSCANDO ROTA...";
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 4000);
+                display.innerText = "📡 RASTREANDO ROTA...";
+                
+                // Promessa de Timeout (Força a parada em 4s)
+                const timeout = new Promise((_, reject) => 
+                    setTimeout(() => reject(new Error('timeout')), 4000)
+                );
 
                 try {
-                    const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`, { signal: controller.signal });
-                    const j = await r.json();
-                    clearTimeout(timeoutId);
+                    // Corrida entre a API e o Relógio
+                    const response = await Promise.race([
+                        fetch(`https://viacep.com.br/ws/${cep}/json/`),
+                        timeout
+                    ]);
+                    
+                    const j = await response.json();
+                    
                     if(!j.erro) {
                         display.innerText = `📍 ${j.localidade}/${j.uf} ✅`;
-                        const fretes = { SP: "12,90", RJ: "15,80", MG: "16,50", ES: "17,20", PR: "14,20", SC: "15,90", RS: "17,50", BA: "21,50", CE: "23,90", PE: "22,80", MA: "26,50", PI: "26,80", PA: "28,50" };
+                        const fretes = { 
+                            SP: "12,90", RJ: "15,80", MG: "16,50", ES: "17,20", 
+                            PR: "14,20", SC: "15,90", RS: "17,50", BA: "21,50", 
+                            CE: "23,90", PE: "22,80", MA: "26,50", PI: "26,80", PA: "28,50" 
+                        };
                         const valorEstado = fretes[j.uf] || "25,00";
-                        document.getElementById('frete').value = valorEstado.replace('.',','); recalc();
+                        document.getElementById('frete').value = valorEstado.replace('.',',');
+                        recalc();
+                    } else {
+                        display.innerText = "❌ CEP INVÁLIDO";
                     }
                 } catch(e) {
-                    display.innerText = "📍 ROTA INTERIOR (ESTIMADA) ⚡";
-                    document.getElementById('frete').value = "28,90"; recalc();
+                    // SÓ ENTRA AQUI SE PASSAR DE 4 SEGUNDOS OU CAIR A NET
+                    display.innerText = "📍 INTERIOR/REMOTA (ESTIMADO) ⚡";
+                    document.getElementById('frete').value = "28,90";
+                    recalc();
                 }
             }
         }
 
         function recalc() {
-            const c = parseFloat(document.getElementById('custo').value.replace(/\./g, '').replace(',', '.')) || 0;
-            const f = parseFloat(document.getElementById('frete').value.replace(/\./g, '').replace(',', '.')) || 0;
-            if(c > 0) document.getElementById('venda').value = ((c + f) * 1.45).toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            const cStr = document.getElementById('custo').value.replace(/\./g, '').replace(',', '.');
+            const c = parseFloat(cStr) || 0;
+            const fStr = document.getElementById('frete').value.replace(/\./g, '').replace(',', '.');
+            const f = parseFloat(fStr) || 0;
+            if(c > 0) {
+                const total = (c + f) * 1.45;
+                document.getElementById('venda').value = total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            }
         }
 
         function finalLucro() {
             const v = parseFloat(document.getElementById('venda').value.replace(/\./g, '').replace(',', '.')) || 0;
             const c = parseFloat(document.getElementById('custo').value.replace(/\./g, '').replace(',', '.')) || 0;
             const f = parseFloat(document.getElementById('frete').value.replace(/\./g, '').replace(',', '.')) || 0;
-            document.getElementById('lucroFinal').innerText = "R$ " + (v - c - f - (v * 0.12)).toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            // Cálculo: Venda - Custo - Frete - 12% Taxa
+            const lucro = v - c - f - (v * 0.12);
+            document.getElementById('lucroFinal').innerText = "R$ " + lucro.toLocaleString('pt-BR', {minimumFractionDigits: 2});
             document.getElementById('resCard').classList.remove('hidden');
             confetti({ particleCount: 150, spread: 60, origin: { y: 0.7 } });
         }
