@@ -9,36 +9,34 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-    
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root { --bg: #020205; --card: rgba(10, 10, 25, .98); --primary: #7c3aed; --gold: #fbbf24; --green: #10b981; --cyan: #06b6d4; }
         * { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; }
         body { font-family:'Rajdhani', sans-serif; background:var(--bg); color:#fff; min-height:100vh; overflow-x:hidden; position: relative; }
-
         .aurora { position:fixed; inset:0; z-index:-2; background:radial-gradient(circle at 20% 20%, rgba(124, 58, 237, .2) 0%, transparent 40%), radial-gradient(circle at 80% 80%, rgba(6, 182, 212, .15) 0%, transparent 40%); animation:auroraMove 20s infinite; }
         @keyframes auroraMove { 0%,100% { transform:scale(1); opacity:.8; } 50% { transform:scale(1.1); opacity:1; } }
-        
         .container { max-width:420px; margin: 0 auto; padding:15px; position: relative; }
         .logo { font-family:'Orbitron', sans-serif; font-size:24px; font-weight:900; text-align:center; margin:20px 0; text-shadow:0 0 10px var(--primary); letter-spacing: 2px; }
         .logo span { color: var(--cyan); }
-
         .card { background:var(--card); border: 1px solid rgba(124, 58, 237, 0.3); border-radius: 15px; padding: 18px; margin-bottom: 15px; backdrop-filter: blur(10px); }
+        
+        /* BANNER NUVEMSHOP */
+        .nuvem-banner { background: linear-gradient(90deg, #0046ff, #001a4d); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
+        .nuvem-banner:active { transform: scale(0.96); }
+        .nuvem-logo { background:#fff; width:28px; height:28px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:900; color:#0046ff; font-size: 16px; }
+
         .label { font-size:10px; color:var(--cyan); font-weight:700; text-transform:uppercase; margin-bottom:8px; display:block; font-family:'Orbitron'; letter-spacing: 1px; }
-        
         input { width:100%; padding:14px; margin-bottom:12px; border-radius:10px; border: 1px solid #1e1e30; background:rgba(0,0,0,0.8); color:#fff; font-size:16px; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(124, 58, 237, 0.2); }
-        
         .btn { width:100%; padding:16px; border-radius:12px; border:none; font-weight:800; cursor:pointer; text-transform:uppercase; font-family:'Orbitron'; display:flex; align-items:center; justify-content:center; gap:10px; transition: 0.2s; }
         .btn-primary { background:var(--primary); color:#fff; }
         .btn-gold { background:var(--gold); color:#000; margin-top:10px; }
-        
         .ai-status { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 10px; font-weight: 900; margin-bottom: 15px; padding: 8px; border-radius: 50px; border: 1px solid currentColor; }
         #rankBadge { padding: 5px 15px; border-radius: 50px; font-size: 11px; font-weight: 900; margin-bottom: 10px; display: inline-block; font-family: 'Orbitron'; background: #cd7f32; color: #fff; }
         .hidden { display:none !important; }
         #locDisplay { font-size: 12px; color: var(--green); margin:-8px 0 12px; font-weight: 700; padding: 10px; background: rgba(16, 185, 129, 0.1); border-radius: 8px; border-left: 3px solid var(--green); }
-        .result-value { font-size:32px; color:var(--green); font-family:'Orbitron'; font-weight: 900; text-shadow: 0 0 10px rgba(16, 185, 129, 0.3); text-align:center; }
+        .result-value { font-size:32px; color:var(--green); font-family:'Orbitron'; font-weight: 900; text-align:center; }
     </style>
 </head>
 <body>
@@ -52,11 +50,19 @@
                 <input type="email" id="email" placeholder="E-mail">
                 <input type="password" id="pass" placeholder="Senha">
                 <button class="btn btn-primary" onclick="handleAuth()">🔐 ENTRAR NO TERMINAL</button>
-                <div style="text-align:center; font-size:11px; margin-top:15px; color:var(--cyan); text-decoration:underline; cursor: pointer;" onclick="toggleRegister()">NÃO TEM CONTA? CADASTRE-SE</div>
+                <div style="text-align:center; font-size:11px; margin-top:15px; color:var(--cyan); text-decoration:underline; cursor: pointer;" onclick="toggleRegister()">CADASTRE-SE</div>
             </div>
         </section>
 
         <section id="screen-app" class="hidden">
+            <div class="nuvem-banner" onclick="window.open('https://www.nuvemshop.com.br/')">
+                <div class="nuvem-logo">N</div>
+                <div style="text-align: left;">
+                    <div style="font-size: 10px; font-weight: 800; color: #fff; font-family:'Orbitron';">SINC. NUVEMSHOP</div>
+                    <div style="font-size: 12px; font-weight: 700; color: #fff; opacity: 0.9;">Parceiro Oficial v119.0</div>
+                </div>
+            </div>
+
             <div id="aiIndicator" class="ai-status" style="color:var(--green); background:rgba(16, 185, 129, 0.1);"><span>IA Conectada ✅</span></div>
             <div class="card" style="text-align: center;"><div id="rankBadge">BRONZE</div></div>
             
@@ -65,7 +71,7 @@
                 <input type="url" id="productUrl" placeholder="Link Shopee/AliExpress">
                 <button class="btn btn-primary" id="btnMiner" onclick="scanAI()">⚡ LER COM GEMINI AI</button>
                 
-                <span class="label" style="margin-top:15px">Logística (Brasil Total)</span>
+                <span class="label" style="margin-top:15px">Logística Brasil</span>
                 <input type="text" id="destCep" placeholder="00000000" maxlength="8" oninput="buscaCep(this)">
                 <div id="locDisplay">Aguardando CEP...</div>
 
@@ -74,13 +80,12 @@
                     <div><span class="label">Frete Real</span><input type="text" id="frete" value="0,00" readonly style="color:var(--cyan); font-weight: 700;"></div>
                 </div>
 
-                <span class="label">Sugestão de Venda (45% Margem)</span>
+                <span class="label">Sugestão de Venda (45%)</span>
                 <input type="text" id="venda" style="color:var(--gold); font-weight:900;" readonly>
                 <button class="btn btn-gold" onclick="finalLucro()">🚀 PROCESSAR LUCRO REAL</button>
             </div>
 
             <div id="resCard" class="card hidden">
-                <span class="label" style="text-align: center;">Lucro Líquido Estimado</span>
                 <div id="lucroFinal" class="result-value">R$ 0,00</div>
                 <button class="btn" style="background:#25d366; color:#fff; margin-top:15px;" onclick="window.open('https://wa.me/5511975473066')">💬 SUPORTE VIP JUNIOR</button>
             </div>
@@ -90,15 +95,7 @@
     </div>
 
     <script>
-        const firebaseConfig = { 
-            apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I", 
-            authDomain: "vortexpro1021.firebaseapp.com", 
-            projectId: "vortexpro1021", 
-            storageBucket: "vortexpro1021.firebasestorage.app", 
-            messagingSenderId: "403000271858", 
-            appId: "1:403000271858:web:7a8716548ee0a1b822016b" 
-        };
-        
+        const firebaseConfig = { apiKey: "AIzaSyABtMG8ZU2BTEjV2e-WqD2HdX-1ObZ5y_I", authDomain: "vortexpro1021.firebaseapp.com", projectId: "vortexpro1021", storageBucket: "vortexpro1021.firebasestorage.app", messagingSenderId: "403000271858", appId: "1:403000271858:web:7a8716548ee0a1b822016b" };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
@@ -107,62 +104,44 @@
         let isRegister = false;
         let userRank = "BRONZE";
 
-        // Funções de Auth
-        function toggleRegister() {
-            isRegister = !isRegister;
-            document.getElementById('auth-title').innerText = isRegister ? "Ativar Acesso Bronze" : "Acesso Operador";
-        }
+        function toggleRegister() { isRegister = !isRegister; document.getElementById('auth-title').innerText = isRegister ? "Ativar Acesso Bronze" : "Acesso Operador"; }
 
         async function handleAuth() {
-            const e = document.getElementById('email').value;
-            const p = document.getElementById('pass').value;
+            const e = document.getElementById('email').value, p = document.getElementById('pass').value;
             if(!e || !p) return alert("Preencha tudo!");
             try {
                 if(isRegister) {
                     const c = await auth.createUserWithEmailAndPassword(e, p);
                     await db.collection("users").doc(c.user.uid).set({ patente: "BRONZE" });
-                    alert("Conta criada!"); location.reload();
-                } else {
-                    await auth.signInWithEmailAndPassword(e, p);
-                }
+                    alert("Conta Bronze Criada!"); location.reload();
+                } else { await auth.signInWithEmailAndPassword(e, p); }
             } catch(error) { alert("ERRO: " + error.message); }
         }
 
         function logout() { auth.signOut().then(() => location.reload()); }
 
-        // Scanner IA (Usando Fetch direto para evitar erro de import)
         async function scanAI() {
             if(userRank === "BRONZE") return alert("Scanner exclusivo OURO 💎");
             const url = document.getElementById('productUrl').value;
             if(!url) return alert("Cole o link!");
-            
             const btn = document.getElementById('btnMiner');
             btn.innerText = "⛏️ MINERANDO..."; btn.disabled = true;
-
             try {
                 const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
                 const response = await fetch(proxyUrl);
                 const data = await response.json();
-                
                 const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${G_KEY}`;
                 const geminiRes = await fetch(geminiUrl, {
                     method: 'POST',
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: `Extraia apenas o preço em R$ deste texto: ${data.contents.substring(0, 2000)}` }] }]
-                    })
+                    body: JSON.stringify({ contents: [{ parts: [{ text: `Retorne apenas o número decimal do preço em R$ contido neste texto: ${data.contents.substring(0, 2000)}` }] }] })
                 });
                 const resJson = await geminiRes.json();
                 const price = resJson.candidates[0].content.parts[0].text.replace(/[^0-9.,]/g, '').replace(',', '.');
-                
-                if(price) {
-                    document.getElementById('custo').value = parseFloat(price).toLocaleString('pt-BR', {minimumFractionDigits: 2});
-                    recalc();
-                }
+                if(price) { document.getElementById('custo').value = parseFloat(price).toLocaleString('pt-BR', {minimumFractionDigits: 2}); recalc(); }
             } catch(e) { alert("IA ocupada. Insira manual."); }
             finally { btn.innerText = "⚡ LER COM GEMINI AI"; btn.disabled = false; }
         }
 
-        // Cálculos e Logística
         async function buscaCep(el) {
             const cep = el.value.replace(/\D/g, '');
             if(cep.length === 8) {
@@ -171,9 +150,8 @@
                 const j = await r.json();
                 if(!j.erro) {
                     document.getElementById('locDisplay').innerText = `📍 ${j.localidade}/${j.uf} ✅`;
-                    const fretes = { SP: "12,90", RJ: "15,80", MG: "16,50", ES: "17,20", PR: "14,20", SC: "15,90", RS: "17,50" };
-                    document.getElementById('frete').value = (fretes[j.uf] || "22,50").replace('.',',');
-                    recalc();
+                    const fretes = { SP: "12,90", RJ: "15,80", MG: "16,50", ES: "17,20", PR: "14,20", SC: "15,90", RS: "17,50", BA: "21,50", CE: "23,90" };
+                    document.getElementById('frete').value = (fretes[j.uf] || "22,50").replace('.',','); recalc();
                 }
             }
         }
@@ -188,13 +166,11 @@
             const v = parseFloat(document.getElementById('venda').value.replace(/\./g, '').replace(',', '.')) || 0;
             const c = parseFloat(document.getElementById('custo').value.replace(/\./g, '').replace(',', '.')) || 0;
             const f = parseFloat(document.getElementById('frete').value.replace(/\./g, '').replace(',', '.')) || 0;
-            if(v === 0) return alert("Calcule o custo primeiro!");
             document.getElementById('lucroFinal').innerText = "R$ " + (v - c - f - (v * 0.12)).toLocaleString('pt-BR', {minimumFractionDigits: 2});
             document.getElementById('resCard').classList.remove('hidden');
             confetti({ particleCount: 150, spread: 60, origin: { y: 0.7 } });
         }
 
-        // Monitor de Estado
         auth.onAuthStateChanged(async (user) => {
             if (user) {
                 document.getElementById('screen-auth').classList.add('hidden');
@@ -202,8 +178,7 @@
                 const doc = await db.collection("users").doc(user.uid).get();
                 if(doc.exists) {
                     userRank = doc.data().patente || "BRONZE";
-                    const b = document.getElementById('rankBadge');
-                    b.innerText = userRank;
+                    const b = document.getElementById('rankBadge'); b.innerText = userRank;
                     b.style.background = userRank === "OURO" ? "#fbbf24" : "#cd7f32";
                     b.style.color = userRank === "OURO" ? "#000" : "#fff";
                 }
